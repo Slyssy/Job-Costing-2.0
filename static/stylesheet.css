@@ -1,0 +1,17 @@
+.xAxisLabel {
+  font-size: 3.5em;
+    fill: #635f5d;
+}
+
+.bars {
+  opacity: 0.5;
+}
+
+.tick line {
+  stroke: #C0C0BB
+}
+
+.tick text {
+  font-size: 2.5em;
+  fill: #635f5d;
+}
