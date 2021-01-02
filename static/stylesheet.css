@@ -1,3 +1,10 @@
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
+
 .xAxisLabel {
   font-size: 3.5em;
     fill: #635f5d;

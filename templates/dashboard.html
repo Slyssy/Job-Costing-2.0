@@ -58,6 +58,12 @@
               href="#performanceVisualizations"
               >Performance Visualizations</a
             >
+            &nbsp;  &nbsp;
+            <a
+              class="btn btn-primary border-white mt-auto"
+              href="#project-map"
+              >Project Map</a
+            >
             <button
               class="navbar-toggler"
               type="button"
@@ -147,6 +153,9 @@
           <div id="estimate-to-actual"></div>
         </div>
       </div>
+      <div class="row">
+        <div id="project-map"></div>
+      </div>
     </div>
 
     <script>
@@ -156,6 +165,7 @@
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>
     <script src="{{ url_for('static', filename='d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='d3Map.js') }}"></script>
     <script src="{{ url_for('static', filename='app2.js') }}"></script>
   </body>
 </html>
