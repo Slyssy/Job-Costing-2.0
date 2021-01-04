@@ -1,3 +1,5 @@
+
+
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
 // console.log(projectArray)
@@ -40,16 +42,98 @@ const data = data0.map(
 );
 console.log(data)
 
+// d3.json('data'). then(d=>chart());
 
+// function chart(data) {
 
-const elements = Object.keys(data[0])
-		.filter(function(d){
-			return ((d != "month") & (d != "fin_est_labor_expense") & (d != "fin_act_labor_expense"));
-        });
-        console.log (elements)
+//   data.forEach(d => {
+//     d.year = d.year;
+//     d.month = d.month;
+//     d.fin_act_labor_expense = d.fin_act_labor_expense;
+//     d.fin_est_labor_expense = d.fin_est_labor_expense;
+//   })
 
-const selection = elements[0];
-console.log(selection)
+  // Looping through data to pull the Unique years in the data set.
+const years = data.map(a => a.year)
+.filter((value, index, self) => self.indexOf(value) === index)
+console.log(years)
+
+const options = d3.select("#year").selectAll("option")
+          .data(years)
+      .enter().append("option")
+          .text(d => d)
+// var svg = d3.select("#estimate-to-actual"),
+// margin = {top: 70, right: 20, bottom: 70, left: 125},
+// width = +svg.attr("width") - margin.left - margin.right,
+// height = +svg.attr("height") - margin.top - margin.bottom;
+
+// // Setting x Scale
+// const x = d3.scaleBand()
+// .range([margin.left, width - margin.right])
+// .padding(0.1)
+// .paddingOuter(0.2);
+
+// var y = d3.scaleLinear()
+// .range([height - margin.bottom, margin.top])
+
+// var xAxis = g => g
+// .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+// .call(d3.axisBottom(x).tickSizeOuter(0))
+
+// var yAxis = g => g
+// .attr("transform", "translate(" + margin.left + ",0)")
+// .call(d3.axisLeft(y))
+
+// svg.append("g")
+// .attr("class", "x-axis")
+
+// svg.append("g")
+// .attr("class", "y-axis")
+
+// update(d3.select("#year").property("value"), 0)
+
+// function update(year, speed) {
+
+// var dataf = data.filter(f => f.year == year)
+
+// y.domain([0, d3.max(data, d => d.fin_est_labor_expense)]).nice()
+
+// svg.selectAll(".y-axis").transition().duration(speed)
+//     .call(yAxis);
+
+// // data.sort(d3.select("#sort").property("checked")
+// //     ? (a, b) => b.value - a.value
+// //     : (a, b) => months.indexOf(a.month) - months.indexOf(b.month))
+
+// x.domain(data.map(d => d.month))
+
+// svg.selectAll(".x-axis").transition().duration(speed)
+//     .call(xAxis)
+
+// var bar = svg.selectAll(".bar")
+//     .data(dataf, d => d.month)
+
+// bar.exit().remove();
+
+// bar.enter().append("rect")
+//     .attr("class", "bar")
+//     .attr("fill", "steelblue")
+//     .attr("width", x.bandwidth())
+//     .merge(bar)
+// .transition().duration(speed)
+//     .attr("x", d => x(d.month))
+//     .attr("y", d => y(d.fin_act_labor_expense))
+//     .attr("height", d => y(0) - y(d.fin_act_labor_expense))
+// }
+
+// chart.update = update;
+// }
+
+// var select = d3.select("#year")
+// .style("border-radius", "5px")
+// .on("change", function() {
+// chart.update(this.value, 750)
+// })
 
 // Defining margins for plot
 const margin = {top: 70, right: 20, bottom: 70, left: 125},
@@ -82,11 +166,12 @@ const svg = d3.select("#estimate-to-actual").append("svg")
           "translate(" + margin.left + "," + margin.top + ")");
 
 // Parsing through data to pull data needed for bars and x axis
-data.forEach(d => {
-   d.month = d.month;
-   d.year = d.year
-  d.fin_act_labor_expense = +d.fin_act_labor_expense;
-});
+// data.forEach(d => {
+//   //  d.month = d.month;
+//   //  d.year = d.year
+//    d.monthYear = d.month + "-" + d.year
+//   // d.fin_act_labor_expense = +d.fin_act_labor_expense;
+// });
 
 // Setting domain for x and y scales
   x.domain(data.map(d => d.month));
@@ -96,7 +181,12 @@ data.forEach(d => {
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis.ticks(null).tickSize(0))
+      .call(xAxis.ticks(null).tickSize(0));
+      // .selectAll('text')
+      // .attr('x', '-65')
+      // .attr('y', '-10')
+      // .attr("transform", "rotate(-50)" );
+      
 
  // Appending a group to the svg and adding the y axis with labels and to that group.
   svg.append("g")
@@ -157,55 +247,15 @@ svg.append ('text')
       .style("font-size", "3.5em")
       .text("Estimate vs. Actual Labor Expense")
 
-  const selector = d3.select('#selector')
-    .append('select')
-    .attr('id', 'dropdown')
-    .on("change", function(d){
-      selection = document.getElementById("dropdown");
-
-      y.domain([0, d3.max(data, function(d){
-    return +d[selection.value];})]);
-
-      yAxis.scale(y);
-
-      d3.selectAll(".rectangle")
-           .transition()
-          .attr("height", function(d){
-      return height - y(+d[selection.value]);
-    })
-    .attr("x", function(d, i){
-      return (width / data.length) * i ;
-    })
-    .attr("y", function(d){
-      return y(+d[selection.value]);
-    })
-           .ease("linear")
-           .select("title")
-           .text(function(d){
-             return d.month
-              // + " : " + d[selection.value];
-           });
-  
-         d3.selectAll("g.y.axis")
-           .transition()
-           .call(yAxis);
-
-     });
-     selector.selectAll("option")
-      .data(elements)
-      .enter().append("option")
-      .attr("value", function(d){
-        return d;
-      })
-      .text(function(d){
-        return d;
-      })
-
-
-    
 
 
 
 
 
 
+
+// var checkbox = d3.select("#sort")
+// .style("margin-left", "45%")
+// .on("click", function() {
+// chart.update(select.property("value"), 750)
+// })
