@@ -1,10 +1,10 @@
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
-console.log(projectArray)
+// console.log(projectArray)
 
 // Filtering data to be used for plot
 const chartData = projectArray.map(({act_start_date, fin_est_labor_expense, fin_act_labor_expense}) => ({act_start_date, fin_est_labor_expense: parseFloat((fin_est_labor_expense).replace(/,/g, '')), fin_act_labor_expense: parseFloat((fin_act_labor_expense).replace(/,/g, ''))}));
-console.log(chartData)
+// console.log(chartData)
 
 // Grouping dates into months and summing estimated and actual labor expense by month
 const mapper = single => {
@@ -40,8 +40,19 @@ const data = data0.map(
 );
 console.log(data)
 
+
+
+const elements = Object.keys(data[0])
+		.filter(function(d){
+			return ((d != "month") & (d != "fin_est_labor_expense") & (d != "fin_act_labor_expense"));
+        });
+        console.log (elements)
+
+const selection = elements[0];
+console.log(selection)
+
 // Defining margins for plot
-const margin = {top: 70, right: 20, bottom: 70, left: 100},
+const margin = {top: 70, right: 20, bottom: 70, left: 125},
     width = 1135 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -72,13 +83,14 @@ const svg = d3.select("#estimate-to-actual").append("svg")
 
 // Parsing through data to pull data needed for bars and x axis
 data.forEach(d => {
-   d.act_start_date = d.month;
+   d.month = d.month;
+   d.year = d.year
   d.fin_act_labor_expense = +d.fin_act_labor_expense;
 });
 
 // Setting domain for x and y scales
   x.domain(data.map(d => d.month));
-  y.domain([0, d3.max(data, d => d.fin_est_labor_expense)]); 
+  y.domain([0, d3.max(data, d => d.fin_est_labor_expense) * 1.2]); 
 
   // Appending a group to the svg and adding the x axis to that group.
   svg.append("g")
@@ -97,7 +109,7 @@ data.forEach(d => {
     .enter().append("rect")
       .style("fill", d => d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828')
       .attr("class", "bars")
-      .attr("x", d => x(d.act_start_date))
+      .attr("x", d => x(d.month))
       .attr("width", x.bandwidth())
       .attr("y", d => y(d.fin_act_labor_expense))
       .attr("height", d => height - y(d.fin_act_labor_expense))
@@ -108,8 +120,8 @@ data.forEach(d => {
       .data(data)
     .enter().append("line")
       .style("fill", 'none')
-  		.attr("x1", d => x(d.act_start_date) + x.bandwidth() +5)
-      .attr("x2", d => x(d.act_start_date) -5)
+  		.attr("x1", d => x(d.month) + x.bandwidth() +5)
+      .attr("x2", d => x(d.month) -5)
    .attr("y1", d => y(+d.fin_est_labor_expense))
       .attr("y2", d => y(+d.fin_est_labor_expense))
   		.style("stroke-dasharray", [6,2])
@@ -128,7 +140,7 @@ svg.append ('text')
 // Adding y Axis labels
     svg.append('text')
       .attr('class', 'yAxis')
-      .attr('y', -55)
+      .attr('y', -95)
       .attr('x', -380)
       .attr('fill', 'black')
       .attr('transform', `rotate(-90)`)
@@ -144,6 +156,51 @@ svg.append ('text')
       .attr("fill", "#635f5d")
       .style("font-size", "3.5em")
       .text("Estimate vs. Actual Labor Expense")
+
+  const selector = d3.select('#selector')
+    .append('select')
+    .attr('id', 'dropdown')
+    .on("change", function(d){
+      selection = document.getElementById("dropdown");
+
+      y.domain([0, d3.max(data, function(d){
+    return +d[selection.value];})]);
+
+      yAxis.scale(y);
+
+      d3.selectAll(".rectangle")
+           .transition()
+          .attr("height", function(d){
+      return height - y(+d[selection.value]);
+    })
+    .attr("x", function(d, i){
+      return (width / data.length) * i ;
+    })
+    .attr("y", function(d){
+      return y(+d[selection.value]);
+    })
+           .ease("linear")
+           .select("title")
+           .text(function(d){
+             return d.month
+              // + " : " + d[selection.value];
+           });
+  
+         d3.selectAll("g.y.axis")
+           .transition()
+           .call(yAxis);
+
+     });
+     selector.selectAll("option")
+      .data(elements)
+      .enter().append("option")
+      .attr("value", function(d){
+        return d;
+      })
+      .text(function(d){
+        return d;
+      })
+
 
     
 
