@@ -1,3 +1,10 @@
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
+
 .xAxisLabel {
   font-size: 3.5em;
     fill: #635f5d;
@@ -14,4 +21,14 @@
 .tick text {
   font-size: 2.5em;
   fill: #635f5d;
+}
+
+#project-map path {
+  fill: #636769;
+  opacity: 0.5;
+  stroke: white
+}
+
+#project-map path:hover {
+  fill: #1b71f2;
 }
