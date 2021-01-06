@@ -1,15 +1,15 @@
 // const { select } = require("d3");
 
 const marginMap = {top: 0, right: 0, bottom: 0, left: 0};
-const widthMap = 1135 - margin.left - margin.right;
-const heightMap = 600 - margin.top - margin.bottom;
+const widthMap = 1135 - marginMap.left - marginMap.right;
+const heightMap = 600 - marginMap.top - marginMap.bottom;
 
 const svgMap = d3.select('#project-map')
     .append('svg')
-    .attr('height', height + margin.top + margin.bottom)
-    .attr('width', width + margin.left + margin.right)
+    .attr('height', heightMap + marginMap.top + marginMap.bottom)
+    .attr('width', widthMap + marginMap.left + marginMap.right)
     .append('g')
-    .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+    .attr("transform", "translate(" + marginMap.left + ", " + marginMap.top + ")");
 
 const projection = d3.geoAlbersUsa();
 const pathGenerator = d3.geoPath().projection(projection);
