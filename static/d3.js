@@ -1,10 +1,10 @@
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
-console.log(projectArray)
+// console.log(projectArray)
 
 // Filtering data to be used for plot
 const chartData = projectArray.map(({act_start_date, fin_est_labor_expense, fin_act_labor_expense}) => ({act_start_date, fin_est_labor_expense: parseFloat((fin_est_labor_expense).replace(/,/g, '')), fin_act_labor_expense: parseFloat((fin_act_labor_expense).replace(/,/g, ''))}));
-console.log(chartData)
+// console.log(chartData)
 
 // Grouping dates into months and summing estimated and actual labor expense by month
 const mapper = single => {
@@ -40,115 +40,105 @@ const data = data0.map(
 );
 console.log(data)
 
-// Defining margins for plot
-let margin = {top: 70, right: 20, bottom: 70, left: 125};
-let width = 1135 - margin.left - margin.right;
-let height = 600 - margin.top - margin.bottom;
+function chart(data) {
+  // Looping through data to pull the Unique years in the data set.
+const years = data.map(a => a.year)
+.filter((value, index, self) => self.indexOf(value) === index)
+years.sort(function(a, b){return b - a});
+console.log(years)
+
+const options = d3.select("#year").selectAll("option")
+          .data(years)
+      .enter().append("option")
+          .text(d => d)
+
+var svg = d3.select("#estimate-to-actual"),
+margin = {top: 70, right: 20, bottom: 70, left: 125},
+width = +svg.attr("width") - margin.left - margin.right,
+height = +svg.attr("height") - margin.top - margin.bottom;
 
 // Setting x Scale
 const x = d3.scaleBand()
-.rangeRound([0, width], .05)
-.padding(0.1);
+.range([margin.left, width - margin.right])
+.padding(0.1)
+.paddingOuter(0.2);
 
-// Setting y Scale
-const y = d3.scaleLinear().range([height, 0]);
+var y = d3.scaleLinear()
+.range([height - margin.bottom, margin.top])
 
-// Building xAxis
-const xAxis = d3.axisBottom()
-    .scale(x)
+var xAxis = g => g
+.attr("transform", "translate(0," + (height - margin.bottom) + ")")
+.call(d3.axisBottom(x).tickSizeOuter(0))
 
-// Building y Axis
-const yAxis = d3.axisLeft()
-    .scale(y)
-    .ticks(10);
+var yAxis = g => g
+.attr("transform", "translate(" + margin.left + ",0)")
+.call(d3.axisLeft(y).tickSize(-width))
 
-// Appending svg to dashboard.html ("#estimate-to-actual")
-const svg = d3.select("#estimate-to-actual").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+svg.append("g")
+.attr("class", "x-axis")
 
-// Parsing through data to pull data needed for bars and x axis
-data.forEach(d => {
-   d.act_start_date = d.month;
-  d.fin_act_labor_expense = +d.fin_act_labor_expense;
-});
+svg.append("g")
+.attr("class", "y-axis")
 
-// Setting domain for x and y scales
-  x.domain(data.map(d => d.month));
-  y.domain([0, d3.max(data, d => d.fin_est_labor_expense) * 1.2]); 
 
-  // Appending a group to the svg and adding the x axis to that group.
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis.ticks(null).tickSize(0))
+update(d3.select("#year").property("value"), 0)
 
- // Appending a group to the svg and adding the y axis with labels and to that group.
-  svg.append("g")
-      // .attr("class", "y axis")
-      .call(yAxis.ticks(null).tickSize(-width))       
-      
-// Defining and placing bars
-  svg.selectAll("bar")
-      .data(data)
-    .enter().append("rect")
-      .style("fill", d => d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828')
-      .attr("class", "bars")
-      .attr("x", d => x(d.act_start_date))
-      .attr("width", x.bandwidth())
-      .attr("y", d => y(d.fin_act_labor_expense))
-      .attr("height", d => height - y(d.fin_act_labor_expense))
-      .attr("opacity", ".5");
-  
-// Defining limit lines for estimated labor expense
-  svg.selectAll("lines")
-      .data(data)
-    .enter().append("line")
+function update(year, speed) {
+
+var dataf = data.filter(f => f.year == year)
+
+y.domain([0, d3.max(data, d => d.fin_est_labor_expense)]).nice()
+
+svg.selectAll(".y-axis").transition().duration(speed)
+    .call(yAxis);
+
+x.domain(data.map(d => d.month))
+
+svg.selectAll(".x-axis").transition().duration(speed)
+    .call(xAxis)
+
+var bar = svg.selectAll(".bar")
+    .data(dataf, d => d.month)
+
+bar.exit().remove();
+
+bar.enter().append("rect")
+    .attr("class", "bar")
+    .style("fill", d => d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828')
+    .attr("opacity", ".5")
+    .attr("width", x.bandwidth())
+    .merge(bar)
+.transition().duration(speed)
+    .attr("x", d => x(d.month))
+    .attr("y", d => y(d.fin_act_labor_expense))
+    .attr("height", d => y(0) - y(d.fin_act_labor_expense))
+
+  // Defining limit lines for estimated labor expense
+  var line = svg.selectAll(".line")
+    .data(dataf, d => d.month)
+
+line.exit().remove();
+ 
+    line.enter().append("line")
+    .attr("class", "line")
       .style("fill", 'none')
-  		.attr("x1", d => x(d.act_start_date) + x.bandwidth() +5)
-      .attr("x2", d => x(d.act_start_date) -5)
+  		.attr("x1", d => x(d.month) + x.bandwidth() +5)
+      .attr("x2", d => x(d.month) -5)
    .attr("y1", d => y(+d.fin_est_labor_expense))
       .attr("y2", d => y(+d.fin_est_labor_expense))
   		.style("stroke-dasharray", [6,2])
   		.style("stroke", "#eb2828")
   .style("stroke-width", 3)
 
-// Adding x Axis labels
-svg.append ('text')
-    .attr("class", 'xAxis')
-    .attr("y", 525)
-    .attr("x", width/2)
-    .attr("fill", "#635f5d")
-    .style('font-size', '2.5em')
-    .text( "Months")
+}
 
-// Adding y Axis labels
-    svg.append('text')
-      .attr('class', 'yAxis')
-      .attr('y', -95)
-      .attr('x', -380)
-      .attr('fill', 'black')
-      .attr('transform', `rotate(-90)`)
-      .attr("fill", "#635f5d")
-      .style('font-size', '2.5em')
-      .text("Labor Expense ($)");
-      
-// Adding Title
-  svg.append ('text')
-      .attr("class", "Title")
-      .attr("y", -20)
-      .attr("x", 160)
-      .attr("fill", "#635f5d")
-      .style("font-size", "3.5em")
-      .text("Estimate vs. Actual Labor Expense")
-
-    
+chart.update = update;
+}
+chart(data)
 
 
-
-
-
-
+var select = d3.select("#year")
+.style("border-radius", "5px")
+.on("change", function() {
+chart.update(this.value, 750)
+})

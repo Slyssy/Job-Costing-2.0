@@ -23,7 +23,7 @@ function searchTable(value, data) {
 
 
 let projectArray = Object.keys(project_list).map((i) => project_list[i]);
-console.log(projectArray);
+// console.log(projectArray);
 
 projectArray.sort((a, b) => a.project_name !== b.project_name ? a.project_name < b.project_name ? -1 : 1 : 0);
 
@@ -53,7 +53,7 @@ function buildTable(data){
   for (let i = 0; i < data.length; i++){
     let  row = `<tr>
                              <td><a href="/search?project_id=${data[i].id}">${data[i].project_name}</a></td>
-                              <td>${data[i].fin_act_revenue}</td>
+                              <td>$${data[i].fin_act_revenue}</td>
                               <td>${data[i].fin_est_labor_hours}</td>
                               <td>${data[i].fin_act_labor_hours}</td>
                               <td>$ ${data[i].fin_est_labor_expense}</td>
