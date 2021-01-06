@@ -164,7 +164,7 @@ const yAxis = svg.append("g")
   .append('text')
     .attr('class', 'yAxis')
     .attr('y', -90)
-    .attr('x', -80)
+    .attr('x', -30)
     .attr('transform', `rotate(-90)`)
     .attr("fill", "#635f5d")
     .style('font-size', '2.5em')
@@ -191,7 +191,7 @@ function update(data) {
   // .style('font-size', '2.0em')
 
   // Update the Y axis
-  y.domain([0, d3.max(data, d => d.value ) ]);
+  y.domain([0, d3.max(data, d => d.value ) * 1.2 ]);
   yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
   // Create the u variable
