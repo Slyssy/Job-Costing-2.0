@@ -78,7 +78,7 @@ data.forEach(d => {
 
 // Setting domain for x and y scales
   x.domain(data.map(d => d.month));
-  y.domain([0, d3.max(data, d => d.fin_est_labor_expense)]); 
+  y.domain([0, d3.max(data, d => d.fin_est_labor_expense) * 1.2]); 
 
   // Appending a group to the svg and adding the x axis to that group.
   svg.append("g")
