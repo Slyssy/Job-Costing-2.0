@@ -133,12 +133,12 @@ console.log(data2)
 
 
 // set the dimensions and margins of the graph
-var margin = {top: 70, right: 30, bottom: 70, left: 120},
+const margin = {top: 70, right: 30, bottom: 70, left: 120},
     width = 1135 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
-var svg = d3.select("#eva_exp_bar")
+const svg = d3.select("#eva_exp_bar")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -147,23 +147,24 @@ var svg = d3.select("#eva_exp_bar")
           "translate(" + margin.left + "," + margin.top + ")");
 
 // Initialize the X axis
-var x = d3.scaleBand()
+const x = d3.scaleBand()
   .range([ 0, width ])
   .padding(0.2);
-var xAxis = svg.append("g")
+
+const xAxis = svg.append("g")
   .attr("transform", "translate(0," + height + ")")
 
 // Initialize the Y axis
-var y = d3.scaleLinear()
+const y = d3.scaleLinear()
   .range([ height, 0]);
-var yAxis = svg.append("g")
+const yAxis = svg.append("g")
   .attr("class", "myYaxis") 
 
   yAxis
   .append('text')
     .attr('class', 'yAxis')
     .attr('y', -90)
-    .attr('x', -80)
+    .attr('x', -30)
     .attr('transform', `rotate(-90)`)
     .attr("fill", "#635f5d")
     .style('font-size', '2.5em')
@@ -182,7 +183,7 @@ var yAxis = svg.append("g")
 function update(data) {
 
   // Update the X axis
-  x.domain(data.map(function(d) { return d.type; }))
+  x.domain(data.map(d => d.type))
   xAxisG = xAxis.call(d3.axisBottom(x))
 
   xAxisG
@@ -190,12 +191,16 @@ function update(data) {
   // .style('font-size', '2.0em')
 
   // Update the Y axis
-  y.domain([0, d3.max(data, function(d) { return d.value }) ]);
+  y.domain([0, d3.max(data, d => d.value ) * 1.2 ]);
   yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
   // Create the u variable
-  var u = svg.selectAll("rect")
+  const u = svg.selectAll("rect")
     .data(data)
+
+    const colors = d3.scaleOrdinal()
+    .domain(['Budget Expense', 'Actual Expense'])
+    .range([ '#1b71f2', '#eb2828'])
 
   u
     .enter()
@@ -203,11 +208,11 @@ function update(data) {
     .merge(u) // get the already existing elements as well
     .transition() // and apply changes to all of them
     .duration(1000)
-      .attr("x", function(d) { return x(d.type); })
-      .attr("y", function(d) { return y(d.value); })
+      .attr("x", d => x(d.type))
+      .attr("y", d => y(d.value))
       .attr("width", x.bandwidth())
-      .attr("height", function(d) { return height - y(d.value); })
-      .attr("fill", "#eb2828")
+      .attr("height", d => height - y(d.value))
+      .attr("fill", function(d, i)  {return colors(d.type)})
       .style("opacity", "0.5")
       // "#1b71f2", "#eb2828"
   // If less group in the new dataset, I delete the ones not in use anymore

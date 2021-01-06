@@ -50,7 +50,7 @@
         <div class="card-body d-flex flex-column align-items-start">
           <h4 class="card-title">Enter New Project</h4>
           <p class="card-text">
-            Fill out the required fields to enter a new project.
+            Fill out the required fields to enter a new project. Do not use any special characters. Simply enter values as a float.
           </p>
           <a href="/dashboard" class="btn btn-primary border-white mt-auto"
             >Return to Dashboard</a
@@ -76,6 +76,7 @@
               required=""
               id="un"
               name="project_name"
+              placeholder="Enter Project Name"
             />
             <div class="invalid-feedback">Project Name is required.</div>
           </div>
@@ -193,7 +194,7 @@
               class="form-control"
               type="text"
               name="zipcode"
-              placeholder="#####"
+              placeholder="Enter Zip Code"
             />
           </div>
         </div>
@@ -206,7 +207,7 @@
             <input
               class="form-control"
               type="text"
-              placeholder="$0.00"
+              placeholder="Enter Projected Revenue"
               required=""
               name="revenue"
             />
@@ -222,7 +223,7 @@
             <input
               class="form-control"
               type="text"
-              placeholder="0"
+              placeholder="Enter Labor Hours"
               required=""
               id="un"
               name="est_labor_hours"
@@ -241,7 +242,7 @@
             <input
               class="form-control"
               type="text"
-              placeholder="$0.00/hr"
+              placeholder="Enter Labor Rate"
               required=""
               id="un"
               name="est_labor_rate"
@@ -265,7 +266,62 @@
             />
           </div>
         </div>
-
+        <!-- Material Expense -->
+        <div class="form-group row">
+          <label class="col-lg-3 col-form-label form-control-label text-muted"
+            >Budget Material Expense:</label
+          >
+          <div class="col-lg-9">
+            <input
+              class="form-control"
+              type="text"
+              name="est_material_expense"
+              placeholder="Enter Material Expense"
+            />
+          </div>
+        </div>
+        <!-- Subcontractor Expense -->
+        <div class="form-group row">
+          <label class="col-lg-3 col-form-label form-control-label text-muted"
+            >Budget Subcontractor Expense:</label
+          >
+          <div class="col-lg-9">
+            <input
+              class="form-control"
+              type="text"
+              name="est_subcontractor_expense"
+              placeholder="Enter Subcontractor Expense"
+            />
+          </div>
+        </div>
+        <!-- Miscellaneous Expense -->
+        <div class="form-group row">
+          <label class="col-lg-3 col-form-label form-control-label text-muted"
+            >Budget Miscellaneous Expense:</label
+          >
+          <div class="col-lg-9">
+            <input
+              class="form-control"
+              type="text"
+              name="est_miscellaneous_expense"
+              placeholder="Enter Miscellaneous Expense"
+            />
+          </div>
+        </div>  
+        <!-- Overhead % Expense -->
+        <div class="form-group row">
+          <label class="col-lg-3 col-form-label form-control-label text-muted"
+            >Budget Overhead Rate(%):</label
+          >
+          <div class="col-lg-9">
+            <input
+              class="form-control"
+              type="text"
+              name="est_overhead_expense"
+              placeholder="Enter Overhead Rate"
+            />
+          </div>
+                  </div> 
         <!-- Date Picker -->
         <div class="form-group row">
           <label class="col-lg-3 col-form-label form-control-label text-muted"
