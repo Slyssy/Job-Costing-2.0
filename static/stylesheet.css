@@ -29,6 +29,15 @@
   stroke: white
 }
 
+
 #project-map path:hover {
-  fill: #1b71f2;
+  fill: #ecb133;
 }
+
+.cities {
+  fill: #eb2828
+}
+
+/* .cities:hover{
+  fill: 'yellow'
+} */
