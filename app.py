@@ -83,6 +83,10 @@ def dashboard_data():
             est_labor_hours = str(proj[9])
             est_labor_expense = str(proj[10])
             act_start_date = str(proj[11])
+            material_expense = str(proj[15])
+            subcontractor_expense = str(proj[16])
+            misc_expense = str(proj[17])
+            overhead_exp = str(proj[18])
             project_dict['act_start_date'] = act_start_date
             if str(proj[12]) != "":
                 project_dict['act_end_date'] = str(proj[12])              
@@ -184,6 +188,14 @@ def new_project_data():
         full_values_string += ',' + est_labor_hours
         est_labor_expense = str("{:.2f}".format(float(est_labor_hours) * float(est_labor_rate)))
         full_values_string += ',' + est_labor_expense
+        material_expense = str("{:.2f}".format(float(material_expense) * float(material_expense)))
+        full_values_string += ',' + material_expense
+        subcontractor_expense = str("{:.2f}".format(float(subcontractor_expense) * float(subcontractor_expense)))
+        full_values_string += ',' + subcontractor_expense
+        misc_expense = str("{:.2f}".format(float(misc_expense) * float(misc_expense)))
+        full_values_string += ',' + misc_expense
+        overhead_exp = str("{:.2f}".format(float(overhead_exp) * float(overhead_exp)))
+        full_values_string += ',' + overhead_exp
         if 'act_start_date' in request.form and request.form['act_start_date'] != "":
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
