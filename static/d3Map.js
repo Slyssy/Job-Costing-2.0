@@ -17,11 +17,9 @@ const svgMap = d3.select('#project-map')
 const projection = d3.geoAlbersUsa();
 const pathGenerator = d3.geoPath().projection(projection);
 
-// const mapG = svgMap.append('g');
-// const circlesG = svgMap.append('g');
-
-const g = svgMap.append('g');
-
+const zoomG = svgMap.append('g');
+const mapG = zoomG.append('g');
+const circlesG = zoomG.append('g');
    
 d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json")
     .then(data => {
@@ -34,7 +32,7 @@ d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba16920754
     
         const states = topojson.feature(data, data.objects.states);          
        
-        g.selectAll('path').lower()
+        mapG.selectAll('path')
         .data(states.features)
         .enter().append('path')
         .attr('class', 'states')
@@ -47,7 +45,7 @@ d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba16920754
 d3.tsv('static/uscities.tsv')
     .then(data => {
         console.log(data)
-        g.selectAll('circle').raise()
+        circlesG.selectAll('circle').raise()
             .data(data)
             .enter().append('circle')
             .attr('class', "cities")
@@ -97,8 +95,8 @@ d3.tsv('static/uscities.tsv')
     });
 
     //Creating pan and zoom feature
-    g.call(d3.zoom().on("zoom", () => {
-        g.attr("transform", d3.event.transform);
+    zoomG.call(d3.zoom().on("zoom", () => {
+        zoomG.attr("transform", d3.event.transform);
     }))
             
 })
