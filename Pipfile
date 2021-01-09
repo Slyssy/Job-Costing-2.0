@@ -10,7 +10,8 @@ flask = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 plotly = "*"
-psycopg2 = "*"
+certifi = "*"
+geopy = "*"
 
 [requires]
 python_version = "3.9"
