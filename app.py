@@ -36,9 +36,16 @@ app = Flask(__name__)
 
 
 # Route for Index page -- Homepage and Intro to the App
-@app.route("/", methods=['GET'])
+@app.route("/", methods=['GET','POST'])
 def index():
-    return render_template("index.html")
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            return redirect(url_for('dashboard_data'))
+    return render_template('index2.html', error=error)
+    # return render_template("index.html")
 
 
 
@@ -234,7 +241,12 @@ def userdata_html_to_db():
         email = request.form['email']
         full_values_string += ',' + "'" + email + "'"
         phone = request.form['phone']
-        full_values_string += ',' + "'" + phone + "'" + ")"
+        full_values_string += ',' + "'" + phone + "'"
+        #need to check on the form names 
+        log_in = request.form['log_in']
+        full_values_string += ',' + "'" + log_in + "'" 
+        password = request.form['pass']
+        full_values_string += ',' + "'" + password + "'" + ")"
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Users table in database')

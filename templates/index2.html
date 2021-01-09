@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+        .right {
+             position: fixed;
+             right: 0px;
+             top: 0px;
+             width: 300px;
+             border: 3px solid #73AD21;
+             padding: 10px;
+}
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container top_container">
+        <div class="jumbotron w-100 py-5 mx-auto">
+          <h1>Green Team's Job Costing App</h1>
+          <h4>Project Management Job Costing Visuals</h4>
+          <p class="lead">
+            Smaller Construction management teams have less resources and time to
+            keep up with their busy days. Other than managing the team and
+            projects, they need to focus on the financial timelines and discussing
+            projects with Stakeholders.
+            <br /><br />
+            Team Green's app will make user experience with project management
+            tool friendlier, and allows them to give live updates to their
+            customers, clients, and bosses.
+            <br />
+            <br />
+            This app will allow for the leads to see progress in the financial and
+            day to day workload by tracking and visualizing budgeted labor values,
+            and comparing them to the actual labor values. We are limiting the
+            back and forth of chasing employees around for timesheets and daily
+            progress. Knowing when a project is exceding budgeted time is often
+            the first step to preventing a project from becoming a major loss.
+          </p>
+        </div>
+        <div class="card border-primary h-100">
+            <div class="card-body d-flex flex-column align-items-center">
+                <h3 class="card-title text-primary">Meet the Team!</h3>
+                <h5>Stephen Lyssy (Project Manager, Developer, & Visulizations)</h5>
+            <!-- <h5>Alicia Pelkey (Database Engineer & Modeler)</h5>
+            <h5>Amy Banerji (Backend Developer)</h5> -->
+                <h5>Julie Gandre (Developer)</h5>
+                    <div class="image">
+                    <img src="../images/new_user.png" alt="..."/>
+                    </div>
+                <h5>Karen Kitchens (Developer, Visualizations)</h5>
+                <h5>Michael Donatucci (Developer, Visualizations)</h5>
+            </div>
+        </div>
+    </div>      
+
+
+    <div class="container right">
+      <h1>Please login</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+        <input class="btn btn-default" type="submit" value="Login">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+
+  </body>
+</html>
