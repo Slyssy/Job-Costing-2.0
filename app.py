@@ -87,7 +87,7 @@ def dashboard_data():
                     project_dict['project_address'] = street + city + ", " + state + zipcode
             else:
                 project_dict['project_address'] = city + ", " + state + zipcode
-            some_geo = str(street)
+            some_geo = str(street) 
             location = geolocator.geocode(some_geo, timeout=10)
             project_dict['lat'] = ""
             project_dict['lng'] = ""

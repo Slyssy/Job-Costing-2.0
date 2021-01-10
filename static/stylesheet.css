@@ -27,7 +27,7 @@
   z-index: -1;
   fill: #636769;
   opacity: 0.5;
-  stroke: white
+  stroke: rgb(255, 255, 255)
 }
 
 
@@ -35,8 +35,18 @@
   fill: #ecb133;
 }
 
+.projects {
+  fill: #eb2828;
+  opacity: 0.5;
+}
+
 .cities {
-  fill: #eb2828
+  fill: rgb(4, 160, 250);
+}
+
+.cityName {
+  fill:rgb(4, 160, 250);
+  font-size: 10px;
 }
 
 #tooltip {
