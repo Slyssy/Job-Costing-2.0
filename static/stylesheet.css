@@ -36,7 +36,8 @@
 }
 
 .cities {
-  fill: #eb2828
+  fill: #eb2828;
+  opacity: 0.5;
 }
 
 #tooltip {

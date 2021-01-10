@@ -1,6 +1,6 @@
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
-console.log(projectArray)
+// console.log(projectArray)
 
 // Filtering data to be used for plot
 const chartData = projectArray.map(({act_start_date, fin_est_labor_expense, fin_act_labor_expense}) => ({act_start_date, fin_est_labor_expense: parseFloat((fin_est_labor_expense).replace(/,/g, '')), fin_act_labor_expense: parseFloat((fin_act_labor_expense).replace(/,/g, ''))}));
@@ -38,14 +38,14 @@ const months = ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","N
 const data = data0.map(
   o => ({...o, month: months[o.month - 1]})
 );
-console.log(data)
+// console.log(data)
 
 function chart(data) {
   // Looping through data to pull the Unique years in the data set.
 const years = data.map(a => a.year)
 .filter((value, index, self) => self.indexOf(value) === index)
 years.sort(function(a, b){return b - a});
-console.log(years)
+// console.log(years)
 
 const options = d3.select("#year").selectAll("option")
           .data(years)
