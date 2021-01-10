@@ -32,3 +32,12 @@
 #project-map path:hover {
   fill: #1b71f2;
 }
+
+.intro {
+  text-align: left;
+
+}
+
+.header {
+  text-align: center;
+}

@@ -6,7 +6,10 @@ import datetime
 from pprint import pprint
 
 from crud import *
+import bcrypt
 
+#for password hashing
+SALT = bcrypt.gensalt()
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
 pg_port = os.getenv("pg_port")
@@ -44,7 +47,7 @@ def index():
             error = 'Invalid Credentials. Please try again.'
         else:
             return redirect(url_for('dashboard_data'))
-    return render_template('index2.html', error=error)
+    return render_template('index.html', error=error)
     # return render_template("index.html")
 
 
@@ -245,8 +248,10 @@ def userdata_html_to_db():
         #need to check on the form names 
         log_in = request.form['log_in']
         full_values_string += ',' + "'" + log_in + "'" 
-        password = request.form['pass']
-        full_values_string += ',' + "'" + password + "'" + ")"
+        password = request.form['password']
+        pwd = b'password'
+        hashed = bcrypt.hashpw(pwd, SALT)
+        full_values_string += ',' + "'" + hashed + "'" + ")"
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Users table in database')
@@ -256,7 +261,7 @@ def userdata_html_to_db():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')

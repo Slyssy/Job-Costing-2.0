@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+
+    <!-- Bootstrap Greyson Liabraries and Oswald Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://bootstrap.themes.guide/greyson/theme.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <style>
+        a {
+        outline: none;
+        text-decoration: none;
+        padding: 2px 1px 0;
+        }
+
+        a:link {
+        color: #1e0153;
+        }
+
+        a:visited {
+        color: #437A16;
+        }
+
+        a:focus {
+        border-bottom: 1px solid;
+        background: #BAE498;
+        }
+
+        a:hover {
+        border-bottom: 1px solid;
+        background: #CDFEAA;
+        }
+
+        a:active {
+        background: #265301;
+        color: #CDFEAA;
+        }
+
+        h3.team, h5 {
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container top_container">
+        <div class="jumbotron w-100 py-5 mx-auto">
+          <h1>Green Team's Job Costing App</h1>
+        </div>
+    </div>
+    <!-- <div class="header">
+        <h1> Green Team's Job Costing App </h1>
+        <hr>
+    </div> -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-LG-9 col-md-9 col-sm-6">
+                <h2>Green Team's Job Costing App 2.0 is here!</h2>  
+                <p class="intro">
+                    
+                    Construction is a competitive business. With less resources, it's difficult
+                    for smaller companies to stay competitive. An owner, project manager, or project lead 
+                    will need to manage many aspects of the project such as timelines, purchase orders, labor, 
+                    financials,and meetings with Stakeholders for each project from bid stage to close. 
+                </br>
+                </br>
+                    We wanted to help smaller companies gain a competitive advantage by providing a  
+                    user friendly project management tool with features to aid in the efficiency of 
+                    labor and financial management. Get a company overview of all projects on the 
+                    Project Dashboard or check an indvidual projects progress using its project details page.  
+         
+                    <h3>This app will: </h3>
+                    <ul>Allow leads to asses individual projects progress by comparing 
+                        important financials and labor data</ul>
+                    <ul>Allow individuals to update project information 
+                        on the job in real time </ul>
+                    <ul>Allow employees or project managers to update timesheets</ul>
+                    <ul>Provide useful visualizations for quick analysis and reporting</ul>    
+                    
+                    <h3>Updates Include: </h3>
+                    <ul>Revenue Performance Visualization in D3</ul>
+                    <ul>Log-in/User Authentication</ul>
+                    <ul>D3 Projects Map </ul>
+                    <ul>Labor Performance Visualization in D3</ul> 
+                   
+                </p>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <h1>Please login</h1>
+                <br>
+                <form action="" method="post">
+                    <input type="text" placeholder="Username" name="username" value="{{
+                    request.form.username }}">
+                    <input type="password" placeholder="Password" name="password" value="{{
+                    request.form.password }}">
+                    <input class="btn btn-default" type="submit" value="Login">
+                    <br>
+                    <br>
+                    <br>
+                    <h3 class="team">Meet the Team! </h4>
+                    <h5>Stephen Lyssy - Project Manager, Developer, & Visulizations</h5>
+                    <a href= "">Linked In</a>
+                    <a href= "https://github.com/Slyssy">Git Hub</a>
+                    <h5>Karen Kitchens - Developer, Visualizations</h5>
+                    <a href= "">Linked In</a>
+                    <a href= "https://github.com/karenkitchens">Git Hub</a>
+                    <h5>Michael Donatucci - Developer, Visualizations</h5>
+                    <a href= "">Linked In</a>
+                    <a href= "https://github.com/michaeldonatucci9">Git Hub</a>
+                    <h5>Julie Gandre - Developer</h5>
+                    <!-- <p>Developer</p> -->
+                    <a href= "https://www.linkedin.com/in/julie-gandre-14620341">Linked In</a>
+                    <a href= "https://github.com/jgandre">Git Hub</a>
+                    
+                    <!-- <div class="image">
+                        <img src="static\new_project.png" alt="new user"/>
+                    </div> -->
+                    
+
+                </form>
+                {% if error %}
+                    <p class="error"><strong>Error:</strong> {{ error }}</p>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+    <!-- <div class="card border-primary h-100">
+        <div class="card-body d-flex flex-column align-items-center">
+            <h3 class="card-title text-primary">Meet the Team!</h3>
+            <h5>Stephen Lyssy (Project Manager, Developer, & Visulizations)</h5>
+            <h5>Alicia Pelkey (Database Engineer & Modeler)</h5>
+            <h5>Amy Banerji (Backend Developer)</h5>
+            <h5>Julie Gandre (Developer)</h5>
+            <div class="image">
+                <img src="../images/new_project.png" alt="new user">
+            </div>
+            <h5>Karen Kitchens (Developer, Visualizations)</h5>
+            <h5>Michael Donatucci (Developer, Visualizations)</h5>
+        </div> -->
+    <br>
+    <br>
+</body>
+</html>
