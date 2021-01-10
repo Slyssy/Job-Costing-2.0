@@ -239,17 +239,17 @@ def userdata_html_to_db():
         full_values_string += ',' + "'" + phone + "'"
         #need to check on the form names 
         log_in = request.form['log_in']
-        full_values_string += ',' + "'" + log_in + "'" 
+        full_values_string += ',' + "'" + log_in + "'" + ")"
         password = request.form['password']
-        # result = hashlib.md5(b'password')
-        # hashed = result.digest()
+        result = hashlib.md5(b'password')
+        hashed = result.digest()
         #bcrypt options that did not work below:
         # hashAndSalt = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         # pwd = b'password'
         # pwd_string = str(pwd, 'utf-8')
         # hashed = bcrypt.hashpw(pwd, SALT)
         # hashed_str = str(hashed, 'utf-8')
-        full_values_string += ',' + "'" + password + "'" + ")"
+        # full_values_string += ',' + "'" + hashed + "'" + ")"
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Users table in database')
@@ -259,10 +259,11 @@ def userdata_html_to_db():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
+            cur.execute('INSERT INTO users ( password) VALUES ' + hashed + ';')
         except:
             print('---------------------------------------')
             db_write_error = 'Oops - could not write to database!'
