@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7f4f9591866a1931114dff3c37641d897d082a76ab8a6b8c9921a2a256e15fe5"
+            "sha256": "89d9f870d263b907f3f54757a2dbd8cc08634473265946bc6ffab2cce732a02c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -117,6 +117,14 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.1.1"
+        },
+        "passlib": {
+            "hashes": [
+                "sha256:aa6bca462b8d8bda89c70b382f0c298a20b5560af6cbfa2dce410c0a2fb669f1",
+                "sha256:defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04"
+            ],
+            "index": "pypi",
+            "version": "==1.7.4"
         },
         "plotly": {
             "hashes": [

@@ -10,6 +10,8 @@ import geopy.geocoders
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 from crud import *
+import hashlib
+from passlib.hash import sha256_crypt
 
 ctx = ssl.create_default_context(cafile=certifi.where())
 geopy.geocoders.options.default_ssl_context = ctx
@@ -262,7 +264,21 @@ def userdata_html_to_db():
         email = request.form['email']
         full_values_string += ',' + "'" + email + "'"
         phone = request.form['phone']
-        full_values_string += ',' + "'" + phone + "'" + ")"
+        full_values_string += ',' + "'" + phone + "'"
+        #log-in and hashing password 
+        log_in = request.form['log_in']
+        full_values_string += ',' + "'" + log_in + "'"
+        password = request.form['password']
+        passw = sha256_crypt.hash("password")
+        # result = hashlib.md5(b'password')
+        # hashed = result.digest()
+        #bcrypt options that did not work below:
+        # hashAndSalt = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        # pwd = b'password'
+        # pwd_string = str(pwd, 'utf-8')
+        # hashed = bcrypt.hashpw(pwd, SALT)
+        # hashed_str = str(hashed, 'utf-8')
+        full_values_string += ',' + "'" + passw + "'" + ")"
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Users table in database')
@@ -272,7 +288,7 @@ def userdata_html_to_db():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
