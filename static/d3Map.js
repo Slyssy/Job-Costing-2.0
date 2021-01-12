@@ -47,7 +47,7 @@ d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba16920754
 // Load in Cities Data
 d3.tsv('static/uscities.tsv')
     .then(data => {
-        console.log(data)
+        // console.log(data)
         cityG.selectAll('circle').raise()
             .data(data)
             .enter().append('circle')
@@ -79,53 +79,51 @@ d3.tsv('static/uscities.tsv')
             
 })
 
-console.log(projectArray)
+// console.log(projectArray)
 //Parsing and formatting data to be used for map points
 const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat, lng}));
-
-    let d = new Date(mapData.act_start_date);
-    console.log(d)
+console.log(mapData)
 
 // Load in map point data
 function map(mapData) {
 
-    //Map slider update function
-d3.select("#timeslide").on("input", function() {
-    update(+this.value);
-});
+//     //Map slider update function
+// d3.select("#timeslide").on("input", function() {
+//     update(+this.value);
+// });
 
-// update the fill of each SVG of class "incident" with value
-function update(value) {
-    document.getElementById("range").innerHTML=month[value];
-    inputValue = month[value];
-    d3.selectAll(".incident")
-        .attr("fill", dateMatch);
-}
+// // update the fill of each SVG of class "incident" with value
+// function update(value) {
+//     document.getElementById("range").innerHTML=month[value];
+//     inputValue = month[value];
+//     d3.selectAll(".incident")
+//         .attr("fill", dateMatch);
+// }
 
-function dateMatch(mapData, value) {
-    let d = new Date(mapData.act_start_date);
-    let m = month[d.getMonth()];
-    if (inputValue == m) {
-        this.parentElement.appendChild(this);
-        return "red";
-    } else {
-        return "#999";
-    };
-}
+// function dateMatch(mapData, value) {
+//     let d = new Date(mapData.act_start_date);
+//     let m = month[d.getMonth()];
+//     if (inputValue == m) {
+//         this.parentElement.appendChild(this);
+//         return "#eb2828";
+//     } else {
+//         return "#636769";
+//     };
+// }
 
-function initialDate(Mapdata,i){
-    let d = new Date(d.act_start_date);
-    let m = month[d.getMonth()];
-    if (m == "January") {
-        this.parentElement.appendChild(this);
-        return "red";
-    } else {
-        return "#999";
-    };
-}
+// function initialDate(Mapdata,i){
+//     let d = new Date(d.act_start_date);
+//     let m = month[d.getMonth()];
+//     if (m == "January") {
+//         this.parentElement.appendChild(this);
+//         return "re#eb2828d";
+//     } else {
+//         return "#636769";
+//     };
+// }
    
-            console.log(mapData)
+            // console.log(mapData)
             projectG.selectAll('circle').raise()
                 .data(mapData)
                 .enter().append('circle')
@@ -176,6 +174,42 @@ function initialDate(Mapdata,i){
                 
     }
     map(mapData)
+
+        //Map slider update function
+d3.select("#timeslide").on("input", function() {
+    update(+this.value);
+});
+
+// update the fill of each SVG of class "incident" with value
+function update(value) {
+    document.getElementById("range").innerHTML=month[value];
+    inputValue = month[value];
+    d3.selectAll(".incident")
+        .attr("fill", dateMatch);
+}
+
+function dateMatch(mapData, value) {
+    let d = new Date(mapData.act_start_date);
+    let m = month[d.getMonth()];
+    if (inputValue == m) {
+        this.parentElement.appendChild(this);
+        return "#eb2828";
+    } else {
+        return "#636769";
+    };
+}
+
+function initialDate(Mapdata,i){
+    let d = new Date(d.act_start_date);
+    let m = month[d.getMonth()];
+    if (m == "January") {
+        this.parentElement.appendChild(this);
+        return "re#eb2828d";
+    } else {
+        return "#636769";
+    };
+}
+
 
 
    
