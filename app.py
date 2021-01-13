@@ -41,13 +41,79 @@ app = Flask(__name__)
 # Route for Index page -- Homepage and Intro to the App
 @app.route("/", methods=['GET','POST'])
 def index():
-    error = None
+    # if request.method == 'GET':
+    #     # Fetch all employee names from database for dropdown menu
+    #     cur = conn.cursor()
+    #     cur.execute('SELECT name FROM users')
+    #     employee_names_fetch = cur.fetchall()
+    #     print('------------------------------------------------------------')   
+    #     print('All employee names fetched from database for dropdown list')   
+    #     print('------------------------------------------------------------')   
+    #     print(employee_names_fetch)
+    #     print('------------------------------------------------------------')   
+    #     # Convert employee names to a JSON
+    #     employee_list = []
+    #     for db_row in employee_names_fetch:
+    #         employee_dict = {}
+    #         employee_dict['name'] = db_row[0]
+    #         employee_list.append(employee_dict)
+    #     # Create a dictionary for employee and project names, and convert to a JSON for the dropdown menus
+    #     emp_dropdown_dict = {}
+    #     emp_dropdown_dict['employee_list'] = employee_list
+    #     print(employee_list)
+
+
+        # return render_template('index3.html', dropdown_dict=json.dumps(emp_dropdown_dict))
+
     if request.method == 'POST':
+        # Required fields, and missing fields check
+        required_fields_list = ['log)in', 'password']
+        missing_fields = []
+        for req_field in required_fields_list:
+            if req_field not in request.form:
+                missing_fields.append(req_field)
+        if len(missing_fields):
+            missing_fields_error = 'Oops - could not find these fields ' + ' '.join(missing_fields)
+            return render_template('error.html', error_type=missing_fields_error)
+        
+        # Fetching employee and project names from form input    
+        log_in = request.form['username']
+        in_password = request.form['password']
+        hashed_in_pass = sha256(in_password) 
+        # Fetching user_id and project_id from Users and Project Details tables in database  
+        cur = conn.cursor() 
+        cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
+        user_pw_fetch = cur.fetchall()
+        for p in user_ps_fetch:
+            password = p[0]  
+        print(password)
+
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
             return redirect(url_for('dashboard_data'))
-    return render_template('index.html', error=error)
+    return render_template('index3.html', error=error)
+    
+         try:
+            cur = conn.cursor() 
+            cur.execute("INSERT INTO time_sheets (user_id, project_id, start_time, finish_time) VALUES (%s, %s, %s, %s)", (user_id, project_id, start_time, finish_time))
+            print('-----------------------------------')
+            print('Data added to database - woohoo!')
+            print('-----------------------------------')
+        except:
+            db_write_error = 'Oops - could not write to database!'
+            return render_template('error.html', error_type=db_write_error)
+        return redirect(url_for('dashboard_data'))
+
+
+#THIS POST ROUTE WORKS FOR HARDCODED USERNAME AND PASSWORD CHECK
+    # error = None
+    # if request.method == 'POST':
+    #     if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+    #         error = 'Invalid Credentials. Please try again.'
+    #     else:
+    #         return redirect(url_for('dashboard_data'))
+    # return render_template('index3.html', error=error)
     # return render_template("index.html")
 
 
