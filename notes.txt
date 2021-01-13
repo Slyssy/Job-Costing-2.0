@@ -1,0 +1,67 @@
+ADDED button to dashboard as a log out option --- it takes you back to the index page 
+which will be the sign in page. I just don't know that you can't just press back and get
+into the app again without having to log in, so need to look more into the log out route
+
+@app.route('/login/', methods=["GET","POST"])
+def login_page():
+    error = ''
+    try:
+        c, conn = connection()
+        if request.method == "POST":
+
+            data = c.execute("SELECT * FROM users WHERE username = (%s)",
+                             thwart(request.form['username']))
+            
+            data = c.fetchone()[2]
+
+            if sha256_crypt.verify(request.form['password'], data):
+                session['logged_in'] = True
+                session['username'] = request.form['username']
+
+                flash("You are now logged in")
+                return redirect(url_for("dashboard"))
+
+            else:
+                error = "Invalid credentials, try again."
+
+        gc.collect()
+
+        return render_template("login.html", error=error)
+
+    except Exception as e:
+        #flash(e)
+        error = "Invalid credentials, try again."
+        return render_template("login.html", error = error) 
+
+
+
+
+
+        project_list = {}
+        for proj in project_details_data:
+            project_dict = {}
+            project_id = str(proj[0])
+            project_dict['project_name'] = str(proj[1])
+            street = str(proj[2])
+            if street == 'None':
+                street = None
+            street2 = str(proj[3])
+            if street2 == 'None':
+                street2 = None
+            city = str(proj[4])
+            state = str(proj[5])
+            zipcode = str(proj[6])
+            zipcode = " " + zipcode
+            if street:
+                street = street + ", "
+                if street2:
+                    street2 = street2 + ", "            
+                    project_dict['project_address'] = street + street2 + city + ", " + state + zipcode
+                else:
+                    project_dict['project_address'] = street + city + ", " + state + zipcode
+            else:
+                project_dict['project_address'] = city + ", " + state + zipcode
+            revenue = str(proj[7])
+            est_labor_rate = str(proj[8])
+            est_labor_hours = str(proj[9])
+            est_labor_expense = str(proj[10])
