@@ -13,7 +13,7 @@ from passlib.hash import sha256_crypt
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
 pg_port = os.getenv("pg_port")
-pg_username = 'postgres'
+pg_username = os.getenv("pg_username")
 pg_password = os.getenv("pg_password")
 pg_dbname = os.getenv("pg_dbname")
 
