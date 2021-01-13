@@ -83,7 +83,8 @@ def dashboard_data():
                 project_dict['project_address'] = city + ", " + state + zipcode
             URL = "https://geocode.search.hereapi.com/v1/geocode"
             location = project_dict['project_address']
-            api_key = 'FldvT1Yu3evOE1OMeJutzC0ee8xXBlqg7ot-sMi1u3w'
+            
+            api_key = os.getenv("api_key")
             PARAMS = {'apikey':api_key,'q':location} 
 
             # sending get request and saving the response as response object 
