@@ -101,10 +101,10 @@ def dashboard_data():
             est_labor_hours = str(proj[9])
             est_labor_expense = str(proj[10])
             act_start_date = str(proj[11])
-            material_expense = str(proj[15])
-            subcontractor_expense = str(proj[16])
-            misc_expense = str(proj[17])
-            overhead_exp = str(proj[18])
+            est_material_expense = str(proj[15])
+            est_subcontractor_expense = str(proj[16])
+            est_miscellaneous_expense = str(proj[17])
+            est_overhead_expense = str(proj[18])
             project_dict['act_start_date'] = act_start_date
             if str(proj[12]) != "":
                 project_dict['act_end_date'] = str(proj[12])              
@@ -142,6 +142,14 @@ def dashboard_data():
             fin_est_labor_expense = float(fin_est_labor_hours) * float(fin_est_labor_rate)
             project_dict['fin_est_labor_expense'] = f'{float(fin_est_labor_expense):,}'
             fin_est_gross_profit = float(fin_est_revenue) - fin_est_labor_expense
+            fin_est_material_expense = est_material_expense
+            project_dict['fin_est_material_expense'] = f'{float(est_material_expense)}'
+            fin_est_subcontractor_expense = est_subcontractor_expense
+            project_dict['fin_est_subcontractor_expense'] = f'{float(est_subcontractor_expense)}'
+            fin_est_miscellaneous_expense = est_miscellaneous_expense
+            project_dict['fin_est_miscellaneous_expense'] = f'{float(est_miscellaneous_expense)}'
+            fin_overhead_expense = est_overhead_expense
+            project_dict['fin_overhead_expense'] = f'{float(est_overhead_expense)}'
             # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
             project_dict['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
             fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
@@ -157,6 +165,14 @@ def dashboard_data():
             fin_act_labor_expense = float(fin_act_labor_hours) * float(fin_act_labor_rate)
             project_dict['fin_act_labor_expense'] = f'{float(fin_act_labor_expense):,}'
             fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense)
+            fin_act_material_expense = act_material_expense
+            project_dict['fin_act_material_expense'] = f'{float(act_material_expense)}'
+            fin_act_subcontractor_expense = act_subcontractor_expense
+            project_dict['fin_act_subcontractor_expense'] = f'{float(act_subcontractor_expense)}'
+            fin_act_miscellaneous_expense = act_miscellaneous_expense
+            project_dict['fin_act_miscellaneous_expense'] = f'{float(act_miscellaneous_expense)}'
+            fin_overhead_expense = act_overhead_expense
+            project_dict['fin_overhead_expense'] = f'{float(act_overhead_expense)}'
             # project_dict['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
             project_dict['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
             fin_act_gross_margin = float(fin_act_gross_profit) / float(fin_act_revenue) * 100
@@ -206,14 +222,14 @@ def new_project_data():
         full_values_string += ',' + est_labor_hours
         est_labor_expense = str("{:.2f}".format(float(est_labor_hours) * float(est_labor_rate)))
         full_values_string += ',' + est_labor_expense
-        material_expense = str("{:.2f}".format(float(material_expense) * float(material_expense)))
-        full_values_string += ',' + material_expense
-        subcontractor_expense = str("{:.2f}".format(float(subcontractor_expense) * float(subcontractor_expense)))
-        full_values_string += ',' + subcontractor_expense
-        misc_expense = str("{:.2f}".format(float(misc_expense) * float(misc_expense)))
-        full_values_string += ',' + misc_expense
-        overhead_exp = str("{:.2f}".format(float(overhead_exp) * float(overhead_exp)))
-        full_values_string += ',' + overhead_exp
+        # est_material_expense = str("{:.2f}".format(float(est_material_expense) * float(est_material_expense)))
+        # full_values_string += ',' + est_material_expense
+        # est_subcontractor_expense = str("{:.2f}".format(float(est_subcontractor_expense) * float(est_subcontractor_expense)))
+        # full_values_string += ',' + est_subcontractor_expense
+        # miscellaneous_expense = str("{:.2f}".format(float(miscellaneous_expense) * float(miscellaneous_expense)))
+        # full_values_string += ',' + miscellaneous_expense
+        # est_overhead_expense = str("{:.2f}".format(float(est_overhead_expense) * float(est_overhead_expense)))
+        # full_values_string += ',' + est_overhead_expense
         if 'act_start_date' in request.form and request.form['act_start_date'] != "":
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
@@ -228,7 +244,7 @@ def new_project_data():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date, est_material_expense, est_subcontractor_expense, est_miscellaneous_expense, est_overhead_expense) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')

@@ -12,7 +12,11 @@ CREATE TABLE project_details(
     est_labor_hours FLOAT,
     est_labor_expense FLOAT,
     act_start_date DATE, 
-    act_comp_date DATE
+    act_comp_date DATE,
+    material_expense FLOAT,
+    subcontractor_expense FLOAT,
+    misc_expense FLOAT,
+    overhead_exp FLOAT
 );
 
 -- users 

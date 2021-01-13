@@ -112,7 +112,7 @@
 
 // Plotly.newPlot("eva_gp_bar", gpData, gpLayout);
 
-// console.log(project_dict)
+console.log(project_dict)
 
 // Function to grab data from object necessary to create plots 
 function dataGrab1({fin_est_labor_expense, fin_act_labor_expense}) {
@@ -125,11 +125,11 @@ function dataGrab2({fin_est_labor_hours, fin_act_labor_hours}) {
 
 const grabbedData1 = dataGrab1(project_dict)
 let data1 = Object.keys(grabbedData1).map(e => ({type: e, value: grabbedData1[e]}))
-console.log(data1)
+// console.log(data1)
 
 const grabbedData2 = dataGrab2(project_dict)
 let data2 = Object.keys(grabbedData2).map(e => ({type: e, value: grabbedData2[e]}))
-console.log(data2)
+// console.log(data2)
 
 
 // set the dimensions and margins of the graph
