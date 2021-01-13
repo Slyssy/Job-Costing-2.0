@@ -22,7 +22,7 @@ const mapG = zoomG.append('g');
 const cityG = zoomG.append('g');
 const projectG = zoomG.append('g');
 
-const inputValue = null;
+let inputValue = null;
 const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
    
 d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json")
@@ -84,44 +84,50 @@ d3.tsv('static/uscities.tsv')
 const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat, lng}));
 console.log(mapData)
+startDate = [];
+mapData.forEach(d => {
+    startDate.push(d.act_start_date)
+})
+console.log(startDate)
 
 // Load in map point data
 function map(mapData) {
 
-//     //Map slider update function
-// d3.select("#timeslide").on("input", function() {
-//     update(+this.value);
-// });
+//Map slider update function
+d3.select("#timeslide").on("input", function() {
+    update(+this.value);
+});
 
-// // update the fill of each SVG of class "incident" with value
-// function update(value) {
-//     document.getElementById("range").innerHTML=month[value];
-//     inputValue = month[value];
-//     d3.selectAll(".incident")
-//         .attr("fill", dateMatch);
-// }
+// update the fill of each SVG of class "incident" with value
+function update(value) {
+    document.getElementById("range").innerHTML=month[value];
+    inputValue = month[value];
+    d3.selectAll(".incident")
+        .attr("fill", dateMatch);
+}
 
-// function dateMatch(mapData, value) {
-//     let d = new Date(mapData.act_start_date);
-//     let m = month[d.getMonth()];
-//     if (inputValue == m) {
-//         this.parentElement.appendChild(this);
-//         return "#eb2828";
-//     } else {
-//         return "#636769";
-//     };
-// }
+function dateMatch(mapData, value) {
+    let d = new Date(mapData.act_start_date);
+    console.log(d)
+    let m = month[d.getMonth()];
+    if (inputValue == m) {
+        this.parentElement.appendChild(this);
+        return "#eb2828";
+    } else {
+        return "#636769";
+    };
+}
 
-// function initialDate(Mapdata,i){
-//     let d = new Date(d.act_start_date);
-//     let m = month[d.getMonth()];
-//     if (m == "January") {
-//         this.parentElement.appendChild(this);
-//         return "re#eb2828d";
-//     } else {
-//         return "#636769";
-//     };
-// }
+function initialDate(date, i){
+    let d = new Date(d.act_start_date);
+    let m = month[d.getMonth()];
+    if (m == "January") {
+        this.parentElement.appendChild(this);
+        return "re#eb2828d";
+    } else {
+        return "#636769";
+    };
+}
    
             // console.log(mapData)
             projectG.selectAll('circle').raise()
@@ -175,43 +181,44 @@ function map(mapData) {
     }
     map(mapData)
 
-        //Map slider update function
-d3.select("#timeslide").on("input", function() {
-    update(+this.value);
-});
+//         //Map slider update function
+// d3.select("#timeslide").on("input", function() {
+//     update(+this.value);
+// });
 
-// update the fill of each SVG of class "incident" with value
-function update(value) {
-    document.getElementById("range").innerHTML=month[value];
-    inputValue = month[value];
-    d3.selectAll(".incident")
-        .attr("fill", dateMatch);
-}
+// // update the fill of each SVG of class "incident" with value
+// function update(value) {
+//     document.getElementById("range").innerHTML=month[value];
+//     inputValue = month[value];
+//     d3.selectAll(".incident")
+//         .attr("fill", dateMatch);
+// }
 
-function dateMatch(mapData, value) {
-    let d = new Date(mapData.act_start_date);
-    let m = month[d.getMonth()];
-    if (inputValue == m) {
-        this.parentElement.appendChild(this);
-        return "#eb2828";
-    } else {
-        return "#636769";
-    };
-}
-
-function initialDate(Mapdata,i){
-    let d = new Date(d.act_start_date);
-    let m = month[d.getMonth()];
-    if (m == "January") {
-        this.parentElement.appendChild(this);
-        return "re#eb2828d";
-    } else {
-        return "#636769";
-    };
-}
+// function dateMatch(mapData, value) {
+//     let d = new Date(mapData.act_start_date);
+//     let m = month[d.getMonth()];
+//     if (inputValue == m) {
+//         this.parentElement.appendChild(this);
+//         return "#eb2828";
+//     } else {
+//         return "#636769";
+//     };
+// }
 
 
+// function initialDate(Mapdata,i){
+//     let d = new Date(d.act_start_date);
+//     let m = month[d.getMonth()];
+//     if (m == "January") {
+//         this.parentElement.appendChild(this);
+//         return "re#eb2828d";
+//     } else {
+//         return "#636769";
+//     };
+// }
 
-   
+
+
+
 
 
