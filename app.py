@@ -1,22 +1,14 @@
 # Setup dependencies
 import os
 import psycopg2
+import requests
 from flask import Flask, render_template, request, redirect, url_for, json, jsonify
 import datetime
 from pprint import pprint
-import certifi
 import ssl
-import geopy.geocoders
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
 from crud import *
 import hashlib
 from passlib.hash import sha256_crypt
-
-ctx = ssl.create_default_context(cafile=certifi.where())
-geopy.geocoders.options.default_ssl_context = ctx
-
-geolocator = Nominatim(scheme='http', user_agent='proj_job_costing')
 
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
@@ -89,13 +81,22 @@ def dashboard_data():
                     project_dict['project_address'] = street + city + ", " + state + zipcode
             else:
                 project_dict['project_address'] = city + ", " + state + zipcode
-            some_geo = str(street) 
-            location = geolocator.geocode(some_geo, timeout=10)
+            URL = "https://geocode.search.hereapi.com/v1/geocode"
+            location = project_dict['project_address']
+            api_key = 'FldvT1Yu3evOE1OMeJutzC0ee8xXBlqg7ot-sMi1u3w'
+            PARAMS = {'apikey':api_key,'q':location} 
+
+            # sending get request and saving the response as response object 
+            r = requests.get(url = URL, params = PARAMS) 
+            data = r.json()
+
+            latitude = data['items'][0]['position']['lat']
+            longitude = data['items'][0]['position']['lng']
             project_dict['lat'] = ""
             project_dict['lng'] = ""
             if location: 
-                project_dict['lat'] = str(location.latitude)
-                project_dict['lng'] = str(location.longitude)
+                project_dict['lat'] = latitude
+                project_dict['lng'] = longitude
             revenue = str(proj[7])
             est_labor_rate = str(proj[8])
             est_labor_hours = str(proj[9])
