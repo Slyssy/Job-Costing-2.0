@@ -64,10 +64,11 @@ def index():
 
 
         # return render_template('index3.html', dropdown_dict=json.dumps(emp_dropdown_dict))
-
+    error = None
     if request.method == 'POST':
+        
         # Required fields, and missing fields check
-        required_fields_list = ['log)in', 'password']
+        required_fields_list = ['log_in', 'password']
         missing_fields = []
         for req_field in required_fields_list:
             if req_field not in request.form:
@@ -79,7 +80,9 @@ def index():
         # Fetching employee and project names from form input    
         log_in = request.form['username']
         in_password = request.form['password']
-        hashed_in_pass = sha256(in_password) 
+        hashed_in_pass = sha256_crypt.hash("in_password")
+
+         
         # Fetching user_id and project_id from Users and Project Details tables in database  
         cur = conn.cursor() 
         cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
@@ -88,24 +91,13 @@ def index():
             password = p[0]  
         print(password)
 
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if hashed_in_pass != password:
             error = 'Invalid Credentials. Please try again.'
         else:
             return redirect(url_for('dashboard_data'))
     return render_template('index3.html', error=error)
     
-         try:
-            cur = conn.cursor() 
-            cur.execute("INSERT INTO time_sheets (user_id, project_id, start_time, finish_time) VALUES (%s, %s, %s, %s)", (user_id, project_id, start_time, finish_time))
-            print('-----------------------------------')
-            print('Data added to database - woohoo!')
-            print('-----------------------------------')
-        except:
-            db_write_error = 'Oops - could not write to database!'
-            return render_template('error.html', error_type=db_write_error)
-        return redirect(url_for('dashboard_data'))
-
-
+         
 #THIS POST ROUTE WORKS FOR HARDCODED USERNAME AND PASSWORD CHECK
     # error = None
     # if request.method == 'POST':
