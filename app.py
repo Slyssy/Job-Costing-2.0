@@ -68,14 +68,14 @@ def index():
     if request.method == 'POST':
         
         # Required fields, and missing fields check
-        required_fields_list = ['log_in', 'password']
-        missing_fields = []
-        for req_field in required_fields_list:
-            if req_field not in request.form:
-                missing_fields.append(req_field)
-        if len(missing_fields):
-            missing_fields_error = 'Oops - could not find these fields ' + ' '.join(missing_fields)
-            return render_template('error.html', error_type=missing_fields_error)
+        # required_fields_list = ['log_in', 'password']
+        # missing_fields = []
+        # for req_field in required_fields_list:
+        #     if req_field not in request.form:
+        #         missing_fields.append(req_field)
+        # if len(missing_fields):
+        #     missing_fields_error = 'Oops - could not find these fields ' + ' '.join(missing_fields)
+        #     return render_template('error.html', error_type=missing_fields_error)
         
         # Fetching employee and project names from form input    
         log_in = request.form['username']
@@ -86,16 +86,32 @@ def index():
         # Fetching user_id and project_id from Users and Project Details tables in database  
         cur = conn.cursor() 
         cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
-        user_pw_fetch = cur.fetchall()
-        for p in user_ps_fetch:
-            password = p[0]  
-        print(password)
+        # user_pw_fetch = cur.fetchall()
+        # for p in user_ps_fetch:
+        #     password = p[0]  
+        # print(password)
+        rows = cur.fetchall()
+        tup= rows[0] 
+        strpass = functools.reduce(operator.add,(tup))
+        print(strpass)
+        hashed_strpass = sha256_crypt.hash("strpass")
 
-        if hashed_in_pass != password:
+        if hashed_in_pass != hashed_strpass:
             error = 'Invalid Credentials. Please try again.'
         else:
             return redirect(url_for('dashboard_data'))
     return render_template('index3.html', error=error)
+
+
+    # if request.method == 'POST':
+    # log_in_name = request.form['log_in']
+    # cur.execute('SELECT password from users WHERE log_in=%s;', [log_in_name])
+    # rows = cur.fetchall()
+    # tup= rows[0] 
+
+    # strpass = functools.reduce(operator.add,(tup))
+    # print(strpass)
+    # hashed_strpass = sha256_crypt.hash("strpass")
     
          
 #THIS POST ROUTE WORKS FOR HARDCODED USERNAME AND PASSWORD CHECK
