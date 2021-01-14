@@ -67,6 +67,10 @@ tup= rows[0]
 
 strpass = functools.reduce(operator.add,(tup))
 print(strpass)
+hashed_strpass = sha256_crypt.hash("strpass")
+print(hashed_strpass)
+
+#will need to hash string to match (most) passwords in db
 
 # def convertTuple(tup):
 #     str = functools.reduce(operator.add,(tup))

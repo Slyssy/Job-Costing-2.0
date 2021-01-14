@@ -49,8 +49,20 @@ app = Flask(__name__)
 # Route for Index page -- Homepage and Intro to the App
 @app.route("/", methods=['GET'])
 def index():
-    return render_template("index.html")
+    if request.method == 'POST':
+    log_in_name = request.form['log_in']
+    cur.execute('SELECT password from users WHERE log_in=%s;', [log_in_name])
+    rows = cur.fetchall()
+    tup= rows[0] 
 
+    strpass = functools.reduce(operator.add,(tup))
+    print(strpass)
+    hashed_strpass = sha256_crypt.hash("strpass")
+    
+    
+    return render_template("index.html")
+    
+   
 
 
 # Route for Project Dashboard -- fetches project data from database for display, writes an input field to database
