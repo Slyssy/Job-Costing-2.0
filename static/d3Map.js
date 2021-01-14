@@ -110,6 +110,7 @@ function dateMatch(mapData, value) {
     let d = new Date(mapData.act_start_date);
     console.log(d)
     let m = month[d.getMonth()];
+    console.log(m)
     if (inputValue == m) {
         this.parentElement.appendChild(this);
         return "#eb2828";
@@ -118,16 +119,18 @@ function dateMatch(mapData, value) {
     };
 }
 
-function initialDate(date, i){
-    let d = new Date(d.act_start_date);
-    let m = month[d.getMonth()];
+function initialDate(mapData){
+    var d = new Date(mapData.act_start_date);
+    var m = month[d.getMonth()];
+    console.log(m)
     if (m == "January") {
         this.parentElement.appendChild(this);
-        return "re#eb2828d";
+        return "#eb2828";
     } else {
         return "#636769";
     };
 }
+initialDate(mapData)
    
             // console.log(mapData)
             projectG.selectAll('circle').raise()
