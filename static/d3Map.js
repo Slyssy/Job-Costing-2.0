@@ -81,9 +81,10 @@ d3.tsv('static/uscities.tsv')
 console.log(projectArray)
 // console.log(projectArray)
 //Parsing and formatting data to be used for map points
-var mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
-    {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat, lng}));
-console.log(mapData)
+
+const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
+    {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat: lat.toString(), lng: lng.toString()}));
+
 
 startDate = [];
 mapData.forEach(d => {

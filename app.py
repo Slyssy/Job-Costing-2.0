@@ -1,20 +1,14 @@
 # Setup dependencies
 import os
 import psycopg2
+import requests
 from flask import Flask, render_template, request, redirect, url_for, json, jsonify
 import datetime
 from pprint import pprint
-import certifi
 import ssl
-import geopy.geocoders
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
 from crud import *
-
-ctx = ssl.create_default_context(cafile=certifi.where())
-geopy.geocoders.options.default_ssl_context = ctx
-
-geolocator = Nominatim(scheme='http', user_agent='proj_job_costing')
+import hashlib
+from passlib.hash import sha256_crypt
 
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
@@ -87,13 +81,23 @@ def dashboard_data():
                     project_dict['project_address'] = street + city + ", " + state + zipcode
             else:
                 project_dict['project_address'] = city + ", " + state + zipcode
-            some_geo = str(street) 
-            location = geolocator.geocode(some_geo, timeout=10)
+            URL = "https://geocode.search.hereapi.com/v1/geocode"
+            location = project_dict['project_address']
+            
+            api_key = os.getenv("api_key")
+            PARAMS = {'apikey':api_key,'q':location} 
+
+            # sending get request and saving the response as response object 
+            r = requests.get(url = URL, params = PARAMS) 
+            data = r.json()
+
+            latitude = data['items'][0]['position']['lat']
+            longitude = data['items'][0]['position']['lng']
             project_dict['lat'] = ""
             project_dict['lng'] = ""
             if location: 
-                project_dict['lat'] = str(location.latitude)
-                project_dict['lng'] = str(location.longitude)
+                project_dict['lat'] = latitude
+                project_dict['lng'] = longitude
             revenue = str(proj[7])
             est_labor_rate = str(proj[8])
             est_labor_hours = str(proj[9])
@@ -262,7 +266,21 @@ def userdata_html_to_db():
         email = request.form['email']
         full_values_string += ',' + "'" + email + "'"
         phone = request.form['phone']
-        full_values_string += ',' + "'" + phone + "'" + ")"
+        full_values_string += ',' + "'" + phone + "'"
+        #log-in and hashing password 
+        log_in = request.form['log_in']
+        full_values_string += ',' + "'" + log_in + "'"
+        password = request.form['password']
+        passw = sha256_crypt.hash("password")
+        # result = hashlib.md5(b'password')
+        # hashed = result.digest()
+        #bcrypt options that did not work below:
+        # hashAndSalt = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        # pwd = b'password'
+        # pwd_string = str(pwd, 'utf-8')
+        # hashed = bcrypt.hashpw(pwd, SALT)
+        # hashed_str = str(hashed, 'utf-8')
+        full_values_string += ',' + "'" + passw + "'" + ")"
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Users table in database')
@@ -272,7 +290,7 @@ def userdata_html_to_db():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')

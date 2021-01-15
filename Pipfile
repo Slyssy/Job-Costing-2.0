@@ -12,6 +12,8 @@ gunicorn = "*"
 plotly = "*"
 certifi = "*"
 geopy = "*"
+passlib = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"
