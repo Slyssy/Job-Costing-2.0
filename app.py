@@ -41,34 +41,58 @@ app = Flask(__name__)
 
 
 # Route for Index page -- Homepage and Intro to the App
+# @app.route("/", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def index():
     error = None
     if request.method == 'POST':
         log_in = request.form['username']
         in_password = request.form['password']
-        hashed_in_pass = sha256_crypt.hash("in_password")
-
+        hashed_in_pass = sha256_crypt.hash(in_password)
         cur = conn.cursor() 
-        cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
-
+        cur.execute('SELECT password FROM users ;')
+        # cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
         rows = cur.fetchall()
-        tup=rows[0] 
+        print(rows)
+        tup=rows[0]
         strpass = functools.reduce(operator.add,(tup))
         print(strpass)
         print(hashed_in_pass)
-        hashed_strpass = sha256_crypt.hash("strpass")
-        print(type(hashed_strpass))
-        print(type(hashed_in_pass))
-
-
-        if hashed_in_pass != in_password or hashed_strpass:
-            error = 'Invalid Credentials. Please try again.'
-            print(error)
-        else:
+        if in_password == strpass:
             return redirect(url_for('new_project_data'))
             print("matched")
+    error = 'Invalid Credentials. Please try again.'
+    print(error)
     return render_template('logINdex.html', error=error)
+
+# def index():
+#     error = None
+#     if request.method == 'POST':
+#         log_in = request.form['username']
+#         in_password = request.form['password']
+#         # hashed_in_pass = sha256_crypt.hash("in_password")
+#         hashed_in_pass = sha256_crypt.hash(request.form['password'])
+
+#         cur = conn.cursor() 
+#         cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
+
+#         rows = cur.fetchall()
+#         tup=rows[0] 
+#         strpass = functools.reduce(operator.add,(tup))
+#         print(strpass)
+#         print(hashed_in_pass)
+#         hashed_strpass = sha256_crypt.hash("strpass")
+#         print(type(hashed_strpass))
+#         print(type(hashed_in_pass))
+
+
+#         if hashed_in_pass != in_password or hashed_strpass:
+#             error = 'Invalid Credentials. Please try again.'
+#             print(error)
+#         else:
+#             return redirect(url_for('new_project_data'))
+#             print("matched")
+#     return render_template('logINdex.html', error=error)
 
 
 
@@ -302,7 +326,7 @@ def userdata_html_to_db():
         log_in = request.form['log_in']
         full_values_string += ',' + "'" + log_in + "'"
         password = request.form['password']
-        passw = sha256_crypt.hash("password")
+        passw = sha256_crypt.hash(password)
         # result = hashlib.md5(b'password')
         # hashed = result.digest()
         #bcrypt options that did not work below:
