@@ -78,10 +78,10 @@ d3.tsv('static/uscities.tsv')
             
             
 })
-
+console.log(projectArray)
 // console.log(projectArray)
 //Parsing and formatting data to be used for map points
-const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
+var mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat, lng}));
 console.log(mapData)
 
@@ -97,21 +97,23 @@ function map(mapData) {
 //Map slider update function
 d3.select("#timeslide").on("input", function() {
     update(+this.value);
+    // console.log(+this.value);
 });
+
 
 // update the fill of each SVG of class "incident" with value
 function update(value) {
     document.getElementById("range").innerHTML=month[value];
     inputValue = month[value];
-    d3.selectAll(".incident")
+    d3.selectAll(".projects")
         .attr("fill", dateMatch);
 }
 
 function dateMatch(mapData, value) {
     let d = new Date(mapData.act_start_date);
-    // console.log(d)
-    let m = month[d.getMonth()];
-    // console.log(m)
+//    console.log(d)
+    let m = month[d.getUTCMonth()];
+    console.log(m)
     if (inputValue == m) {
         this.parentElement.appendChild(this);
         return "#eb2828";
@@ -120,9 +122,9 @@ function dateMatch(mapData, value) {
     };
 }
 
-function initialDate(mapData){
+function initialDate(mapData, i){
     var d = new Date(mapData.act_start_date);
-    var m = month[d.getMonth()];
+    var m = month[d.getUTCMonth()];
     console.log(m)
     if (m == "January") {
         this.parentElement.appendChild(this);
@@ -138,6 +140,8 @@ initialDate(mapData)
                 .data(mapData)
                 .enter().append('circle')
                 .attr('class', "projects")
+                .attr('fill', initialDate)
+                .attr('fill', '#eb2828')
                 .attr('r',  d => {
                     return Math.sqrt(d.fin_act_revenue/ widthMap *0.05);
                 })
