@@ -84,6 +84,7 @@ d3.tsv('static/uscities.tsv')
 const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat, lng}));
 console.log(mapData)
+
 startDate = [];
 mapData.forEach(d => {
     startDate.push(d.act_start_date)
@@ -108,9 +109,9 @@ function update(value) {
 
 function dateMatch(mapData, value) {
     let d = new Date(mapData.act_start_date);
-    console.log(d)
+    // console.log(d)
     let m = month[d.getMonth()];
-    console.log(m)
+    // console.log(m)
     if (inputValue == m) {
         this.parentElement.appendChild(this);
         return "#eb2828";
