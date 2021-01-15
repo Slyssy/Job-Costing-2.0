@@ -21,6 +21,9 @@ const zoomG = svgMap.append('g');
 const mapG = zoomG.append('g');
 const cityG = zoomG.append('g');
 const projectG = zoomG.append('g');
+
+let inputValue = null;
+const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
    
 d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json")
     .then(data => {
@@ -44,7 +47,7 @@ d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba16920754
 // Load in Cities Data
 d3.tsv('static/uscities.tsv')
     .then(data => {
-        console.log(data)
+        // console.log(data)
         cityG.selectAll('circle').raise()
             .data(data)
             .enter().append('circle')
@@ -75,22 +78,71 @@ d3.tsv('static/uscities.tsv')
             
             
 })
-
 console.log(projectArray)
+// console.log(projectArray)
 //Parsing and formatting data to be used for map points
+
 const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat: lat.toString(), lng: lng.toString()}));
 
 
+startDate = [];
+mapData.forEach(d => {
+    startDate.push(d.act_start_date)
+})
+console.log(startDate)
+
 // Load in map point data
 function map(mapData) {
-    // d3.tsv('static/uscities.tsv')
-    //     .then(data => {
-            console.log(mapData)
+
+//Map slider update function
+d3.select("#timeslide").on("input", function() {
+    update(+this.value);
+    // console.log(+this.value);
+});
+
+
+// update the fill of each SVG of class "incident" with value
+function update(value) {
+    document.getElementById("range").innerHTML=month[value];
+    inputValue = month[value];
+    d3.selectAll(".projects")
+        .attr("fill", dateMatch);
+}
+
+function dateMatch(mapData, value) {
+    let d = new Date(mapData.act_start_date);
+//    console.log(d)
+    let m = month[d.getUTCMonth()];
+    console.log(m)
+    if (inputValue == m) {
+        this.parentElement.appendChild(this);
+        return "#eb2828";
+    } else {
+        return "#636769";
+    };
+}
+
+function initialDate(mapData, i){
+    var d = new Date(mapData.act_start_date);
+    var m = month[d.getUTCMonth()];
+    console.log(m)
+    if (m == "January") {
+        this.parentElement.appendChild(this);
+        return "#eb2828";
+    } else {
+        return "#636769";
+    };
+}
+initialDate(mapData)
+   
+            // console.log(mapData)
             projectG.selectAll('circle').raise()
                 .data(mapData)
                 .enter().append('circle')
                 .attr('class', "projects")
+                .attr('fill', initialDate)
+                .attr('fill', '#eb2828')
                 .attr('r',  d => {
                     return Math.sqrt(d.fin_act_revenue/ widthMap *0.05);
                 })
@@ -137,3 +189,45 @@ function map(mapData) {
                 
     }
     map(mapData)
+
+//         //Map slider update function
+// d3.select("#timeslide").on("input", function() {
+//     update(+this.value);
+// });
+
+// // update the fill of each SVG of class "incident" with value
+// function update(value) {
+//     document.getElementById("range").innerHTML=month[value];
+//     inputValue = month[value];
+//     d3.selectAll(".incident")
+//         .attr("fill", dateMatch);
+// }
+
+// function dateMatch(mapData, value) {
+//     let d = new Date(mapData.act_start_date);
+//     let m = month[d.getMonth()];
+//     if (inputValue == m) {
+//         this.parentElement.appendChild(this);
+//         return "#eb2828";
+//     } else {
+//         return "#636769";
+//     };
+// }
+
+
+// function initialDate(Mapdata,i){
+//     let d = new Date(d.act_start_date);
+//     let m = month[d.getMonth()];
+//     if (m == "January") {
+//         this.parentElement.appendChild(this);
+//         return "re#eb2828d";
+//     } else {
+//         return "#636769";
+//     };
+// }
+
+
+
+
+
+

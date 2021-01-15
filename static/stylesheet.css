@@ -36,7 +36,7 @@
 }
 
 .projects {
-  fill: #eb2828;
+  /* fill: #eb2828; */
   opacity: 0.5;
 }
 
@@ -66,4 +66,10 @@
   background-color: rgba(28, 114, 242, 0.75);
   opacity: 0;
   pointer-events: none;
+}
+
+#sliderContainer {
+  text-align: center;
+  position: relative;
+  top: 600px;
 }
