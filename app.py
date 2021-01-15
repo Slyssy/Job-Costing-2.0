@@ -9,6 +9,8 @@ import ssl
 from crud import *
 import hashlib
 from passlib.hash import sha256_crypt
+import functools
+import operator
 
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
@@ -39,9 +41,38 @@ app = Flask(__name__)
 
 
 # Route for Index page -- Homepage and Intro to the App
-@app.route("/", methods=['GET'])
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template("index.html")
+    error = None
+    if request.method == 'POST':
+        log_in = request.form['username']
+        in_password = request.form['password']
+        hashed_in_pass = sha256_crypt.hash("in_password")
+
+        cur = conn.cursor() 
+        cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
+
+        rows = cur.fetchall()
+        tup=rows[0] 
+        strpass = functools.reduce(operator.add,(tup))
+        print(strpass)
+        print(hashed_in_pass)
+        hashed_strpass = sha256_crypt.hash("strpass")
+        print(type(hashed_strpass))
+        print(type(hashed_in_pass))
+
+
+        if hashed_in_pass != in_password or hashed_strpass:
+            error = 'Invalid Credentials. Please try again.'
+            print(error)
+        else:
+            return redirect(url_for('new_project_data'))
+            print("matched")
+    return render_template('logINdex.html', error=error)
+
+
+
+    # return render_template("logINdex.html")
 
 
 
