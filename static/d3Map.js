@@ -24,7 +24,7 @@ const projectG = zoomG.append('g');
 
 let inputValue = null;
 const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-   
+const year= ["2020", "2021", "2022", "2023", "2024"] 
 d3.json("https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/us.json")
     .then(data => {
            // const counties = topojson.feature(data, data.objects.counties)
@@ -72,25 +72,20 @@ d3.tsv('static/uscities.tsv')
                 .attr("y", function(d) {
                 return projection([d.lng, d.lat])[1];
                 })
-                .attr("dy", 8) // set y position of bottom of text
+                .attr("dy", 6) // set y position of bottom of text
                 .attr("text-anchor", "end") // set anchor y justification
                 .text(function(d) {return d.city;}); // define the text to display        
             
             
 })
-console.log(projectArray)
+// console.log(projectArray)
 // console.log(projectArray)
 //Parsing and formatting data to be used for map points
 
 const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat: lat.toString(), lng: lng.toString()}));
+    console.log(mapData)
 
-
-startDate = [];
-mapData.forEach(d => {
-    startDate.push(d.act_start_date)
-})
-console.log(startDate)
 
 // Load in map point data
 function map(mapData) {
@@ -101,8 +96,7 @@ d3.select("#timeslide").on("input", function() {
     // console.log(+this.value);
 });
 
-
-// update the fill of each SVG of class "incident" with value
+// update the fill of each circle of class "projects" with value
 function update(value) {
     document.getElementById("range").innerHTML=month[value];
     inputValue = month[value];
@@ -112,9 +106,9 @@ function update(value) {
 
 function dateMatch(mapData, value) {
     let d = new Date(mapData.act_start_date);
-//    console.log(d)
+   console.log(d)
     let m = month[d.getUTCMonth()];
-    console.log(m)
+    // console.log(m)
     if (inputValue == m) {
         this.parentElement.appendChild(this);
         return "#eb2828";
@@ -126,7 +120,7 @@ function dateMatch(mapData, value) {
 function initialDate(mapData, i){
     var d = new Date(mapData.act_start_date);
     var m = month[d.getUTCMonth()];
-    console.log(m)
+    // console.log(m)
     if (m == "January") {
         this.parentElement.appendChild(this);
         return "#eb2828";
@@ -134,9 +128,26 @@ function initialDate(mapData, i){
         return "#636769";
     };
 }
-initialDate(mapData)
-   
-            // console.log(mapData)
+  
+//Converting date to string, pulling year from the string and setting variable for unique values to be used in the selctor
+const mapDates = mapData.map(a => new Date(a.act_start_date));
+const mapYears = mapDates.map(a => a.getFullYear ());
+const selectYears = mapYears.filter((value, index, self) => self.indexOf(value) === index)
+selectYears.sort(function(a, b){return b - a});
+// console.log(selectYears)
+
+//Appending option to html id-mapYear and adding selectYears to the dropdown
+const mapOptions = d3.select("#mapYear").selectAll("option")
+          .data(selectYears)
+      .enter().append("option")
+          .text(d => d)
+
+
+    
+
+
+
+
             projectG.selectAll('circle').raise()
                 .data(mapData)
                 .enter().append('circle')
@@ -144,7 +155,7 @@ initialDate(mapData)
                 .attr('fill', initialDate)
                 .attr('fill', '#eb2828')
                 .attr('r',  d => {
-                    return Math.sqrt(d.fin_act_revenue/ widthMap *0.05);
+                    return Math.sqrt(d.fin_act_revenue/ widthMap *0.1);
                 })
                 .attr('cx', d => {                   
                     return projection([d.lng, d.lat])[0];
@@ -163,6 +174,7 @@ initialDate(mapData)
             d3.select("#address").text(" " + d.project_address)
             d3.select("#revenue").text( " $" + valueFormat(d.fin_act_revenue))
             d3.select("#grossProfit").text(" $" + valueFormat(d.fin_act_gross_profit))
+            d3.select("startDate").text(" " + new Date(d.act_start_date))
     
             //Position the tooltip <div> and set its content
             let x = d3.event.pageX;
@@ -189,45 +201,4 @@ initialDate(mapData)
                 
     }
     map(mapData)
-
-//         //Map slider update function
-// d3.select("#timeslide").on("input", function() {
-//     update(+this.value);
-// });
-
-// // update the fill of each SVG of class "incident" with value
-// function update(value) {
-//     document.getElementById("range").innerHTML=month[value];
-//     inputValue = month[value];
-//     d3.selectAll(".incident")
-//         .attr("fill", dateMatch);
-// }
-
-// function dateMatch(mapData, value) {
-//     let d = new Date(mapData.act_start_date);
-//     let m = month[d.getMonth()];
-//     if (inputValue == m) {
-//         this.parentElement.appendChild(this);
-//         return "#eb2828";
-//     } else {
-//         return "#636769";
-//     };
-// }
-
-
-// function initialDate(Mapdata,i){
-//     let d = new Date(d.act_start_date);
-//     let m = month[d.getMonth()];
-//     if (m == "January") {
-//         this.parentElement.appendChild(this);
-//         return "re#eb2828d";
-//     } else {
-//         return "#636769";
-//     };
-// }
-
-
-
-
-
 

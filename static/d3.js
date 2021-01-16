@@ -38,7 +38,7 @@ const months = ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","N
 const data = data0.map(
   o => ({...o, month: months[o.month - 1]})
 );
-// console.log(data)
+console.log(data)
 
 function chart(data) {
   // Looping through data to pull the Unique years in the data set.
