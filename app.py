@@ -60,7 +60,7 @@ def index():
         # print(hashed_in_pass)
         hashed_in_pass = sha256_crypt.verify(in_password, strpass)
         if hashed_in_pass:
-            return redirect(url_for('new_project_data'))
+            return redirect(url_for('dashboard_data'))
             # print("matched")
         else:
             error = 'Invalid Credentials. Please try again.'
