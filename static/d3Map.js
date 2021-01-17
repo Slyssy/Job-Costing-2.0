@@ -1,5 +1,7 @@
 // const { select } = require("d3");
 
+// const { svg } = require("d3");
+
 const marginMap = {top: 0, right: 0, bottom: 0, left: 0};
 const widthMap = 1135 - marginMap.left - marginMap.right;
 const heightMap = 600 - marginMap.top - marginMap.bottom;
@@ -82,9 +84,36 @@ d3.tsv('static/uscities.tsv')
 // console.log(projectArray)
 //Parsing and formatting data to be used for map points
 
-const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng}) => (
+const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng,}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat: lat.toString(), lng: lng.toString()}));
-    console.log(mapData)
+    // console.log(mapData)
+
+const mapper1 = single => {
+    let d = single.act_start_date.split('-');
+    let gp = Number(single.fin_act_gross_profit);
+    let rev = Number(single.fin_act_revenue);
+    let lt = single.lat;
+    let lg = single.lng;
+    let pn = single.project_name;
+    let pa = single.project_address
+    return { project_name: pn, project_address: pa, year: d[0], month: d[1], day: d[2], fin_act_gross_profit: gp , fin_act_revenue: rev, lat: lt, lng: lg};
+}
+
+const mapData0 = mapData.map(mapper1)
+
+const mapData1 = mapData0.map(
+    o => ({...o, month: month[o.month - 1]})
+    );   
+    console.log(mapData1)
+
+//Converting date to string, pulling year from the string and setting variable for unique values to be used in the selctor
+const mapDates = mapData.map(a => new Date(a.act_start_date));
+const mapYears = mapDates.map(a => a.getFullYear ());
+const selectYears = mapYears.filter((value, index, self) => self.indexOf(value) === index)
+selectYears.sort(function(a, b){return b - a});
+// console.log(selectYears)
+
+
 
 
 // Load in map point data
@@ -104,11 +133,11 @@ function update(value) {
         .attr("fill", dateMatch);
 }
 
-function dateMatch(mapData, value) {
-    let d = new Date(mapData.act_start_date);
-   console.log(d)
-    let m = month[d.getUTCMonth()];
-    // console.log(m)
+// Date Match function used to determine the color of the circles based on whether or not selector selection
+// matches month in actual start date
+function dateMatch(mapData1, value) {
+    let m = mapData1.month;
+
     if (inputValue == m) {
         this.parentElement.appendChild(this);
         return "#eb2828";
@@ -117,10 +146,10 @@ function dateMatch(mapData, value) {
     };
 }
 
+// Establish initial date view on map. Set for January.
 function initialDate(mapData, i){
-    var d = new Date(mapData.act_start_date);
-    var m = month[d.getUTCMonth()];
-    // console.log(m)
+    let m = mapData1.month;
+  
     if (m == "January") {
         this.parentElement.appendChild(this);
         return "#eb2828";
@@ -129,12 +158,7 @@ function initialDate(mapData, i){
     };
 }
   
-//Converting date to string, pulling year from the string and setting variable for unique values to be used in the selctor
-const mapDates = mapData.map(a => new Date(a.act_start_date));
-const mapYears = mapDates.map(a => a.getFullYear ());
-const selectYears = mapYears.filter((value, index, self) => self.indexOf(value) === index)
-selectYears.sort(function(a, b){return b - a});
-// console.log(selectYears)
+
 
 //Appending option to html id-mapYear and adding selectYears to the dropdown
 const mapOptions = d3.select("#mapYear").selectAll("option")
@@ -143,13 +167,21 @@ const mapOptions = d3.select("#mapYear").selectAll("option")
           .text(d => d)
 
 
+mapUpdate(d3.select("#mapYear").property("value"), 0)
     
+function mapUpdate(year, speed) {    
+    var dataf1 = mapData1.filter(f => f.year == year)
+    console.log(dataf1)
 
+    projectG.selectAll('.projects').transition().duration(speed)
 
+    var projects = projectG.selectAll(".projects")
+    // .data(dataf1, d => d.lng, d => d.lat)
 
-
+    projects.remove();
+    
             projectG.selectAll('circle').raise()
-                .data(mapData)
+                .data(mapData1)
                 .enter().append('circle')
                 .attr('class', "projects")
                 .attr('fill', initialDate)
@@ -174,7 +206,7 @@ const mapOptions = d3.select("#mapYear").selectAll("option")
             d3.select("#address").text(" " + d.project_address)
             d3.select("#revenue").text( " $" + valueFormat(d.fin_act_revenue))
             d3.select("#grossProfit").text(" $" + valueFormat(d.fin_act_gross_profit))
-            d3.select("startDate").text(" " + new Date(d.act_start_date))
+            d3.select("#startDate").text(" " + d.month + " " + d.day + ", " + d.year)
     
             //Position the tooltip <div> and set its content
             let x = d3.event.pageX;
@@ -200,5 +232,7 @@ const mapOptions = d3.select("#mapYear").selectAll("option")
         }))
                 
     }
+    map.update = mapUpdate
+}
     map(mapData)
 
