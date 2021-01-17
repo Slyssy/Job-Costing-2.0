@@ -48,25 +48,22 @@ def index():
     if request.method == 'POST':
         log_in = request.form['username']
         in_password = request.form['password']
-        print(in_password)
+        hashed_in_pass = sha256_crypt.hash(in_password)
         cur = conn.cursor() 
-        # cur.execute('SELECT password FROM users ;')
-        cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
+        cur.execute('SELECT password FROM users ;')
+        # cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
         rows = cur.fetchall()
         print(rows)
         tup=rows[0]
         strpass = functools.reduce(operator.add,(tup))
         print(strpass)
-        # print(hashed_in_pass)
-        hashed_in_pass = sha256_crypt.verify(in_password, strpass)
-        if hashed_in_pass:
+        print(hashed_in_pass)
+        if in_password == strpass:
             return redirect(url_for('new_project_data'))
-            # print("matched")
-        else:
-            error = 'Invalid Credentials. Please try again.'
-            print(error)
-            return render_template('logINdex.html', error=error)
-    return render_template('logINdex.html')
+            print("matched")
+    error = 'Invalid Credentials. Please try again.'
+    print(error)
+    return render_template('logINdex.html', error=error)
 
 # def index():
 #     error = None
@@ -330,6 +327,14 @@ def userdata_html_to_db():
         full_values_string += ',' + "'" + log_in + "'"
         password = request.form['password']
         passw = sha256_crypt.hash(password)
+        # result = hashlib.md5(b'password')
+        # hashed = result.digest()
+        #bcrypt options that did not work below:
+        # hashAndSalt = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        # pwd = b'password'
+        # pwd_string = str(pwd, 'utf-8')
+        # hashed = bcrypt.hashpw(pwd, SALT)
+        # hashed_str = str(hashed, 'utf-8')
         full_values_string += ',' + "'" + passw + "'" + ")"
         # Print data list for database entry
         print('-------------------------------------------------------------------')
