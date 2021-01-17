@@ -40,7 +40,7 @@ app = Flask(__name__)
 
 
 
-# Route for Index page -- Homepage and Intro to the App
+# Route for Index page -- Homepage/Intro to the App/Log-In page 
 # @app.route("/", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def index():
