@@ -1,7 +1,3 @@
-// const { select } = require("d3");
-
-// const { svg } = require("d3");
-
 const marginMap = {top: 0, right: 0, bottom: 0, left: 0};
 const widthMap = 1135 - marginMap.left - marginMap.right;
 const heightMap = 600 - marginMap.top - marginMap.bottom;
@@ -175,10 +171,10 @@ function mapUpdate(year, speed) {
 
     projectG.selectAll('.projects').transition().duration(speed)
 
-    var projects = projectG.selectAll(".projects")
-    // .data(dataf1, d => d.lng, d => d.lat)
-
-    projects.remove();
+    // var projects = projectG.selectAll(".projects")
+    // .data(dataf1, d => d.month)
+    projectG.selectAll('circle').remove();
+    
     
             projectG.selectAll('circle').raise()
                 .data(mapData1)
@@ -236,3 +232,8 @@ function mapUpdate(year, speed) {
 }
     map(mapData)
 
+var mapSelect = d3.select("#mapYear")
+// .style("border-radius", "5px")
+.on("change", function() {
+map.mapUpdate(this.value, 750)
+})
