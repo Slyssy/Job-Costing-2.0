@@ -72,14 +72,11 @@ d3.tsv('static/uscities.tsv')
                 })
                 .attr("dy", 6) // set y position of bottom of text
                 .attr("text-anchor", "end") // set anchor y justification
-                .text(function(d) {return d.city;}); // define the text to display        
-            
-            
+                .text(function(d) {return d.city;}); // define the text to display                         
 })
 // console.log(projectArray)
-// console.log(projectArray)
-//Parsing and formatting data to be used for map points
 
+//Parsing and formatting data to be used for map points
 const mapData = projectArray.map(({project_name, project_address, act_start_date, fin_act_revenue, fin_act_gross_profit, lat, lng,}) => (
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat: lat.toString(), lng: lng.toString()}));
     // console.log(mapData)
@@ -102,15 +99,11 @@ const mapData1 = mapData0.map(
     );   
     console.log(mapData1)
 
-//Converting date to string, pulling year from the string and setting variable for unique values to be used in the selctor
-const mapDates = mapData.map(a => new Date(a.act_start_date));
-const mapYears = mapDates.map(a => a.getFullYear ());
+// Grabbing years and pulling unique years to create a variable that will be used to populate the dropdown selector.
+const mapYears = mapData1.map(a => a.year);
 const selectYears = mapYears.filter((value, index, self) => self.indexOf(value) === index)
 selectYears.sort(function(a, b){return b - a});
-// console.log(selectYears)
-
-
-
+console.log(selectYears)
 
 // Load in map point data
 function map(mapData) {
@@ -143,7 +136,7 @@ function dateMatch(mapData1, value) {
 }
 
 // Establish initial date view on map. Set for January.
-function initialDate(mapData, i){
+function initialDate(mapData1, i){
     let m = mapData1.month;
   
     if (m == "January") {
@@ -153,8 +146,6 @@ function initialDate(mapData, i){
         return "#636769";
     };
 }
-  
-
 
 //Appending option to html id-mapYear and adding selectYears to the dropdown
 const mapOptions = d3.select("#mapYear").selectAll("option")
@@ -170,70 +161,70 @@ function mapUpdate(year, speed) {
     console.log(dataf1)
 
     projectG.selectAll('.projects').transition().duration(speed)
+    // .call(project_circles)
 
-    // var projects = projectG.selectAll(".projects")
-    // .data(dataf1, d => d.month)
-    projectG.selectAll('circle').remove();
+    var projects = projectG.selectAll(".projects")
+    // .data(dataf1, d => d.lng, d.lat)
     
-    
-            projectG.selectAll('circle').raise()
-                .data(mapData1)
-                .enter().append('circle')
-                .attr('class', "projects")
-                .attr('fill', initialDate)
-                .attr('fill', '#eb2828')
-                .attr('r',  d => {
-                    return Math.sqrt(d.fin_act_revenue/ widthMap *0.1);
-                })
-                .attr('cx', d => {                   
-                    return projection([d.lng, d.lat])[0];
-                })
-                .attr('cy', d => {
-                    return projection([d.lng, d.lat])[1];
-                })
-         
-            
-                
-        // Adding Tooltip Behavior
-    
-        .on('mouseover', function(d)  {
-            d3.select(this).style('fill', '#a834eb')
-            d3.select("#name").text(" " + d.project_name)
-            d3.select("#address").text(" " + d.project_address)
-            d3.select("#revenue").text( " $" + valueFormat(d.fin_act_revenue))
-            d3.select("#grossProfit").text(" $" + valueFormat(d.fin_act_gross_profit))
-            d3.select("#startDate").text(" " + d.month + " " + d.day + ", " + d.year)
-    
-            //Position the tooltip <div> and set its content
-            let x = d3.event.pageX;
-            let y = d3.event.pageY - 40;
-            
-            //Position tooltip and make it visible
-            d3.select('#tooltip')
-                .style('left', x +'px')
-                .style('top', y + 'px')
-                .style('opacity', 1)
+    //Function to plot points
+        projectG.selectAll('.projects').remove();
+        console.log(mapData1)
+        projectG.selectAll('circle').raise()
+        .data(dataf1)
+        .enter().append('circle')
+        .attr('class', "projects")
+        .attr('fill', initialDate)
+        // .attr('fill', '#eb2828')
+        .attr('r',  d => {
+            return Math.sqrt(d.fin_act_revenue/ widthMap *0.1);
         })
-        .on('mouseout', function() {
-            d3.select(this).style('fill', '#eb2828');        
-            
-            //Hide the tooltip
-            d3.select('#tooltip')
-                .style('opacity', '0');
-        });
+        .attr('cx', d => {                   
+            return projection([d.lng, d.lat])[0];
+        })
+        .attr('cy', d => {
+            return projection([d.lng, d.lat])[1];
+        })
+
+        // Adding Tooltip Behavior    
+    .on('mouseover', function(d)  {
+        d3.select(this).style('fill', '#a834eb')
+        d3.select("#name").text(" " + d.project_name)
+        d3.select("#address").text(" " + d.project_address)
+        d3.select("#revenue").text( " $" + valueFormat(d.fin_act_revenue))
+        d3.select("#grossProfit").text(" $" + valueFormat(d.fin_act_gross_profit))
+        d3.select("#startDate").text(" " + d.month + " " + d.day + ", " + d.year)
+
+        //Position the tooltip <div> and set its content
+        let x = d3.event.pageX;
+        let y = d3.event.pageY - 40;
+        
+        //Position tooltip and make it visible
+        d3.select('#tooltip')
+            .style('left', x +'px')
+            .style('top', y + 'px')
+            .style('opacity', 1)
+    })
+    .on('mouseout', function() {
+        d3.select(this).style('fill', '#eb2828');        
     
+        //Hide the tooltip
+        d3.select('#tooltip')
+            .style('opacity', '0');
+    });
         //Creating pan and zoom feature
         zoomG.call(d3.zoom().on("zoom", () => {
             zoomG.attr("transform", d3.event.transform);
         }))
-                
+           
     }
     map.update = mapUpdate
 }
-    map(mapData)
+    map(mapData1)
 
 var mapSelect = d3.select("#mapYear")
 // .style("border-radius", "5px")
 .on("change", function() {
-map.mapUpdate(this.value, 750)
+map.update(this.value, 750)
 })
+
+
