@@ -107,11 +107,39 @@ bar.enter().append("rect")
     .style("fill", d => d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828')
     .attr("opacity", ".5")
     .attr("width", x.bandwidth())
-    .merge(bar)
-.transition().duration(speed)
     .attr("x", d => x(d.month))
     .attr("y", d => y(d.fin_act_labor_expense))
     .attr("height", d => y(0) - y(d.fin_act_labor_expense))
+    // .merge(bar)
+    // .transition().duration(speed)
+    // .attr("x", d => x(d.month))
+    // .attr("y", d => y(d.fin_act_labor_expense))
+    // .attr("height", d => y(0) - y(d.fin_act_labor_expense))
+
+  // Adding Tooltip Behavior    
+.on('mouseover', function(d)  {
+  d3.select(this).style('fill', '#a834eb')
+  d3.select("#act_labor_exp").text(" $" + valueFormat(d.fin_act_labor_expense))
+
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
+
+//Position tooltip and make it visible
+d3.select('#tooltip-bar')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
+
+.on('mouseout', function() {
+  d3.select(this).style('fill', function (d) {return d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828'
+  });        
+
+  //Hide the tooltip
+  d3.select('#tooltip-bar')
+      .style('opacity', '0');
+});
 
   // Defining limit lines for estimated labor expense
   var line = svg.selectAll(".line")
@@ -120,16 +148,48 @@ bar.enter().append("rect")
 line.exit().remove();
  
     line.enter().append("line")
-    .attr("class", "line")
+     .attr("class", "line")
       .style("fill", 'none')
   		.attr("x1", d => x(d.month) + x.bandwidth() +5)
       .attr("x2", d => x(d.month) -5)
-   .attr("y1", d => y(+d.fin_est_labor_expense))
+      .attr("y1", d => y(+d.fin_est_labor_expense))
       .attr("y2", d => y(+d.fin_est_labor_expense))
   		.style("stroke-dasharray", [6,2])
   		.style("stroke", "#eb2828")
-  .style("stroke-width", 3)
+      .style("stroke-width", 3)
+      .merge(line)
+      // .transition().duration(speed)
+      // .attr("x", d => x(d.month) + x.bandwidth() +5)
+      // .attr("x2", d => x(d.month) -5)
+      // .attr("y1", d => y(+d.fin_est_labor_expense))
+      // .attr("y2", d => y(+d.fin_est_labor_expense))
+      // .style("stroke-dasharray", [6,2])
+  		// .style("stroke", "#eb2828")
+      // .style("stroke-width", 3)
 
+// Adding Tooltip Behavior    
+.on('mouseover', function(d)  {
+  d3.select(this).style('stroke', '#a834eb')
+  d3.select("#est_labor_exp").text(" $" + valueFormat(d.fin_est_labor_expense))
+
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
+
+//Position tooltip and make it visible
+d3.select('#tooltip-line')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
+
+.on('mouseout', function() {
+  d3.select(this).style('stroke', '#eb2828');        
+
+  //Hide the tooltip
+  d3.select('#tooltip-line')
+      .style('opacity', '0');
+});
 }
 
 chart.update = update;
