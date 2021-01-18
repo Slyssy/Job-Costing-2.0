@@ -46,7 +46,7 @@
 
 .cityName {
   fill:rgba(28, 114, 242);
-  font-size: 10px;
+  font-size: 6px;
 }
 
 #tooltip {
@@ -72,4 +72,8 @@
   text-align: center;
   position: relative;
   top: 600px;
+}
+
+#range {
+  font-size: 32px;
 }
