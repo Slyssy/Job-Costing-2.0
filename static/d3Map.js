@@ -81,6 +81,7 @@ const mapData = projectArray.map(({project_name, project_address, act_start_date
     {project_name, project_address, act_start_date, fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, '')), fin_act_gross_profit: parseFloat((fin_act_gross_profit).replace(/,/g, '')), lat: lat.toString(), lng: lng.toString()}));
     // console.log(mapData)
 
+// Restructuring data so it can be used to filter the projects by year.
 const mapper1 = single => {
     let d = single.act_start_date.split('-');
     let gp = Number(single.fin_act_gross_profit);
