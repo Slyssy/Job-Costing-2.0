@@ -11,7 +11,7 @@ import hashlib
 from passlib.hash import sha256_crypt
 import functools
 import operator
-
+from collections import OrderedDict
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
 pg_port = os.getenv("pg_port")
@@ -364,7 +364,7 @@ def time_html_to_db():
     if request.method == 'GET':
         # Fetch all employee names from database for dropdown menu
         cur = conn.cursor()
-        cur.execute('SELECT name FROM users')
+        cur.execute('SELECT name FROM users ORDER BY name ASC')
         employee_names_fetch = cur.fetchall()
         print('------------------------------------------------------------')   
         print('All employee names fetched from database for dropdown list')   
@@ -378,8 +378,10 @@ def time_html_to_db():
             employee_dict['name'] = db_row[0]
             employee_list.append(employee_dict)
         
+        # sorted_emp_list = employee_list.sort()  
+        
         # Fetch all project names from database for dropdown menu
-        cur.execute('SELECT name FROM project_details')    
+        cur.execute('SELECT name FROM project_details ORDER BY name ASC')    
         project_names_fetch = cur.fetchall()
         print('-----------------------------------------------------------')   
         print('All project names fetched from database for dropdown list')   
