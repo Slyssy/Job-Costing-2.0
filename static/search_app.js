@@ -131,6 +131,7 @@ const grabbedData2 = dataGrab2(project_dict)
 let data2 = Object.keys(grabbedData2).map(e => ({type: e, value: grabbedData2[e]}))
 console.log(data2)
 
+const valueFormat = d3.format(',');
 
 // set the dimensions and margins of the graph
 const margin = {top: 70, right: 30, bottom: 70, left: 120},
@@ -157,9 +158,15 @@ const xAxis = svg.append("g")
 // Initialize the Y axis
 const y = d3.scaleLinear()
   .range([ height, 0]);
-const yAxis = svg.append("g")
+
+const yAxis = svg.append("g") 
   .attr("class", "myYaxis") 
 
+
+  
+
+
+// Adding yAxis label
   yAxis
   .append('text')
     .attr('class', 'yAxis')
@@ -194,6 +201,7 @@ function update(data) {
   y.domain([0, d3.max(data, d => d.value ) * 1.2 ]);
   yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
+
   // Create the u variable
   const u = svg.selectAll("rect")
     .data(data)
@@ -202,10 +210,16 @@ function update(data) {
     .domain(['Budget Expense', 'Actual Expense'])
     .range([ '#1b71f2', '#eb2828'])
 
+// If less group in the new dataset, I delete the ones not in use anymore
   u
+    .exit()
+    .remove()
+
+  let u1 = u
     .enter()
     .append("rect") // Add a new rect for each new elements
-    .merge(u) // get the already existing elements as well
+    
+    u1.merge(u) // get the already existing elements as well
     .transition() // and apply changes to all of them
     .duration(1000)
       .attr("x", d => x(d.type))
@@ -215,10 +229,32 @@ function update(data) {
       .attr("fill", function(d, i)  {return colors(d.type)})
       .style("opacity", "0.5")
       // "#1b71f2", "#eb2828"
-  // If less group in the new dataset, I delete the ones not in use anymore
-  u
-    .exit()
-    .remove()
+  
+  
+  // u1.on('mouseover', function(d)  {
+  //   d3.select(this).style('fill', '#a834eb')
+  //   d3.select("#budget_labor_exp").text(" $" + valueFormat(d.value))
+  
+  // //Position the tooltip <div> and set its content
+  // let x = d3.event.pageX;
+  // let y = d3.event.pageY - 40;
+  
+  // //Position tooltip and make it visible
+  // d3.select('#tooltip-budgeted')
+  // .style('left', x +'px')
+  // .style('top', y + 'px')
+  // .style('opacity', 1)
+  // })
+  
+  // .on('mouseout', function() {
+  //   d3.select(this).style("fill", function(d, i)  {return colors(d.type)});   
+  
+  //   //Hide the tooltip
+  //   d3.select('#tooltip-budgeted')
+  //       .style('opacity', '0');
+  // });
+
+
 }
 
 

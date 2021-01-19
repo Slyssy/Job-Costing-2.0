@@ -106,6 +106,25 @@
   pointer-events: none;
 }
 
+#tooltip-budgeted {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 10px;
+  width: auto;
+  height: auto;
+  color: white;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+  background-color:rgba(34, 35, 36, 0.75);
+  opacity: 0;
+  pointer-events: none;
+}
+
 #sliderContainer {
   text-align: center;
   position: relative;
