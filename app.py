@@ -108,6 +108,8 @@ def dashboard_data():
                 project_dict['act_end_date'] = str(proj[12])
             est_material_expense = str(proj[15])
             est_subcontractor_expense = str(proj[16])
+            est_miscellaneous_expense = str(proj[17])
+            est_overhead_expense = str(proj[18])
 
                         
             # Fetch Time_Sheets data for given project_id
@@ -152,6 +154,10 @@ def dashboard_data():
             project_dict['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
             fin_est_subcontractor_expense = (est_subcontractor_expense)
             project_dict['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
+            fin_est_miscellaneous_expense = est_miscellaneous_expense
+            project_dict['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
+            # fin_est_overhead_expense = float(est_overhead_expense)
+            # project_dict['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
 
             # Calculations for Project Financials - Actual
             fin_act_revenue = revenue
