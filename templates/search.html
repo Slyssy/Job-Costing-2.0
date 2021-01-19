@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Details</title>
-
+​
     <!-- Bootstrap Greyson Liabraries and Oswald Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
@@ -21,7 +21,7 @@
       type="text/css"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
-
+​
     <!-- Datepicker links and dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script
@@ -35,10 +35,10 @@
     />
     <!-- Plotly CDN -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+​
     <!-- D3 CDN -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
-
+​
     <link
       rel="stylesheet"
       type="text/css"
@@ -86,9 +86,6 @@
                   <a class="nav-link" href="/new_project">Create New Project</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/enter_expense">Enter Project Expense</a>
-                </li>
-                <li class="nav-item">
                   <a class="nav-link" href="/new_user">Create User</a>
                 </li>
               </ul>
@@ -106,6 +103,7 @@
             <th scope="col">Actual labor Hours</th>
             <th scope="col">Budget Labor Expense</th>
             <th scope="col">Actual Labor Expense</th>
+​
           </tr>
         </thead>
         <tbody>
@@ -200,6 +198,26 @@
               <td>$ {{project_dict.fin_act_labor_expense}}</td>
             </tr>
             <tr>
+              <th scope="row">Material Expense:</th>
+              <td>$ {{project_dict.fin_material_expense}}</td>
+              <td>$ {{project_dict.fin_material_expense}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Subcontractor Expense:</th>
+              <td>$ {{project_dict.fin_subcontractor_expense}}</td>
+              <td>$ {{project_dict.fin_subcontractor_expense}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Miscelleanous Expense:</th>
+              <td>$ {{project_dict.fin_miscelleaneous_expense}}</td>
+              <td>$ {{project_dict.fin_miscelleaneous_expense}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Overhead Expense:</th>
+              <td>$ {{project_dict.fin_overhead_expense}}</td>
+              <td>$ {{project_dict.fin_overhead_expense}}</td>
+            </tr>
+            <tr>
               <th scope="row">Project Gross Profit:</th>
               <td>$ {{project_dict.fin_est_gross_profit}}</td>
               <td>$ {{project_dict.fin_act_gross_profit}}</td>
@@ -212,7 +230,7 @@
           </tbody>
         </table>
       </div>
-
+​
       <div class="container visualizations_container">
         <div
           class="card bg-primary text-white h-100"
@@ -226,7 +244,7 @@
             </p>
           </div>
         </div>
-
+​
         <div class="row">
           <div class="col-md-6">
             <button class="btn btn-primary mr-2" onclick="update(data1)">Labor Expense</button>
@@ -248,4 +266,3 @@
     const project_dict = {{ project_dict | safe }}
   </script>
   <script src="{{ url_for('static', filename='search_app.js') }}"></script>
-</html>

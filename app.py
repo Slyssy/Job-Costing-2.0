@@ -171,6 +171,8 @@ def dashboard_data():
                 project_dict['act_end_date'] = str(proj[12])
             est_material_expense = str(proj[15])
             est_subcontractor_expense = str(proj[16])
+            est_miscellaneous_expense = str(proj[17])
+            est_overhead_expense = str(proj[18])
 
                         
             # Fetch Time_Sheets data for given project_id
@@ -215,6 +217,10 @@ def dashboard_data():
             project_dict['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
             fin_est_subcontractor_expense = (est_subcontractor_expense)
             project_dict['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
+            fin_est_miscellaneous_expense = est_miscellaneous_expense
+            project_dict['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
+            fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
+            project_dict['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
 
             # Calculations for Project Financials - Actual
             fin_act_revenue = revenue
@@ -279,15 +285,7 @@ def new_project_data():
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
             act_start_date = datetime.datetime.now() 
-        # est_material_expense = str("{:.2f}".format(float(est_material_expense) * float(est_material_expense)))
-        # full_values_string += ',' + est_material_expense
-        # est_subcontractor_expense = str("{:.2f}".format(float(est_subcontractor_expense) * float(est_subcontractor_expense)))
-        # full_values_string += ',' + est_subcontractor_expense
-        # est_miscellaneous_expense = str("{:.2f}".format(float(est_miscellaneous_expense) * float(est_miscellaneous_expense)))
-        # full_values_string += ',' + est_miscellaneous_expense
-        # est_overhead_expense = str("{:.2f}".format(float(est_overhead_expense) * float(est_overhead_expense)))
-        # full_values_string += ',' + est_overhead_expense          
-        # full_values_string += ',' + "'" + str(act_start_date) + "'" + ')'
+
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Project_Details table in database')
