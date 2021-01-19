@@ -227,5 +227,3 @@ var mapSelect = d3.select("#mapYear")
 .on("change", function() {
 map.update(this.value, 750)
 })
-
-
