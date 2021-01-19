@@ -92,8 +92,8 @@ def search_by_id(project_id, conn):
         project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
         fin_est_miscellaneous_expense = est_miscellaneous_expense
         project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
-        # fin_est_overhead_expense = float(est_overhead_expense) * float(revenue)
-        # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
+        fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
+        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
 
 
         # Calculations for Project Financials - Actual
