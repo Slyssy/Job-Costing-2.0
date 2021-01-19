@@ -112,7 +112,7 @@
 
 // Plotly.newPlot("eva_gp_bar", gpData, gpLayout);
 
-// console.log(project_dict)
+console.log(project_dict)
 
 // Function to grab data from object necessary to create plots 
 function dataGrab1({fin_est_labor_expense, fin_act_labor_expense}) {

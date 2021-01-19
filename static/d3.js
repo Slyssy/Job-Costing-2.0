@@ -1,3 +1,4 @@
+console.log(project_list)
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
 // console.log(projectArray)

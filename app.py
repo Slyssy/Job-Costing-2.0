@@ -51,7 +51,7 @@ def dashboard_data():
     if request.method == 'GET':
         cur = conn.cursor()
         # Fetch data from Project_Details table
-        cur.execute('SELECT * FROM project_details' + ';')
+        cur.execute('SELECt * FROM project_details' + ';')
         project_details_data = cur.fetchall()
         print('*****************************************')
         print('Data fetched from Project_Details table')
@@ -103,14 +103,13 @@ def dashboard_data():
             est_labor_hours = str(proj[9])
             est_labor_expense = str(proj[10])
             act_start_date = str(proj[11])
-            material_expense = str(proj[15])
-            subcontractor_expense = str(proj[16])
-            misc_expense = str(proj[17])
-            overhead_exp = str(proj[18])
             project_dict['act_start_date'] = act_start_date
             if str(proj[12]) != "":
-                project_dict['act_end_date'] = str(proj[12])              
-                            
+                project_dict['act_end_date'] = str(proj[12])
+            est_material_expense = str(proj[15])
+            est_subcontractor_expense = str(proj[16])
+
+                        
             # Fetch Time_Sheets data for given project_id
             cur = conn.cursor()
             cur.execute('SELECT * FROM time_sheets WHERE project_id=' + str(project_id) + ';')
@@ -133,6 +132,7 @@ def dashboard_data():
             project_dict["timesheets"] = timesheet_all
             project_list["project_id: "+ str(project_id)] = project_dict
             project_dict['id'] = str(project_id)
+            
 
             # Calculations for Project Financials - Budgeted/Estimated
             fin_est_revenue = revenue
@@ -148,6 +148,10 @@ def dashboard_data():
             project_dict['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
             fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
             project_dict['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
+            fin_est_material_expense = (est_material_expense)
+            project_dict['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
+            fin_est_subcontractor_expense = (est_subcontractor_expense)
+            project_dict['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
 
             # Calculations for Project Financials - Actual
             fin_act_revenue = revenue
@@ -163,7 +167,7 @@ def dashboard_data():
             project_dict['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
             fin_act_gross_margin = float(fin_act_gross_profit) / float(fin_act_revenue) * 100
             project_dict['fin_act_gross_margin'] = "{:.2f}".format(fin_act_gross_margin) + " %"
-        # pprint(project_list)     
+        pprint(project_list)     
         
         # Create a dictionary of dictionaries with project_details table data chosen, and output as a JSON
         return render_template('dashboard.html', project_list=json.dumps(project_list))
@@ -208,19 +212,19 @@ def new_project_data():
         full_values_string += ',' + est_labor_hours
         est_labor_expense = str("{:.2f}".format(float(est_labor_hours) * float(est_labor_rate)))
         full_values_string += ',' + est_labor_expense
-        material_expense = str("{:.2f}".format(float(material_expense) * float(material_expense)))
-        full_values_string += ',' + material_expense
-        subcontractor_expense = str("{:.2f}".format(float(subcontractor_expense) * float(subcontractor_expense)))
-        full_values_string += ',' + subcontractor_expense
-        misc_expense = str("{:.2f}".format(float(misc_expense) * float(misc_expense)))
-        full_values_string += ',' + misc_expense
-        overhead_exp = str("{:.2f}".format(float(overhead_exp) * float(overhead_exp)))
-        full_values_string += ',' + overhead_exp
         if 'act_start_date' in request.form and request.form['act_start_date'] != "":
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
-            act_start_date = datetime.datetime.now()           
-        full_values_string += ',' + "'" + str(act_start_date) + "'" + ')'
+            act_start_date = datetime.datetime.now() 
+        # est_material_expense = str("{:.2f}".format(float(est_material_expense) * float(est_material_expense)))
+        # full_values_string += ',' + est_material_expense
+        # est_subcontractor_expense = str("{:.2f}".format(float(est_subcontractor_expense) * float(est_subcontractor_expense)))
+        # full_values_string += ',' + est_subcontractor_expense
+        # est_miscellaneous_expense = str("{:.2f}".format(float(est_miscellaneous_expense) * float(est_miscellaneous_expense)))
+        # full_values_string += ',' + est_miscellaneous_expense
+        # est_overhead_expense = str("{:.2f}".format(float(est_overhead_expense) * float(est_overhead_expense)))
+        # full_values_string += ',' + est_overhead_expense          
+        # full_values_string += ',' + "'" + str(act_start_date) + "'" + ')'
         # Print data list for database entry
         print('-------------------------------------------------------------------')
         print('Data list prepared for entry to Project_Details table in database')
@@ -230,7 +234,7 @@ def new_project_data():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date, est_material_expense, est_subcontractor_expense, est_miscellaneous_expense, est_overhead_expense) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
