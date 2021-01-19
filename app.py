@@ -44,6 +44,11 @@ app = Flask(__name__)
 # @app.route("/", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    if request.method == 'GET':
+        print('*****************')
+        print('Getting form...')
+        print('*****************')
+        return render_template('logIndex.html') 
     error = None
     if request.method == 'POST':
         log_in = request.form['username']
@@ -65,8 +70,8 @@ def index():
         else:
             error = 'Invalid Credentials. Please try again.'
             print(error)
-            return render_template('logINdex.html', error=error)
-    return render_template('logINdex.html')
+            return render_template('logIndex.html', error=error)
+    return render_template('logIndex.html')
 
 # def index():
 #     error = None
