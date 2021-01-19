@@ -98,13 +98,13 @@ const mapData0 = mapData.map(mapper1)
 const mapData1 = mapData0.map(
     o => ({...o, month: month[o.month - 1]})
     );   
-    console.log(mapData1)
+    // console.log(mapData1)
 
 // Grabbing years and pulling unique years to create a variable that will be used to populate the dropdown selector.
 const mapYears = mapData1.map(a => a.year);
 const selectYears = mapYears.filter((value, index, self) => self.indexOf(value) === index)
 selectYears.sort(function(a, b){return b - a});
-console.log(selectYears)
+// console.log(selectYears)
 
 // Load in map point data
 function map(mapData) {
@@ -159,7 +159,7 @@ mapUpdate(d3.select("#mapYear").property("value"), 0)
     
 function mapUpdate(year, speed) {    
     var dataf1 = mapData1.filter(f => f.year == year)
-    console.log(dataf1)
+    // console.log(dataf1)
 
     projectG.selectAll('.projects').transition().duration(speed)
     // .call(project_circles)
@@ -169,7 +169,6 @@ function mapUpdate(year, speed) {
     
     //Function to plot points
         projectG.selectAll('.projects').remove();
-        console.log(mapData1)
         projectG.selectAll('circle').raise()
         .data(dataf1)
         .enter().append('circle')
