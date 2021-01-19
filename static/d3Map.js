@@ -206,7 +206,7 @@ function mapUpdate(year, speed) {
             .style('opacity', 1)
     })
     .on('mouseout', function() {
-        d3.select(this).style('fill', '#eb2828');        
+        d3.select(this).style('fill', initialDate);        
     
         //Hide the tooltip
         d3.select('#tooltip')
@@ -227,5 +227,3 @@ var mapSelect = d3.select("#mapYear")
 .on("change", function() {
 map.update(this.value, 750)
 })
-
-

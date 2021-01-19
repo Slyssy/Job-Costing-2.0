@@ -38,7 +38,7 @@ const months = ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","N
 const data = data0.map(
   o => ({...o, month: months[o.month - 1]})
 );
-// console.log(data)
+console.log(data)
 
 function chart(data) {
   // Looping through data to pull the Unique years in the data set.
@@ -53,7 +53,7 @@ const options = d3.select("#year").selectAll("option")
           .text(d => d)
 
 var svg = d3.select("#estimate-to-actual"),
-margin = {top: 70, right: 20, bottom: 70, left: 125},
+margin = {top: 70, right: -75, bottom: 70, left: 150},
 width = +svg.attr("width") - margin.left - margin.right,
 height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -74,11 +74,20 @@ var yAxis = g => g
 .attr("transform", "translate(" + margin.left + ",0)")
 .call(d3.axisLeft(y).tickSize(-width))
 
+
 svg.append("g")
 .attr("class", "x-axis")
 
 svg.append("g")
 .attr("class", "y-axis")
+.append('text')
+    .attr('class', 'yAxis')
+    .attr('y', -110)
+    .attr('x', -120)
+    .attr('transform', `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style('font-size', '2.5em')
+    .text("Labor Expense ($)")
 
 
 update(d3.select("#year").property("value"), 0)
@@ -102,16 +111,42 @@ var bar = svg.selectAll(".bar")
 
 bar.exit().remove();
 
-bar.enter().append("rect")
+var bar1 = bar.enter().append("rect")
     .attr("class", "bar")
     .style("fill", d => d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828')
     .attr("opacity", ".5")
     .attr("width", x.bandwidth())
-    .merge(bar)
-.transition().duration(speed)
+
+  bar1 .merge(bar)    
+    .transition().duration(speed)
     .attr("x", d => x(d.month))
     .attr("y", d => y(d.fin_act_labor_expense))
     .attr("height", d => y(0) - y(d.fin_act_labor_expense))
+
+  // Adding Tooltip Behavior    
+bar1.on('mouseover', function(d)  {
+  d3.select(this).style('fill', '#a834eb')
+  d3.select("#act_labor_exp").text(" $" + valueFormat(d.fin_act_labor_expense))
+
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
+
+//Position tooltip and make it visible
+d3.select('#tooltip-bar')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
+
+.on('mouseout', function() {
+  d3.select(this).style('fill', function (d) {return d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828'
+  });        
+
+  //Hide the tooltip
+  d3.select('#tooltip-bar')
+      .style('opacity', '0');
+});
 
   // Defining limit lines for estimated labor expense
   var line = svg.selectAll(".line")
@@ -119,17 +154,43 @@ bar.enter().append("rect")
 
 line.exit().remove();
  
-    line.enter().append("line")
-    .attr("class", "line")
+    var line1 = line.enter().append("line")
+     .attr("class", "line")
       .style("fill", 'none')
   		.attr("x1", d => x(d.month) + x.bandwidth() +5)
       .attr("x2", d => x(d.month) -5)
-   .attr("y1", d => y(+d.fin_est_labor_expense))
+     
+      line1.merge(line)
+      .transition().duration(speed)
+      .attr("y1", d => y(+d.fin_est_labor_expense))
       .attr("y2", d => y(+d.fin_est_labor_expense))
-  		.style("stroke-dasharray", [6,2])
+      .style("stroke-dasharray", [6,2])
   		.style("stroke", "#eb2828")
-  .style("stroke-width", 3)
+      .style("stroke-width", 3)
 
+// Adding Tooltip Behavior    
+line1.on('mouseover', function(d)  {
+  d3.select(this).style('stroke', '#a834eb')
+  d3.select("#est_labor_exp").text(" $" + valueFormat(d.fin_est_labor_expense))
+
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
+
+//Position tooltip and make it visible
+d3.select('#tooltip-line')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
+
+.on('mouseout', function() {
+  d3.select(this).style('stroke', '#eb2828');        
+
+  //Hide the tooltip
+  d3.select('#tooltip-line')
+      .style('opacity', '0');
+});
 }
 
 chart.update = update;
