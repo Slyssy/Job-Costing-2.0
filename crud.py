@@ -86,8 +86,14 @@ def search_by_id(project_id, conn):
         project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
         fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
         project_list['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
-        # fin_est_material_expense = est_material_expense
-        # project_list['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
+        fin_est_material_expense = est_material_expense
+        project_list['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
+        fin_est_subcontractor_expense = est_subcontractor_expense
+        project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
+        fin_est_miscellaneous_expense = est_miscellaneous_expense
+        project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
+        fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
+        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
 
 
         # Calculations for Project Financials - Actual
