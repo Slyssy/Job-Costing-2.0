@@ -2,3 +2,7 @@ Created app copy.py --- back up to review changes made
 Need to refactor code -- use sqlalchemy 
     -- starting with new user route and then login route
 Figure out hashing once sqlalchemy works
+
+In ddSort branch:
+- updated SQL query for new_time route to sort the User name and project names 
+alphabetical order (ascending)
