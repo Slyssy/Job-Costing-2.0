@@ -53,22 +53,22 @@ app = Flask(__name__)
 #     return render_template("index.html")
 
 # log_in_name = request.form['employee_name']
-log_in_name = "bob"
-cur.execute('SELECT password from users WHERE log_in=%s;', [log_in_name])
+# log_in_name = "bob"
+# cur.execute('SELECT password from users WHERE log_in=%s;', [log_in_name])
 # cur.execute('SELECT log_in, password from users')
-rows = cur.fetchall()
+# rows = cur.fetchall()
 
 #creates [('password',)]
-print(rows)
+# print(rows)
 #creates ('password',)
-print(rows[0])
+# print(rows[0])
 
-tup= rows[0] 
+# tup= rows[0] 
 
-strpass = functools.reduce(operator.add,(tup))
-print(strpass)
-hashed_strpass = sha256_crypt.hash("strpass")
-print(hashed_strpass)
+# strpass = functools.reduce(operator.add,(tup))
+# print(strpass)
+# hashed_strpass = sha256_crypt.hash("strpass")
+# print(hashed_strpass)
 
 #will need to hash string to match (most) passwords in db
 
@@ -76,15 +76,15 @@ print(hashed_strpass)
 #     str = functools.reduce(operator.add,(tup))
 #     print (str)
 
-if "passbob20" == strpass:
-    print ("it matches")
-else:
-    print("does not match")
+# if "passbob20" == strpass:
+#     print ("it matches")
+# else:
+#     print("does not match")
 
-if "passbob20" == strpass:
-    print ("it matches")
-else:
-    print("does not match")
+# if "passbob20" == strpass:
+#     print ("it matches")
+# else:
+#     print("does not match")
 
 # for r in rows:
 #     password = r[0]
@@ -101,4 +101,96 @@ else:
 #         print ("does not match")    
     
 
-cur.close()
+# cur.close()
+
+# Route for new Time Entry -- saves inputs to Time_Sheets table in db, then redirects to Dashboard
+@app.route('/new_time', methods=['GET', 'POST'])
+def time_html_to_db():     
+    if request.method == 'GET':
+        # Fetch all employee names from database for dropdown menu
+        cur = conn.cursor()
+        cur.execute('SELECT name FROM users')
+        employee_names_fetch = cur.fetchall()
+        print('------------------------------------------------------------')   
+        print('All employee names fetched from database for dropdown list')   
+        print('------------------------------------------------------------')   
+        print(employee_names_fetch)
+        print('------------------------------------------------------------')   
+        # Convert employee names to a JSON
+        employee_list = []
+        for db_row in employee_names_fetch:
+            employee_dict = {}
+            employee_dict['name'] = db_row[0]
+            employee_list.append(employee_dict)
+        
+        # Fetch all project names from database for dropdown menu
+        cur.execute('SELECT name FROM project_details')    
+        project_names_fetch = cur.fetchall()
+        print('-----------------------------------------------------------')   
+        print('All project names fetched from database for dropdown list')   
+        print('-----------------------------------------------------------')   
+        print(project_names_fetch)
+        print('-----------------------------------------------------------') 
+        # Convert project names to a list
+        project_list = []
+        for db_row in project_names_fetch:
+            project_dict = {}
+            project_dict['name'] = db_row[0]
+            project_list.append(project_dict)
+        
+        # Create a dictionary for employee and project names, and convert to a JSON for the dropdown menus
+        dropdown_dict = {}
+        dropdown_dict['employee_list'] = employee_list
+        dropdown_dict['project_list'] = project_list
+        pprint(dropdown_dict)
+        return render_template('enterTime.html', dropdown_dict=json.dumps(dropdown_dict))
+        
+    if request.method == 'POST':
+        # Required fields, and missing fields check
+        required_fields_list = ['employee_name', 'project_name', 'start_time', 'finish_time']
+        missing_fields = []
+        for req_field in required_fields_list:
+            if req_field not in request.form:
+                missing_fields.append(req_field)
+        if len(missing_fields):
+            missing_fields_error = 'Oops - could not find these fields ' + ' '.join(missing_fields)
+            return render_template('error.html', error_type=missing_fields_error)
+        
+        # Fetching employee and project names from form input    
+        employee_name = request.form['employee_name']
+        project_name = request.form['project_name']
+        # Fetching user_id and project_id from Users and Project Details tables in database  
+        cur = conn.cursor() 
+        cur.execute('SELECT user_id FROM users WHERE name=%s;', [employee_name])
+        user_id_fetch = cur.fetchall()
+        for user in user_id_fetch:
+            user_id = user[0]  
+        cur.execute('SELECT project_id FROM project_details WHERE name=%s;', [project_name])
+        project_id_data = cur.fetchall()        
+        for project in project_id_data:
+            project_id = project[0]
+
+        # Fetching time data from form input, and formatting it for database entry
+        start_time = request.form['start_time']
+        start_time = " ".join(reversed(start_time.split(" ")))
+        start_time = datetime.datetime.strptime(start_time, "%m/%d/%Y %H:%M").strftime('%Y-%m-%d %H:%M:%S')
+        print('Start timestamp = ' + start_time)
+        start_time = str(start_time)
+        finish_time = request.form['finish_time']
+        finish_time = " ".join(reversed(finish_time.split(" ")))
+        finish_time = datetime.datetime.strptime(finish_time, "%m/%d/%Y %H:%M").strftime('%Y-%m-%d %H:%M:%S')
+        print('Finish timestamp = ' + finish_time)
+        finish_time=str(finish_time)
+
+        # Adding data to Time_Sheets table in database:
+        try:
+            cur = conn.cursor() 
+            cur.execute("INSERT INTO time_sheets (user_id, project_id, start_time, finish_time) VALUES (%s, %s, %s, %s)", (user_id, project_id, start_time, finish_time))
+            print('-----------------------------------')
+            print('Data added to database - woohoo!')
+            print('-----------------------------------')
+        except:
+            db_write_error = 'Oops - could not write to database!'
+            return render_template('error.html', error_type=db_write_error)
+        return redirect(url_for('dashboard_data'))
+

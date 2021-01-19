@@ -45,7 +45,11 @@ def search_by_id(project_id, conn):
         act_start_date = str(proj[11])
         project_list['act_start_date'] = act_start_date
         if str(proj[12]):
-            project_list['act_end_date'] = str(proj[12])              
+            project_list['act_end_date'] = str(proj[12])
+        est_material_expense = str(proj[15])
+        est_subcontractor_expense = str(proj[16])
+        est_miscellaneous_expense = str(proj[17])
+        est_overhead_expense = str(proj[18])            
                         
         # Fetch Time_Sheets data for given project_id
         cur = conn.cursor()
@@ -83,6 +87,11 @@ def search_by_id(project_id, conn):
         project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
         fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
         project_list['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
+        fin_est_material_expense = est_material_expense 
+        project_list['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
+        est_subcontractor_expense = str(proj[16])
+        est_miscellaneous_expense = str(proj[17])
+        est_overhead_expense = str(proj[18])
 
         # Calculations for Project Financials - Actual
         fin_act_revenue = revenue
