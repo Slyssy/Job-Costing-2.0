@@ -49,15 +49,15 @@ app = Flask(__name__)
 # Route for Index page -- Homepage and Intro to the App
 @app.route("/", methods=['GET'])
 def index():
-    if request.method == 'POST':
-    log_in_name = request.form['log_in']
-    cur.execute('SELECT password from users WHERE log_in=%s;', [log_in_name])
-    rows = cur.fetchall()
-    tup= rows[0] 
+    # if request.method == 'POST':
+    # log_in_name = request.form['log_in']
+    # cur.execute('SELECT password from users WHERE log_in=%s;', [log_in_name])
+    # rows = cur.fetchall()
+    # tup= rows[0] 
 
-    strpass = functools.reduce(operator.add,(tup))
-    print(strpass)
-    hashed_strpass = sha256_crypt.hash("strpass")
+    # strpass = functools.reduce(operator.add,(tup))
+    # print(strpass)
+    # hashed_strpass = sha256_crypt.hash("strpass")
     
     
     return render_template("index.html")
@@ -153,8 +153,10 @@ def dashboard_data():
             project_dict['fin_est_labor_rate'] = f'{float(fin_est_labor_rate):,}'
             fin_est_labor_expense = float(fin_est_labor_hours) * float(fin_est_labor_rate)
             project_dict['fin_est_labor_expense'] = f'{float(fin_est_labor_expense):,}'
-            fin_est_gross_profit = float(fin_est_revenue) - fin_est_labor_expense
+            fin_est_gross_profit = round((float(fin_est_revenue) - (fin_est_labor_expense)) ,2)
             # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
+            # fin_est_gross_profit = ("{:.2f}".format(fin_est_gross_profit))
+            # fin_est_gross_profit = round(fin_est_gross_profit, 2)
             project_dict['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
             fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
             project_dict['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
@@ -450,7 +452,7 @@ def project_search():
 #use New project route, but change to update?
 @app.route('/update_project', methods=['GET', 'POST'])
 def update_project_data():
-if request.method == 'GET':
+    if request.method == 'GET':
         project_id = request.args.get("project_id")
         project_dict = search_by_id(project_id, conn)
         pprint(project_dict)
@@ -518,7 +520,7 @@ if request.method == 'GET':
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            sql_insert_str = "UPDATE project_details SET subcontractor_expense = ("subcontractor_expense")
+            sql_insert_str = "UPDATE project_details SET subcontractor_expense = (subcontractor_expense);"
             print(sql_insert_str)
             cur.execute(sql_insert_str)
             # cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date) VALUES ' + full_values_string + ';')
@@ -532,9 +534,9 @@ if request.method == 'GET':
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
         
-sql_insert_string = "UPDATE project_details SET act_comp_date = TO_DATE('" + act_end_date + "', 'MM/DD/YYYY') WHERE project_id=" + project_id + ";"
-            print(sql_insert_string)
-            cur.execute(sql_insert_string)     
+# sql_insert_string = "UPDATE project_details SET act_comp_date = TO_DATE('" + act_end_date + "', 'MM/DD/YYYY') WHERE project_id=" + project_id + ";"
+#             print(sql_insert_string)
+#             cur.execute(sql_insert_string)     
 
 
 # Close database connection
