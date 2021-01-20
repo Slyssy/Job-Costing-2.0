@@ -154,3 +154,22 @@ def get_actual_labor_rate(timesheet_all, act_labor_hours, conn):
     for timesheet_dict in timesheet_all:
         sum_of_hours_t_rate += float(timesheet_dict['hours_worked']) * float(timesheet_dict['hourly_pay_rate'])
     return (float(sum_of_hours_t_rate)/act_labor_hours)
+
+def act_project_expense(project_expense, act_project_expense, conn):
+    """Function for expense calculations - used later for Dashboard route"""
+    expense_dict ={}
+    expense_dict['project_expense'] = str(project_expense[1])
+    project_id = str(timesheet[0])
+    expense_dict['project_id'] = project_id
+    # Fetch project data from project_expense table
+    cur = conn.cursor()
+    cur.execute('SELECT expense_type, expense_date, expense_amount FROM project_expense WHERE project_id=' + str(project_id));
+    project_id_data = cur.fetchall()
+    for project in project_id_data :
+        expense_type = project_expense[1]
+        expense_dict['expense_type'] = expense_type
+        expense_date = project_expense[2]
+        expense_dict['expense_date'] = expense_date
+        expense_amount = project_expense[3]
+        expense_dict['expense_amount'] =expense_amount
+    return(expense_dict, act_project_expense)

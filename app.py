@@ -452,45 +452,94 @@ def time_html_to_db():
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
 
-# Route for actual_expense pages -- saves inputs to db, then redirects to Dashboard
-@app.route("/enter_expense", methods=['GET', 'POST'])
-def project_expense():
+## Route for enter actual expense -- saves inputs to project_expense table in db, then redirects to Dashboard
+@app.route('/enter_expense', methods=['GET', 'POST'])
+def project_expense():     
     if request.method == 'GET':
-        print('*****************')
-        print('Getting form...')
-        print('*****************')
-        return render_template('enter_expense.html')    
-    
-    if request.method == 'POST':
-        print('*****************')
-        print('Posting form...')
-        print('*****************')
-        full_values_string = ''
-        name = request.form['project_name']
-        full_values_string = ''
-        act_material_expense = request.form['act_material_expense']
-        full_values_string = ''
-        act_miscellaneous_expense = request.form['act_miscellaneous_expense']
-        full_values_string = ''
-        act_overhead_expense = request.form['act_overhead_expense']
-        
-        # Print data list for database entry
-        print('-------------------------------------------------------------------')
-        print('Data list prepared for entry to Project_Details table in database')
-        print('-------------------------------------------------------------------')
-        print(full_values_string)
-        print('-------------------------------------------------------------------')
+        # Fetch all expense from database for dropdown menu
         cur = conn.cursor()
-        # Adding form input data to PostgreSQL database
+        cur.execute('SELECT expense_type FROM project_expense ORDER BY project_id ASC')
+        project_expense_fetch = cur.fetchall()
+        print('------------------------------------------------------------')  
+        print('All projects fetched from database for dropdown list')   
+        print('------------------------------------------------------------')   
+        print(project_expense_fetch)
+        print('------------------------------------------------------------')   
+        # Convert project_expense to a JSON
+        project_expense_list = []
+        for db_row in project_expense_fetch:
+            expense_dict = {}
+            expense_dict['project_expense'] = db_row[0]
+            project_expense_list.append(expense_dict)  
+        
+        # Fetch all project names from database for dropdown menu
+        cur.execute('SELECT name FROM project_details ORDER BY name ASC')    
+        project_names_fetch = cur.fetchall()
+        print('-----------------------------------------------------------')   
+        print('All project names fetched from database for dropdown list')   
+        print('-----------------------------------------------------------')   
+        print(project_names_fetch)
+        print('-----------------------------------------------------------') 
+        # Convert project names to a list
+        project_list = []
+        for db_row in project_names_fetch:
+            project_dict = {}
+            project_dict['name'] = db_row[0]
+            project_list.append(project_dict)
+        
+        # Create a dictionary for expense and project names, and convert to a JSON for the dropdown menus
+        dropdown_dict = {}
+        dropdown_dict['project_expense_list'] = project_expense_list
+        dropdown_dict['project_list'] = project_list
+        pprint(dropdown_dict)
+        return render_template('enter_expense.html', dropdown_dict=json.dumps(dropdown_dict))
+        
+    if request.method == 'POST':
+        # Required fields, and missing fields check
+        required_fields_list = ['project_id', 'expense_type', 'expense_date', 'enter_expense_amount']
+        missing_fields = []
+        for req_field in required_fields_list:
+            if req_field not in request.form:
+                missing_fields.append(req_field)
+        if len(missing_fields):
+            missing_fields_error = 'Oops - could not find these fields ' + ' '.join(missing_fields)
+            return render_template('error.html', error_type=missing_fields_error)
+        
+        # Fetching expense and project names from form input    
+        expense = request.form['project_expense']
+        project_name = request.form['project_name']
+        # Fetching project_expense and project_id from Project_Expense and Project_Details tables in database  
+        cur = conn.cursor() 
+        cur.execute('SELECT project_expense FROM project_expense WHERE project_id=%s;', [project_expense])
+        project_expense_fetch = cur.fetchall()
+        for expense in project_expense_fetch:
+            project_expense = project_expense[0]  
+        cur.execute('SELECT project_id FROM project_details WHERE name=%s;', [project_name])
+        project_id_data = cur.fetchall()        
+        for project in project_id_data:
+            project_id = project[0]
+
+        # Fetching time data from form input, and formatting it for database entry
+        # start_time = request.form['start_time']
+        # start_time = " ".join(reversed(start_time.split(" ")))
+        # start_time = datetime.datetime.strptime(start_time, "%m/%d/%Y %H:%M").strftime('%Y-%m-%d %H:%M:%S')
+        # print('Start timestamp = ' + start_time)
+        # start_time = str(start_time)
+        # finish_time = request.form['finish_time']
+        # finish_time = " ".join(reversed(finish_time.split(" ")))
+        # finish_time = datetime.datetime.strptime(finish_time, "%m/%d/%Y %H:%M").strftime('%Y-%m-%d %H:%M:%S')
+        # print('Finish timestamp = ' + finish_time)
+        # finish_time=str(finish_time)
+
+        # Adding data to project_expense table in database:
         try:
-            cur.execute('INSERT INTO expense (act_material_expense, act_subcontractor_expense, act_miscellaneous_expense) VALUES ' + full_values_string + ';')
+            cur = conn.cursor() 
+            cur.execute("INSERT INTO project_expense (expense_type, project_id, expense_date, enter_expense_amount) VALUES (%s, %s, %s, %s)", (expense_type, project_id, expense_date, enter_expense_amount))
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
         except:
-            print('---------------------------------------')
             db_write_error = 'Oops - could not write to database!'
-            print('---------------------------------------')
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
 
