@@ -145,11 +145,6 @@ def dashboard_data():
             project_dict['fin_est_labor_rate'] = f'{float(fin_est_labor_rate):,}'
             fin_est_labor_expense = float(fin_est_labor_hours) * float(fin_est_labor_rate)
             project_dict['fin_est_labor_expense'] = f'{float(fin_est_labor_expense):,}'
-            fin_est_gross_profit = float(fin_est_revenue) - fin_est_labor_expense
-            # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
-            project_dict['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
-            fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
-            project_dict['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
             fin_est_material_expense = (est_material_expense)
             project_dict['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
             fin_est_subcontractor_expense = (est_subcontractor_expense)
@@ -158,6 +153,11 @@ def dashboard_data():
             project_dict['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
             fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
             project_dict['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
+            fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
+            # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
+            project_dict['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
+            fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
+            project_dict['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
 
             # Calculations for Project Financials - Actual
             fin_act_revenue = revenue
@@ -304,7 +304,6 @@ def userdata_html_to_db():
         return redirect(url_for('dashboard_data'))
 
 
-
 # Route for new Time Entry -- saves inputs to Time_Sheets table in db, then redirects to Dashboard
 @app.route('/new_time', methods=['GET', 'POST'])
 def time_html_to_db():     
@@ -396,6 +395,47 @@ def time_html_to_db():
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
 
+# Route for actual_expense pages -- saves inputs to db, then redirects to Dashboard
+@app.route("/enter_expense", methods=['GET', 'POST'])
+def project_expense():
+    if request.method == 'GET':
+        print('*****************')
+        print('Getting form...')
+        print('*****************')
+        return render_template('enter_expense.html')    
+    
+    if request.method == 'POST':
+        print('*****************')
+        print('Posting form...')
+        print('*****************')
+        full_values_string = ''
+        name = request.form['project_name']
+        full_values_string = ''
+        act_material_expense = request.form['act_material_expense']
+        full_values_string = ''
+        act_miscellaneous_expense = request.form['act_miscellaneous_expense']
+        full_values_string = ''
+        act_overhead_expense = request.form['act_overhead_expense']
+        
+        # Print data list for database entry
+        print('-------------------------------------------------------------------')
+        print('Data list prepared for entry to Project_Details table in database')
+        print('-------------------------------------------------------------------')
+        print(full_values_string)
+        print('-------------------------------------------------------------------')
+        cur = conn.cursor()
+        # Adding form input data to PostgreSQL database
+        try:
+            cur.execute('INSERT INTO expense (act_material_expense, act_subcontractor_expense, act_miscellaneous_expense) VALUES ' + full_values_string + ';')
+            print('-----------------------------------')
+            print('Data added to database - woohoo!')
+            print('-----------------------------------')
+        except:
+            print('---------------------------------------')
+            db_write_error = 'Oops - could not write to database!'
+            print('---------------------------------------')
+            return render_template('error.html', error_type=db_write_error)
+        return redirect(url_for('dashboard_data'))
 
 
 # Route for queried Project_Details pages -- fetches project data from database for display, writes an input field to database
