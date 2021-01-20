@@ -134,8 +134,8 @@ console.log(data2)
 
 // set the dimensions and margins of the graph
 const margin = {top: 70, right: 30, bottom: 70, left: 120},
-    width = 1135 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    width = 560 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("#eva_exp_bar")
@@ -163,20 +163,20 @@ const yAxis = svg.append("g")
   yAxis
   .append('text')
     .attr('class', 'yAxis')
-    .attr('y', -90)
-    .attr('x', -30)
+    .attr('y', -60)
+    .attr('x', -20)
     .attr('transform', `rotate(-90)`)
     .attr("fill", "#635f5d")
-    .style('font-size', '2.5em')
+    .style('font-size', '1.5em')
     .text("Labor Expense ($) / Labor Hours")
 
    svg.append('text')
     .attr('y', -10)
-    .attr('x', 310)
+    .attr('x', 80)
     .attr('class', 'title')
-    .text("Estimate vs. Actual")
+    .text("Estimate vs. Actual Labor")
     .attr("fill", "#635f5d")
-    .style('font-size', '3em')
+    .style('font-size', '1.7em')
 
 
 // A function that create / update the plot for a given variable:
@@ -224,3 +224,92 @@ function update(data) {
 
 // Initialize the plot with the first dataset
 update(data1)
+
+// Start Estmated Material, Misc and Subcontractor
+// set the dimensions and margins of the graph
+
+// append the svg object to the body of the page
+const svg1 = d3.select("#eva_mat_misc_sub_bar")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Initialize the X axis
+const x1 = d3.scaleBand()
+  .range([ 0, width ])
+  .padding(0.2);
+
+const xAxis1 = svg1.append("g")
+  .attr("transform", "translate(0," + height + ")")
+
+// Initialize the Y axis
+const y1 = d3.scaleLinear()
+  .range([ height, 0]);
+const yAxis1 = svg1.append("g")
+  .attr("class", "myOtherYaxis") 
+
+  yAxis1
+  .append('text')
+    .attr('class', 'yAxis')
+    .attr('y', -60)
+    .attr('x', -60)
+    .attr('transform', `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style('font-size', '1.5em')
+    .text("Expense Values ($)")
+
+   svg1.append('text')
+    .attr('y', -10)
+    .attr('x', 20)
+    .attr('class', 'title')
+    .text("Estimate vs. Actual (Mat, Misc & Sub)")
+    .attr("fill", "#635f5d")
+    .style('font-size', '1.7em')
+
+
+// A function that create / update the plot for a given variable:
+function update1(data) {
+
+  // Update the X axis
+  x1.domain(data.map(d => d.type))
+  xAxisG1 = xAxis1.call(d3.axisBottom(x1))
+
+  xAxisG1
+  // .style("color", "#635f5d")
+  // .style('font-size', '2.0em')
+
+  // Update the Y axis
+  y1.domain([0, d3.max(data, d => d.value ) * 1.2 ]);
+  yAxis1.transition().duration(1000).call(d3.axisLeft(y1));
+
+  // Create the u variable
+  const u1 = svg1.selectAll("rect")
+    .data(data)
+
+    const colors = d3.scaleOrdinal()
+    .domain(['Budget Expense', 'Actual Expense'])
+    .range([ '#1b71f2', '#eb2828'])
+
+  u1
+    .enter()
+    .append("rect") // Add a new rect for each new elements
+    .merge(u1) // get the already existing elements as well
+    .transition() // and apply changes to all of them
+    .duration(1000)
+      .attr("x", d => x1(d.type))
+      .attr("y", d => y1(d.value))
+      .attr("width", x1.bandwidth())
+      .attr("height", d => height - y1(d.value))
+      .attr("fill", function(d, i)  {return colors(d.type)})
+      .style("opacity", "0.5")
+      // "#1b71f2", "#eb2828"
+  // If less group in the new dataset, I delete the ones not in use anymore
+  u1
+    .exit()
+    .remove()
+}
+
+update1(data1)
