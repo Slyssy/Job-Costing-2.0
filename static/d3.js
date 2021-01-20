@@ -54,7 +54,7 @@ const options = d3.select("#year").selectAll("option")
           .text(d => d)
 
 var svg = d3.select("#estimate-to-actual"),
-margin = {top: 70, right: -75, bottom: 70, left: 150},
+margin = {top: 70, right: -75, bottom: 0, left: 110},
 width = +svg.attr("width") - margin.left - margin.right,
 height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -83,8 +83,8 @@ svg.append("g")
 .attr("class", "y-axis")
 .append('text')
     .attr('class', 'yAxis')
-    .attr('y', -110)
-    .attr('x', -120)
+    .attr('y', -70)
+    .attr('x', -190)
     .attr('transform', `rotate(-90)`)
     .attr("fill", "#635f5d")
     .style('font-size', '2.5em')
