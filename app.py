@@ -148,12 +148,13 @@ def dashboard_data():
             fin_est_revenue = revenue
             project_dict['fin_est_revenue '] = f'{float(revenue):,}'
             fin_est_labor_hours = est_labor_hours
+            # formatted_est_labor_hours = "{:.2f}".format(fin_est_labor_hours)
             project_dict['fin_est_labor_hours'] = str(fin_est_labor_hours)
             fin_est_labor_rate = est_labor_rate
             project_dict['fin_est_labor_rate'] = f'{float(fin_est_labor_rate):,}'
             fin_est_labor_expense = float(fin_est_labor_hours) * float(fin_est_labor_rate)
             project_dict['fin_est_labor_expense'] = f'{float(fin_est_labor_expense):,}'
-            fin_est_gross_profit = round((float(fin_est_revenue) - (fin_est_labor_expense)) ,2)
+            fin_est_gross_profit = "%.2f" % round((float(fin_est_revenue) - (fin_est_labor_expense)) ,2)
             # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
             # fin_est_gross_profit = ("{:.2f}".format(fin_est_gross_profit))
             # fin_est_gross_profit = round(fin_est_gross_profit, 2)

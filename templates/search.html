@@ -108,7 +108,9 @@
         <tbody>
           <tr>
             <td>$ {{project_dict.fin_act_revenue}}</td>
-            <td>{{project_dict.fin_est_labor_hours}}</td>
+            <!-- <td>{{project_dict.fin_est_labor_hours}}</td> -->
+            <td>{{format(project_dict.fin_est_labor_hours|float)|round}}</td>
+            
             <td>{{project_dict.fin_act_labor_hours}}</td>
             <td>$ {{project_dict.fin_est_labor_expense}}</td>
             <td>$ {{project_dict.fin_act_labor_expense}}</td>
