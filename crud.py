@@ -1,4 +1,5 @@
 import datetime
+from pprint import pprint
 
 def search_by_id(project_id, conn):
     print('I am here: project_id=' + project_id)
@@ -72,6 +73,28 @@ def search_by_id(project_id, conn):
         # Using the predefined function for actual labor hours, calculate actual labor rate
         act_labor_rate = get_actual_labor_rate(timesheet_all, act_labor_hours, conn)
 
+        # Fetch Project_Expense data for given project_id
+        cur = conn.cursor()
+        print('Project ID = ' + str(project_id))
+        cur.execute('SELECT * FROM project_expense WHERE project_id=' + str(project_id) + ';')
+        project_expense_data = cur.fetchall()
+        print('------------------------------------------')
+        print('Data fetched from Project_Expense table')
+        print('------------------------------------------')
+        # Create a list of dictionaries with project_expense table data
+        project_expense_all = []
+        act_expense_amount = float(0)
+        # Get individual expense_dict for display
+        if not len(project_expense_data):
+            print('No expense entered in database for this project, therefore skipping Project ID ' + str(project_id))
+        for project_expense in project_expense_data:
+            # Calling the pre-defined function
+            (expense_dict, act_project_expense) = get_expense_dict(project_expense, act_project_expense, conn)
+            project_expense_all.append(expense_dict)
+            (expense_dict, act_project_expense) = get_expense_dict()
+        # Using the predefined function for actual project expense, calculate actual expenses
+        act_project_expense = get_act_project_expense(project_expense_all, act_expense_amount, conn)
+
         # Calculations for Project Financials - Budgeted/Estimated
         fin_est_revenue = revenue
         project_list['fin_est_revenue '] = f'{float(revenue):,}'
@@ -94,7 +117,6 @@ def search_by_id(project_id, conn):
         project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
         fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
         project_list['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
-
 
         # Calculations for Project Financials - Actual
         fin_act_revenue = revenue
@@ -155,32 +177,11 @@ def get_actual_labor_rate(timesheet_all, act_labor_hours, conn):
         sum_of_hours_t_rate += float(timesheet_dict['hours_worked']) * float(timesheet_dict['hourly_pay_rate'])
     return (float(sum_of_hours_t_rate)/act_labor_hours)
 
-
-    # Fetch Project_Expense data for given project_id
-    cur = conn.cursor()
-    print('Project ID = ' + str(project_id))
-    cur.execute('SELECT * FROM project_expense WHERE project_id=' + str(project_id) + ';')
-    project_expense_data = cur.fetchall()
-    print('------------------------------------------')
-    print('Data fetched from Project_Expense table')
-    print('------------------------------------------')
-    # Create a list of dictionaries with project_expense table data
-    project_expense_all = []
-    act_expense_amount = float(0)
-    # Get individual expense_dict for display
-    if not len(project_expense_data):
-        print('No timesheets entered in database for this project, therefore skipping Project ID ' + str(project_id))
-    for project_expense in project_expense_data:
-        # Calling the pre-defined function
-        (expense_dict, act_project_expense) = get_expense_dict(project_expense, act_project_expense, conn)
-        project_expense_all.append(expense_dict)
-    # Using the predefined function for actual project expense, calculate actual expenses
-    act_material_expense = get_act_material_expense(project_expense_all, act_project_expense, conn)
-
-def act_project_expense(project_expense, act_project_expense, conn):
+def get_act_project_expense(project_expense, act_project_expense, conn):
     """Function for expense calculations - used later for Dashboard route"""
     expense_dict ={}
     expense_dict['project_id'] = str(project_expense[0])
+    expense_dict['project_expense'] = project_id
     expense_dict['expense_type'] = str(project_expense[1])
     expense_dict['project_expense'] = expense_type
     expense_dict['expense_date'] = str(project_expense[2])
@@ -200,5 +201,6 @@ def act_project_expense(project_expense, act_project_expense, conn):
         expense_dict['expense_date'] = expense_date
         expense_amount = project_expense[3]
         expense_dict['expense_amount'] =expense_amount
-    return(expense_dict, act_project_expense)
-print(expense_dict)
+    return(expense_dict, get_act_project_expense)
+
+pprint(get_act_project_expense)
