@@ -542,7 +542,7 @@ def project_expense():
             db_write_error = 'Oops - could not write to database!'
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
-
+    pprint(project_expense)
 
 # Route for queried Project_Details pages -- fetches project data from database for display, writes an input field to database
 @app.route("/search", methods=['GET', 'POST'])
