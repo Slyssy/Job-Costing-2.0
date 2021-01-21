@@ -519,18 +519,6 @@ def project_expense():
         for project in project_id_data:
             project_id = project[0]
 
-        # Fetching time data from form input, and formatting it for database entry
-        # start_time = request.form['start_time']
-        # start_time = " ".join(reversed(start_time.split(" ")))
-        # start_time = datetime.datetime.strptime(start_time, "%m/%d/%Y %H:%M").strftime('%Y-%m-%d %H:%M:%S')
-        # print('Start timestamp = ' + start_time)
-        # start_time = str(start_time)
-        # finish_time = request.form['finish_time']
-        # finish_time = " ".join(reversed(finish_time.split(" ")))
-        # finish_time = datetime.datetime.strptime(finish_time, "%m/%d/%Y %H:%M").strftime('%Y-%m-%d %H:%M:%S')
-        # print('Finish timestamp = ' + finish_time)
-        # finish_time=str(finish_time)
-
         # Adding data to project_expense table in database:
         try:
             cur = conn.cursor() 

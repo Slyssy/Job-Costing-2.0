@@ -89,11 +89,10 @@ def search_by_id(project_id, conn):
             print('No expense entered in database for this project, therefore skipping Project ID ' + str(project_id))
         for project_expense in project_expense_data:
             # Calling the pre-defined function
-            (expense_dict, act_project_expense) = get_expense_dict(project_expense, act_project_expense, conn)
+            (expense_dict, act_project_expense) = get_act_project_expense(project_expense, act_expense_amount, conn)
             project_expense_all.append(expense_dict)
-            (expense_dict, act_project_expense) = get_expense_dict()
         # Using the predefined function for actual project expense, calculate actual expenses
-        act_project_expense = get_act_project_expense(project_expense_all, act_expense_amount, conn)
+        # act_project_expense = get_act_project_expense(project_expense_all, act_expense_amount, conn)
 
         # Calculations for Project Financials - Budgeted/Estimated
         fin_est_revenue = revenue
@@ -181,8 +180,7 @@ def get_act_project_expense(project_expense, act_project_expense, conn):
     """Function for expense calculations - used later for Dashboard route"""
     expense_dict ={}
     expense_dict['project_id'] = str(project_expense[0])
-    expense_dict['project_expense'] = project_id
-    expense_dict['expense_type'] = str(project_expense[1])
+    expense_dict['expense_type'] = (project_expense[1])
     expense_dict['project_expense'] = expense_type
     expense_dict['expense_date'] = str(project_expense[2])
     expense_dict['project_expense'] = expense_date
@@ -193,7 +191,7 @@ def get_act_project_expense(project_expense, act_project_expense, conn):
     cur.execute('SELECT project_id, expense_type, expense_date, expense_amount FROM project_expense WHERE project_id=' + str(project_id));
     project_id_data = cur.fetchall()
     for project in project_id_data :
-        expense_type = project_expense[0]
+        project_id = project_expense[0]
         expense_dict['project_id'] = project_id
         expense_type = project_expense[1]
         expense_dict['expense_type'] = expense_type
