@@ -168,22 +168,7 @@ def search_by_id(project_id, conn):
         # print('-----------------------------------------------------------')
 
         #getting the values (series?) for the amount columns in each expense dataframe
-<<<<<<< HEAD
-        mat_df_values = mat_df['expense_amount'].values
-        subcon_df_values = subcon_df['expense_amount'].values
-        misc_df_values = misc_df['expense_amount'].values
-        
-        # turning df series into a list 
-        list_mat_values = mat_df_values.tolist()
-        list_subcon_values = subcon_df_values.tolist()
-        list_misc_values = misc_df_values.tolist()
 
-        #adding values in list to get total expense per category 
-        total_mat_exp = sum(list_mat_values)
-        total_subcon_exp = sum(list_subcon_values)
-        total_misc_exp = sum(list_misc_values)
-
-=======
         # mat_df_values = mat_df['expense_amount'].values
         # subcon_df_values = subcon_df['expense_amount'].values
         # misc_df_values = misc_df['expense_amount'].values
@@ -198,9 +183,6 @@ def search_by_id(project_id, conn):
         # list_misc_values = list(misc_df_values)
         
         #End old code#
->>>>>>> 5699f0916d82791182f1f38a24fa9d4c93e3b063
-
-
 
         # Calculations for Project Financials - Budgeted/Estimated
         fin_est_revenue = revenue
