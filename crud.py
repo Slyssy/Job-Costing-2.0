@@ -1,4 +1,6 @@
 import datetime
+import pandas as pd
+
 
 def search_by_id(project_id, conn):
     print('I am here: project_id=' + project_id)
@@ -72,6 +74,69 @@ def search_by_id(project_id, conn):
         # Using the predefined function for actual labor hours, calculate actual labor rate
         act_labor_rate = get_actual_labor_rate(timesheet_all, act_labor_hours, conn)
 
+        #adding calculations from work on expense route to try to get expenses into the project dict
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM expenses WHERE project_id=' + str(project_id) + ';')   
+        expenses_fetch = cur.fetchall()
+        print('-----------------------------------------------------------') 
+        print(expenses_fetch)
+
+        mat_exp_list = []
+        subcon_exp_list = []
+        misc_exp_list = []
+        for db_row in expenses_fetch:
+            mat_exp_dict = {}
+            subcon_exp_dict = {}
+            misc_exp_dict = {}
+            if db_row[1] == "Materials":
+                mat_exp_dict['exp_type'] = db_row[1]
+                mat_exp_dict['project_id'] = db_row[2]
+                mat_exp_dict['expense_amount'] = db_row[4]
+                mat_exp_list.append(mat_exp_dict)
+            elif db_row[1] == "Subcontractor":
+                subcon_exp_dict['exp_type'] = db_row[1]
+                subcon_exp_dict['project_id'] = db_row[2]
+                subcon_exp_dict['expense_amount'] = db_row[4]
+                subcon_exp_list.append(subcon_exp_dict)
+            else:
+                misc_exp_dict['exp_type'] = db_row[1]
+                misc_exp_dict['project_id'] = db_row[2]
+                misc_exp_dict['expense_amount'] = db_row[4]
+                misc_exp_list.append(misc_exp_dict)
+
+        
+        # print(exp_dict)
+        print(mat_exp_list)
+        print(subcon_exp_list)
+        print(misc_exp_list)
+        print('-----------------------------------------------------------')
+
+        mat_df = pd.DataFrame(mat_exp_list) 
+        subcon_df = pd.DataFrame(subcon_exp_list)
+        misc_df = pd.DataFrame(misc_exp_list)
+
+
+        print("Dataframes")
+        print(mat_df)
+        print(subcon_df)
+        print(misc_df)
+        print('-----------------------------------------------------------')
+        mat_df_values = mat_df['expense_amount'].values
+        subcon_df_values = subcon_df['expense_amount'].values
+        misc_df_values = misc_df['expense_amount'].values
+        
+        # b = np.sum(a)
+        list_mat_values = mat_df_values.tolist()
+        list_subcon_values = subcon_df_values.tolist()
+        list_misc_values = misc_df_values.tolist()
+
+        total_mat_exp = sum(list_mat_values)
+        total_subcon_exp = sum(list_subcon_values)
+        total_misc_exp = sum(list_misc_values)
+
+
+
+
         # Calculations for Project Financials - Budgeted/Estimated
         fin_est_revenue = revenue
         project_list['fin_est_revenue '] = f'{float(revenue):,}'
@@ -105,6 +170,17 @@ def search_by_id(project_id, conn):
         project_list['fin_act_labor_rate'] = "{:.2f}".format(fin_act_labor_rate)
         fin_act_labor_expense = float(fin_act_labor_hours) * float(fin_act_labor_rate)
         project_list['fin_act_labor_expense'] = f'{float(fin_act_labor_expense):,}'
+        
+        #julist added in financial calculations here 
+        fin_act_mat_exp = float(total_mat_exp)
+        project_list['fin_act_material_expense'] = "{:.2f}".format(fin_act_mat_exp)
+        fin_act_subcon_exp = float(total_subcon_exp)
+        project_list['fin_act_subcontractor_expense'] = "{:.2f}".format(fin_act_subcon_exp)
+        fin_act_misc_exp = float(total_misc_exp)
+        project_list['fin_act_miscellaneous_expense'] = "{:.2f}".format(fin_act_misc_exp)
+
+
+
         fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense)
         # project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
         project_list['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
@@ -154,3 +230,37 @@ def get_actual_labor_rate(timesheet_all, act_labor_hours, conn):
     for timesheet_dict in timesheet_all:
         sum_of_hours_t_rate += float(timesheet_dict['hours_worked']) * float(timesheet_dict['hourly_pay_rate'])
     return (float(sum_of_hours_t_rate)/act_labor_hours)
+
+
+#started making changes here. If doesn't work -- delete and keep what was done on the add expense route
+    # def get_act_expenses(project_expense, act_project_expense, conn):
+    # """Function for individual timesheet calculations - used later for Dashboard route"""
+    # timesheet_dict = {}
+    # timesheet_dict['project_id'] = str(timesheet[2])
+    # user_id = str(timesheet[1])
+    # timesheet_dict['user_id'] = user_id
+    # # Fetch user data from Users table
+    # cur = conn.cursor()
+    # cur.execute('SELECT user_id, name, pay_rate FROM users WHERE user_id=' + str(user_id));
+    # user_data = cur.fetchall()
+    # for user in user_data:
+    #     employee_name = user[1]
+    #     timesheet_dict['employee_name'] = employee_name
+    #     hourly_pay_rate = user[2]
+    #     timesheet_dict['hourly_pay_rate'] = hourly_pay_rate
+    
+def act_exp_by_id(project_id, conn):
+    print('I am here: project_id=' + project_id)
+    """Define query by project_id"""
+    cur = conn.cursor()
+    # Fetch data from Expenses table based on project_id
+    if project_id:
+        cur.execute('SELECT * FROM expenses WHERE project_id=%s', [project_id]);
+    # Fetch all data from Project_Details table if no project_id is specified
+    else:
+        cur.execute('SELECT * FROM project_details' + ';')
+    project_details_data = cur.fetchall()
+    print('*****************************************')
+    print('Data fetched from Project_Details table')
+    print('*****************************************')
+    print(project_details_data)
