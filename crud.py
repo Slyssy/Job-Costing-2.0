@@ -81,9 +81,11 @@ def search_by_id(project_id, conn):
         print('-----------------------------------------------------------') 
         print(expenses_fetch)
 
+        #empty lists
         mat_exp_list = []
         subcon_exp_list = []
         misc_exp_list = []
+        #creating dictionaries of material expenses and appending to empty lists
         for db_row in expenses_fetch:
             mat_exp_dict = {}
             subcon_exp_dict = {}
@@ -111,6 +113,7 @@ def search_by_id(project_id, conn):
         print(misc_exp_list)
         print('-----------------------------------------------------------')
 
+        #creating dataframes from list of dictionaries 
         mat_df = pd.DataFrame(mat_exp_list) 
         subcon_df = pd.DataFrame(subcon_exp_list)
         misc_df = pd.DataFrame(misc_exp_list)
@@ -121,15 +124,18 @@ def search_by_id(project_id, conn):
         print(subcon_df)
         print(misc_df)
         print('-----------------------------------------------------------')
+
+        #getting the values (series?) for the amount columns in each expense dataframe
         mat_df_values = mat_df['expense_amount'].values
         subcon_df_values = subcon_df['expense_amount'].values
         misc_df_values = misc_df['expense_amount'].values
         
-        # b = np.sum(a)
+        # turning df series into a list 
         list_mat_values = mat_df_values.tolist()
         list_subcon_values = subcon_df_values.tolist()
         list_misc_values = misc_df_values.tolist()
 
+        #adding values in list to get total expense per category 
         total_mat_exp = sum(list_mat_values)
         total_subcon_exp = sum(list_subcon_values)
         total_misc_exp = sum(list_misc_values)
@@ -171,7 +177,7 @@ def search_by_id(project_id, conn):
         fin_act_labor_expense = float(fin_act_labor_hours) * float(fin_act_labor_rate)
         project_list['fin_act_labor_expense'] = f'{float(fin_act_labor_expense):,}'
         
-        #julist added in financial calculations here 
+        #added in additional expense calculations here 
         fin_act_mat_exp = float(total_mat_exp)
         project_list['fin_act_material_expense'] = "{:.2f}".format(fin_act_mat_exp)
         fin_act_subcon_exp = float(total_subcon_exp)
@@ -180,8 +186,8 @@ def search_by_id(project_id, conn):
         project_list['fin_act_miscellaneous_expense'] = "{:.2f}".format(fin_act_misc_exp)
 
 
-
-        fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense)
+        #updated gp calculation to include additional expenses
+        fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp
         # project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
         project_list['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
         fin_act_gross_margin = float(fin_act_gross_profit) / float(fin_act_revenue) * 100
