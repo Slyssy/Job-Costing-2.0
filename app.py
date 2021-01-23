@@ -485,7 +485,8 @@ def project_expense():
         cur.execute('SELECT * FROM expenses')    
         expenses_fetch = cur.fetchall()
         print('-----------------------------------------------------------') 
-        print(project_names_fetch)
+        print(expenses_fetch)
+        print('-----------------------------------------------------------') 
 
         mat_exp_list = []
         subcon_exp_list = []
@@ -510,51 +511,83 @@ def project_expense():
                 misc_exp_dict['expense_amount'] = db_row[4]
                 misc_exp_list.append(misc_exp_dict)
 
+        #newstuff on saturday
+        #putting expense values in list 
+        mat_values_list = []
+        for dict_row in mat_exp_list:
+            mat_values = dict_row['expense_amount']
+            mat_values_list.append(mat_values)
         
+        subcon_values_list = []
+        for dict_row in subcon_exp_list:
+            subcon_values = dict_row['expense_amount']
+            subcon_values_list.append(subcon_values)
+        
+        misc_exp_list = []
+        for dict_row in mat_exp_list:
+            misc_values = dict_row['expense_amount']
+            misc_exp_list.append(misc_values)
+
+        #expense totals
+        total_materials_exp = round((sum(mat_values_list)),2)
+        total_subcontractor_exp = round((sum(subcon_values_list)),2)
+        total_miscellaneous_exp = round((sum(misc_exp_list)),2)
+        # total_subcontractor_exp = sum(list_subcon_values)
+        # total_miscellaneous_exp = sum(list_misc_values)
+
+
         # print(exp_dict)
+        print('-----------------------------------------------------------') 
         print(mat_exp_list)
+        print('-----------------------------------------------------------') 
+        print(mat_values_list)
+        print(f'this is the total materials value {total_materials_exp}')
+        print('-----------------------------------------------------------')
         print(subcon_exp_list)
+        print(f'this is the total subcontractor value {total_subcontractor_exp}')
+        print('-----------------------------------------------------------') 
         print(misc_exp_list)
+        print(f'this is the total misc value {total_miscellaneous_exp}')
         print('-----------------------------------------------------------')
 
-        mat_df = pd.DataFrame(mat_exp_list) 
-        subcon_df = pd.DataFrame(subcon_exp_list)
-        misc_df = pd.DataFrame(misc_exp_list)
+        # mat_df = pd.DataFrame(mat_exp_list) 
+        # subcon_df = pd.DataFrame(subcon_exp_list)
+        # misc_df = pd.DataFrame(misc_exp_list)
 
 
-        print("Dataframes")
-        print(mat_df)
-        print(subcon_df)
-        print(misc_df)
-        print('-----------------------------------------------------------')
-        mat_df_values = mat_df['expense_amount'].values
-        subcon_df_values = subcon_df['expense_amount'].values
-        misc_df_values = misc_df['expense_amount'].values
+        # print("Dataframes")
+        # print(mat_df)
+        # print(subcon_df)
+        # print(misc_df)
+        # print('-----------------------------------------------------------')
+        # mat_df_values = mat_df['expense_amount'].values
+        # subcon_df_values = subcon_df['expense_amount'].values
+        # misc_df_values = misc_df['expense_amount'].values
         
         # b = np.sum(a)
-        list_mat_values = mat_df_values.tolist()
-        list_subcon_values = subcon_df_values.tolist()
-        list_misc_values = misc_df_values.tolist()
+        # list_mat_values = mat_df_values.tolist()
+        # list_subcon_values = subcon_df_values.tolist()
+        # list_misc_values = misc_df_values.tolist()
 
-        total_mat_exp = sum(list_mat_values)
-        total_subcon_exp = sum(list_subcon_values)
-        total_misc_exp = sum(list_misc_values)
+        # total_mat_exp = sum(list_mat_values)
+        # total_subcon_exp = sum(list_subcon_values)
+        # total_misc_exp = sum(list_misc_values)
         # for mat_exp in a:
         #     a[0] += a[0]
 
        
-        print('-----------------------------------------------------------')
-        print("printing a - the values of mat_df expense amount column")
-        print(mat_df_values)
-        print('-----------------------------------------------------------')
-        print("type of a")
-        print(type(mat_df_values))
-        print('-----------------------------------------------------------')
-        # print(mat_exp)
-        # print((b))
-        print(total_mat_exp)
-        print(total_subcon_exp)
-        print(total_misc_exp)
+        # print('-----------------------------------------------------------')
+        # print("printing a - the values of mat_df expense amount column")
+        # print(mat_df_values)
+        # print('-----------------------------------------------------------')
+        # print("type of a")
+        # print(type(mat_df_values))
+        # print('-----------------------------------------------------------')
+        # # print(mat_exp)
+        # # print((b))
+        # print(total_mat_exp)
+        # print(total_subcon_exp)
+        # print(total_misc_exp)
 
         return render_template('enter_expense.html', dropdown_dict=json.dumps(dropdown_dict))
     # if request.method == 'GET':
