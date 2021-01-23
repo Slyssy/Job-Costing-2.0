@@ -158,8 +158,11 @@ def search_by_id(project_id, conn):
         project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
         fin_est_miscellaneous_expense = est_miscellaneous_expense
         project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
-        fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
-        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
+        #if we decide to keep oh expense as an amoutn entry (not %) in db
+        fin_est_overhead_expense = float(est_overhead_expense) 
+        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
+        # fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
+        # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
         fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
         # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
         project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
@@ -184,10 +187,13 @@ def search_by_id(project_id, conn):
         project_list['fin_act_subcontractor_expense'] = "{:.2f}".format(fin_act_subcon_exp)
         fin_act_misc_exp = float(total_misc_exp)
         project_list['fin_act_miscellaneous_expense'] = "{:.2f}".format(fin_act_misc_exp)
+        #if we decide to keep oh expense as an amoutn entry (not %) in db
+        fin_act_overhead_expense = float(est_overhead_expense) 
+        project_list['fin_act_overhead_expense'] = "{:.2f}".format(fin_act_overhead_expense)
 
 
         #updated gp calculation to include additional expenses
-        fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp
+        fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp - fin_act_overhead_expense
         # project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
         project_list['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
         fin_act_gross_margin = float(fin_act_gross_profit) / float(fin_act_revenue) * 100
