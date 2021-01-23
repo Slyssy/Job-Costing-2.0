@@ -6,3 +6,5 @@ Figure out hashing once sqlalchemy works
 In ddSort branch:
 - updated SQL query for new_time route to sort the User name and project names 
 alphabetical order (ascending)
+
+postgres: //postgres: PsHyPnfnFOIe4ex0@104.154.193.253:5432/
