@@ -114,13 +114,25 @@
 
 console.log(project_dict)
 
-// Function to grab data from object necessary to create plots 
+// Function to grab data from object necessary to create plots and handle transitions
 function dataGrab1({fin_est_labor_expense, fin_act_labor_expense}) {
   return {'Budgeted Expense' : +fin_est_labor_expense.replace(/,/g, ''), 'Actual Expense' : +fin_act_labor_expense.replace(/,/g, '')}
 }
 
 function dataGrab2({fin_est_labor_hours, fin_act_labor_hours}) {
   return {'Budgeted Hours': +fin_est_labor_hours, 'Actual Hours': +fin_act_labor_hours}
+}
+
+function dataGrab3({fin_est_material_expense, fin_act_material_expense}) {
+  return {'Budgeted Material': +fin_est_material_expense.replace(/,/g, ''), 'Actual Material': +fin_act_material_expense.replace(/,/g, '')}
+}
+
+function dataGrab4({fin_est_miscellaneous_expense, fin_act_miscellaneous_expense}) {
+  return {'Budgeted Miscellaneous': +fin_est_miscellaneous_expense.replace(/,/g, ''), 'Actual Miscellaneous': +fin_act_miscellaneous_expense.replace(/,/g, '')}
+}
+
+function dataGrab5({fin_est_subcontractor_expense, fin_act_subcontractor_expense}) {
+  return {'Budgeted Subcontractor': +fin_est_subcontractor_expense.replace(/,/g, ''), 'Actual Subcontractor': +fin_act_subcontractor_expense.replace(/,/g, '')}
 }
 
 const grabbedData1 = dataGrab1(project_dict)
@@ -130,6 +142,18 @@ console.log(data1)
 const grabbedData2 = dataGrab2(project_dict)
 let data2 = Object.keys(grabbedData2).map(e => ({type: e, value: grabbedData2[e]}))
 console.log(data2)
+
+const grabbedData3 = dataGrab3(project_dict)
+let data3 = Object.keys(grabbedData3).map(e => ({type: e, value: grabbedData3[e]}))
+console.log(data3)
+
+const grabbedData4 = dataGrab4(project_dict)
+let data4 = Object.keys(grabbedData4).map(e => ({type: e, value: grabbedData4[e]}))
+console.log(data4)
+
+const grabbedData5 = dataGrab5(project_dict)
+let data5 = Object.keys(grabbedData5).map(e => ({type: e, value: grabbedData5[e]}))
+console.log(data5)
 
 
 // set the dimensions and margins of the graph
@@ -312,4 +336,4 @@ function update1(data) {
     .remove()
 }
 
-update1(data1)
+update1(data3)
