@@ -491,6 +491,25 @@ def project_expense():
         mat_exp_list = []
         subcon_exp_list = []
         misc_exp_list = []
+        # for db_row in expenses_fetch:
+        #     mat_exp_dict = {}
+        #     subcon_exp_dict = {}
+        #     misc_exp_dict = {}
+        #     if db_row[1] == "Materials":
+        #         mat_exp_dict['exp_type'] = db_row[1]
+        #         mat_exp_dict['project_id'] = db_row[2]
+        #         mat_exp_dict['expense_amount'] = db_row[4]
+        #         mat_exp_list.append(mat_exp_dict)
+        #     elif db_row[1] == "Subcontractor":
+        #         subcon_exp_dict['exp_type'] = db_row[1]
+        #         subcon_exp_dict['project_id'] = db_row[2]
+        #         subcon_exp_dict['expense_amount'] = db_row[4]
+        #         subcon_exp_list.append(subcon_exp_dict)
+        #     else:
+        #         misc_exp_dict['exp_type'] = db_row[1]
+        #         misc_exp_dict['project_id'] = db_row[2]
+        #         misc_exp_dict['expense_amount'] = db_row[4]
+        #         misc_exp_list.append(misc_exp_dict)
         for db_row in expenses_fetch:
             mat_exp_dict = {}
             subcon_exp_dict = {}
@@ -513,11 +532,59 @@ def project_expense():
 
         #newstuff on saturday
         #putting expense values in list 
-        mat_values_list = []
+        pro1_mat_values_list = []
+        pro2_mat_values_list = []
+        pro3_mat_values_list = []
+        pro4_mat_values_list = []
+        pro5_mat_values_list = []
+        pro6_mat_values_list = []
+        pro7_mat_values_list = []
+        pro8_mat_values_list = []
+        pro9_mat_values_list = []
+        pro10_mat_values_list = []
+        pro11_mat_values_list = []
+        pro12_mat_values_list = []
+        pro13_mat_values_list = []
+        pro14_mat_values_list = []
+        pro15_mat_values_list = []
+
+        allOther_mat_values_list = []
         for dict_row in mat_exp_list:
-            mat_values = dict_row['expense_amount']
-            mat_values_list.append(mat_values)
-        
+            if dict_row['project_id'] == 1:
+                pro1_mat_values = dict_row['expense_amount']
+                pro1_mat_values_list.append(pro1_mat_values)
+            if dict_row['project_id'] == 2:
+                pro2_mat_values = dict_row['expense_amount']
+                pro2_mat_values_list.append(pro2_mat_values)
+            if dict_row['project_id'] == 3:
+                pro3_mat_values = dict_row['expense_amount']
+                pro3_mat_values_list.append(pro3_mat_values)
+            if dict_row['project_id'] == 4:
+                pro4_mat_values = dict_row['expense_amount']
+                pro4_mat_values_list.append(pro4_mat_values)
+            if dict_row['project_id'] == 5:
+                pro5_mat_values = dict_row['expense_amount']
+                pro5_mat_values_list.append(pro5_mat_values)
+            if dict_row['project_id'] == 6:
+                pro6_mat_values = dict_row['expense_amount']
+                pro6_mat_values_list.append(pro6_mat_values)
+            if dict_row['project_id'] == 7:
+                pro7_mat_values = dict_row['expense_amount']
+                pro7_mat_values_list.append(pro7_mat_values)
+            else:
+                allOther_mat_values = dict_row['expense_amount']
+                allOther_mat_values_list.append(allOther_mat_values_list)
+        print("this is pro6_list")
+        print(pro6_mat_values_list)
+        print('-----------------------------------------------------------') 
+        print("this is pro1_list")
+        print(pro1_mat_values_list)
+        print('-----------------------------------------------------------')
+        print("this is pro2_list")
+        print(pro2_mat_values_list)
+        print('-----------------------------------------------------------') 
+
+
         subcon_values_list = []
         for dict_row in subcon_exp_list:
             subcon_values = dict_row['expense_amount']
@@ -529,7 +596,7 @@ def project_expense():
             misc_exp_list.append(misc_values)
 
         #expense totals
-        total_materials_exp = round((sum(mat_values_list)),2)
+        # total_materials_exp = round((sum(mat_values_list)),2)
         total_subcontractor_exp = round((sum(subcon_values_list)),2)
         total_miscellaneous_exp = round((sum(misc_exp_list)),2)
         # total_subcontractor_exp = sum(list_subcon_values)
@@ -540,8 +607,8 @@ def project_expense():
         print('-----------------------------------------------------------') 
         print(mat_exp_list)
         print('-----------------------------------------------------------') 
-        print(mat_values_list)
-        print(f'this is the total materials value {total_materials_exp}')
+        # print(mat_values_list)
+        # print(f'this is the total materials value {total_materials_exp}')
         print('-----------------------------------------------------------')
         print(subcon_exp_list)
         print(f'this is the total subcontractor value {total_subcontractor_exp}')
