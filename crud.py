@@ -129,14 +129,23 @@ def search_by_id(project_id, conn):
         print('-----------------------------------------------------------')
 
         #getting the values (series?) for the amount columns in each expense dataframe
-        mat_df_values = mat_df['expense_amount'].values
-        subcon_df_values = subcon_df['expense_amount'].values
-        misc_df_values = misc_df['expense_amount'].values
+        # mat_df_values = mat_df['expense_amount'].values
+        # subcon_df_values = subcon_df['expense_amount'].values
+        # misc_df_values = misc_df['expense_amount'].values
+
+        #Eds fix:
+        mat_df_values = mat_df['expense_amount'].values if 'expense_amount' in mat_df.columns else []
+        subcon_df_values = subcon_df['expense_amount'].values if 'expense_amount' in subcon_df.columns else []
+        misc_df_values = misc_df['expense_amount'].values if 'expense_amount' in misc_df.columns else []
+
+        list_mat_values = list(mat_df_values)
+        list_subcon_values = list(subcon_df_values)
+        list_misc_values = list(misc_df_values)
         
         # turning df series into a list 
-        list_mat_values = mat_df_values.tolist()
-        list_subcon_values = subcon_df_values.tolist()
-        list_misc_values = misc_df_values.tolist()
+        # list_mat_values = mat_df_values.tolist()
+        # list_subcon_values = subcon_df_values.tolist()
+        # list_misc_values = misc_df_values.tolist()
 
         #adding values in list to get total expense per category 
         total_mat_exp = sum(list_mat_values)
