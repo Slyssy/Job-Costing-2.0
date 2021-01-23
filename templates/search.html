@@ -189,17 +189,17 @@
             </tr>
             <tr>
               <th scope="row">Project Labor Rate:</th>
-              <td>$ {{project_dict.fin_est_labor_rate}} / Hour</td>
-              <td>$ {{project_dict.fin_act_labor_rate}} / Hour</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_labor_rate | float)}} / Hour</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_rate | float)}} / Hour</td>
             </tr>
             <tr>
               <th scope="row">Project Labor Expense:</th>
-              <td>$ {{project_dict.fin_est_labor_expense}}</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_labor_expense | float)}}</td>
               <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_expense | float)}}</td>
             </tr>
             <tr>
               <th scope="row">Project Material Expense:</th>
-              <td>$ {{project_dict.fin_est_material_expense}}</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_material_expense | float)}}</td>
               <td>$ {{'{:,.2f}'.format(project_dict.fin_act_material_expense | float)}}</td>
             </tr>
             <tr>
@@ -220,9 +220,9 @@
 
             </tr>
             <tr>
-              <th scope="row">Project Gross Profit:</th>
-              <td>$ {{project_dict.fin_est_gross_profit}}</td>
-              <td>$ {{project_dict.fin_act_gross_profit}}</td>
+              <th scope="row">Project Gross Profit:</th>             
+              <td>$  {{'{:,.2f}'.format(project_dict.fin_est_gross_profit | float)}}</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_gross_profit | float)}}</td>
             </tr>
             <tr>
               <th scope="row">Project Gross Margin:</th>
