@@ -158,7 +158,7 @@ def search_by_id(project_id, conn):
         project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
         fin_est_miscellaneous_expense = est_miscellaneous_expense
         project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
-        #if we decide to keep oh expense as an amoutn entry (not %) in db
+        #if we decide to keep oh expense as an amount entry (not %) in db
         fin_est_overhead_expense = float(est_overhead_expense) 
         project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
         # fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
@@ -261,18 +261,19 @@ def get_actual_labor_rate(timesheet_all, act_labor_hours, conn):
     #     hourly_pay_rate = user[2]
     #     timesheet_dict['hourly_pay_rate'] = hourly_pay_rate
     
-def act_exp_by_id(project_id, conn):
-    print('I am here: project_id=' + project_id)
-    """Define query by project_id"""
-    cur = conn.cursor()
-    # Fetch data from Expenses table based on project_id
-    if project_id:
-        cur.execute('SELECT * FROM expenses WHERE project_id=%s', [project_id]);
-    # Fetch all data from Project_Details table if no project_id is specified
-    else:
-        cur.execute('SELECT * FROM project_details' + ';')
-    project_details_data = cur.fetchall()
-    print('*****************************************')
-    print('Data fetched from Project_Details table')
-    print('*****************************************')
-    print(project_details_data)
+#this isn't being used - jg 
+# def act_exp_by_id(project_id, conn):
+#     print('I am here: project_id=' + project_id)
+#     """Define query by project_id"""
+#     cur = conn.cursor()
+#     # Fetch data from Expenses table based on project_id
+#     if project_id:
+#         cur.execute('SELECT * FROM expenses WHERE project_id=%s', [project_id]);
+#     # Fetch all data from Project_Details table if no project_id is specified
+#     else:
+#         cur.execute('SELECT * FROM project_details' + ';')
+#     project_details_data = cur.fetchall()
+#     print('*****************************************')
+#     print('Data fetched from Project_Details table')
+#     print('*****************************************')
+#     print(project_details_data)
