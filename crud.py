@@ -220,7 +220,7 @@ def search_by_id(project_id, conn):
         fin_act_labor_rate = act_labor_rate
         project_list['fin_act_labor_rate'] = "{:.2f}".format(fin_act_labor_rate)
         fin_act_labor_expense = float(fin_act_labor_hours) * float(fin_act_labor_rate)
-        project_list['fin_act_labor_expense'] = f'{float(fin_act_labor_expense):,}'
+        project_list['fin_act_labor_expense'] = "{:.2f}".format(fin_act_labor_expense)
         
         #added in additional expense calculations here 
         fin_act_mat_exp = float(total_materials_exp)

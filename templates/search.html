@@ -195,17 +195,17 @@
             <tr>
               <th scope="row">Project Labor Expense:</th>
               <td>$ {{project_dict.fin_est_labor_expense}}</td>
-              <td>$ {{project_dict.fin_act_labor_expense}}</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_expense | float)}}</td>
             </tr>
             <tr>
-              <th scope="row">Material Expense:</th>
+              <th scope="row">Project Material Expense:</th>
               <td>$ {{project_dict.fin_est_material_expense}}</td>
-              <td>$ {{project_dict.fin_act_material_expense}}</td>
+              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_material_expense | float)}}</td>
             </tr>
             <tr>
-              <th scope="row">Subcontractor Expense:</th>
+              <th scope="row">Project Subcontractor Expense:</th>
               <td>$ {{project_dict.fin_est_subcontractor_expense}}</td>
-              <td>$ {{project_dict.fin_act_subcontractor_expense}}</td>
+              <td>$  {{'{:,.2f}'.format(project_dict.fin_act_subcontractor_expense | float)}}</td>
             </tr>
             <tr>
               <th scope="row">Miscelleanous Expense:</th>
@@ -213,7 +213,7 @@
               <td>$ {{project_dict.fin_act_miscellaneous_expense}}</td>
             </tr>
             <tr>
-              <th scope="row">Overhead Expense:</th>
+              <th scope="row">Project Overhead Expense:</th>
               <td>$ {{project_dict.fin_est_overhead_expense}}</td>
               <td>$ {{project_dict.fin_act_overhead_expense}}</td>
             </tr>
