@@ -12,6 +12,8 @@ from passlib.hash import sha256_crypt
 import functools
 import operator
 from collections import OrderedDict
+import pandas as pd
+
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
 pg_port = os.getenv("pg_port")
@@ -453,37 +455,165 @@ def time_html_to_db():
         return redirect(url_for('dashboard_data'))
 
 # Route for actual_expense pages -- saves inputs to db, then redirects to Dashboard
+# @app.route("/enter_expense", methods=['GET', 'POST'])
 @app.route("/enter_expense", methods=['GET', 'POST'])
 def project_expense():
     if request.method == 'GET':
-        print('*****************')
-        print('Getting form...')
-        print('*****************')
-        return render_template('enter_expense.html')    
+        cur = conn.cursor()            
+        # Fetch all project names from database for dropdown menu
+        cur.execute('SELECT name FROM project_details ORDER BY name ASC')    
+        project_names_fetch = cur.fetchall()
+        print('-----------------------------------------------------------')   
+        print('All project names fetched from database for dropdown list')   
+        print('-----------------------------------------------------------')   
+        print(project_names_fetch)
+        print('-----------------------------------------------------------') 
+        # Convert project names to a list
+        project_list = []
+        for db_row in project_names_fetch:
+            project_dict = {}
+            project_dict['name'] = db_row[0]
+            project_list.append(project_dict)
+        
+        # Create a dictionary for  project names, and convert to a JSON for the dropdown menus
+        dropdown_dict = {}
+        dropdown_dict['project_list'] = project_list
+        pprint(dropdown_dict)
+      
+        #attempt at db expenses:
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM expenses')    
+        expenses_fetch = cur.fetchall()
+        print('-----------------------------------------------------------') 
+        print(project_names_fetch)
+
+        mat_exp_list = []
+        subcon_exp_list = []
+        misc_exp_list = []
+        for db_row in expenses_fetch:
+            mat_exp_dict = {}
+            subcon_exp_dict = {}
+            misc_exp_dict = {}
+            if db_row[1] == "Materials":
+                mat_exp_dict['exp_type'] = db_row[1]
+                mat_exp_dict['project_id'] = db_row[2]
+                mat_exp_dict['expense_amount'] = db_row[4]
+                mat_exp_list.append(mat_exp_dict)
+            elif db_row[1] == "Subcontractor":
+                subcon_exp_dict['exp_type'] = db_row[1]
+                subcon_exp_dict['project_id'] = db_row[2]
+                subcon_exp_dict['expense_amount'] = db_row[4]
+                subcon_exp_list.append(subcon_exp_dict)
+            else:
+                misc_exp_dict['exp_type'] = db_row[1]
+                misc_exp_dict['project_id'] = db_row[2]
+                misc_exp_dict['expense_amount'] = db_row[4]
+                misc_exp_list.append(misc_exp_dict)
+
+        
+        # print(exp_dict)
+        print(mat_exp_list)
+        print(subcon_exp_list)
+        print(misc_exp_list)
+        print('-----------------------------------------------------------')
+
+        mat_df = pd.DataFrame(mat_exp_list) 
+        subcon_df = pd.DataFrame(subcon_exp_list)
+        misc_df = pd.DataFrame(misc_exp_list)
+
+
+        print("Dataframes")
+        print(mat_df)
+        print(subcon_df)
+        print(misc_df)
+        print('-----------------------------------------------------------')
+        mat_df_values = mat_df['expense_amount'].values
+        subcon_df_values = subcon_df['expense_amount'].values
+        misc_df_values = misc_df['expense_amount'].values
+        
+        # b = np.sum(a)
+        list_mat_values = mat_df_values.tolist()
+        list_subcon_values = subcon_df_values.tolist()
+        list_misc_values = misc_df_values.tolist()
+
+        total_mat_exp = sum(list_mat_values)
+        total_subcon_exp = sum(list_subcon_values)
+        total_misc_exp = sum(list_misc_values)
+        # for mat_exp in a:
+        #     a[0] += a[0]
+
+       
+        print('-----------------------------------------------------------')
+        print("printing a - the values of mat_df expense amount column")
+        print(mat_df_values)
+        print('-----------------------------------------------------------')
+        print("type of a")
+        print(type(mat_df_values))
+        print('-----------------------------------------------------------')
+        # print(mat_exp)
+        # print((b))
+        print(total_mat_exp)
+        print(total_subcon_exp)
+        print(total_misc_exp)
+
+        return render_template('enter_expense.html', dropdown_dict=json.dumps(dropdown_dict))
+    # if request.method == 'GET':
+    #     print('*****************')
+    #     print('Getting form...')
+    #     print('*****************')
+    #     cur.execute('SELECT name FROM project_details ORDER BY name ASC')    
+    #     project_names_fetch = cur.fetchall()
+    #     print('-----------------------------------------------------------')   
+    #     print('All project names fetched from database for dropdown list')   
+    #     print('-----------------------------------------------------------')   
+    #     print(project_names_fetch)
+    #     print('-----------------------------------------------------------') 
+        # Convert project names to a list
+        # project_list = []
+        # for db_row in project_names_fetch:
+        #     project_dict = {}
+        #     project_dict['name'] = db_row[0]
+        #     project_list.append(project_dict)
+        # return render_template('enter_expense.html')    
     
     if request.method == 'POST':
         print('*****************')
         print('Posting form...')
         print('*****************')
+        # Fetching exp type and project names from form input    
+        expense_type = request.form['exp_typ']
+        project_name = request.form['project_name']
+
+         # Fetching project_id from Project Details tables in database  
+        cur = conn.cursor()
+        cur.execute('SELECT project_id FROM project_details WHERE name=%s;', [project_name])
+        project_id_data = cur.fetchall()        
+        for project in project_id_data:
+            project_id = project[0]
+
+        # Fetching data from form input for database entry
         full_values_string = ''
-        name = request.form['project_name']
-        full_values_string = ''
-        act_material_expense = request.form['act_material_expense']
-        full_values_string = ''
-        act_miscellaneous_expense = request.form['act_miscellaneous_expense']
-        full_values_string = ''
-        act_overhead_expense = request.form['act_overhead_expense']
+        expense_type = request.form['exp_typ']
+        full_values_string =  "(" + "'" + expense_type + "'"
+        # expense_date = datetime.datetime.strptime(request.form['expDate'], '%m/%d/%Y').date()
+        # full_values_string += ',' + "'" + expense_date + "'"
+        
+        expense_amount = request.form['expenseAmount']
+        full_values_string += ',' + "'" + expense_amount + "'"
+        project_id = str(project_id)
+        full_values_string += ',' + "'" + project_id + "'"  + ")"
+        
         
         # Print data list for database entry
         print('-------------------------------------------------------------------')
-        print('Data list prepared for entry to Project_Details table in database')
+        print('Data list prepared for entry to Project_Expense table in database')
         print('-------------------------------------------------------------------')
         print(full_values_string)
         print('-------------------------------------------------------------------')
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO expense (act_material_expense, act_subcontractor_expense, act_miscellaneous_expense) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO expenses (expense_type, expense_amount, project_id) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
@@ -493,6 +623,48 @@ def project_expense():
             print('---------------------------------------')
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
+
+
+# Michaels route: 
+# def project_expense():
+#     if request.method == 'GET':
+#         print('*****************')
+#         print('Getting form...')
+#         print('*****************')
+#         return render_template('enter_expense.html')    
+    
+#     if request.method == 'POST':
+#         print('*****************')
+#         print('Posting form...')
+#         print('*****************')
+#         full_values_string = ''
+#         name = request.form['project_name']
+#         full_values_string = ''
+#         act_material_expense = request.form['act_material_expense']
+#         full_values_string = ''
+#         act_miscellaneous_expense = request.form['act_miscellaneous_expense']
+#         full_values_string = ''
+#         act_overhead_expense = request.form['act_overhead_expense']
+        
+#         # Print data list for database entry
+#         print('-------------------------------------------------------------------')
+#         print('Data list prepared for entry to Project_Details table in database')
+#         print('-------------------------------------------------------------------')
+#         print(full_values_string)
+#         print('-------------------------------------------------------------------')
+#         cur = conn.cursor()
+#         # Adding form input data to PostgreSQL database
+#         try:
+#             cur.execute('INSERT INTO expense (act_material_expense, act_subcontractor_expense, act_miscellaneous_expense) VALUES ' + full_values_string + ';')
+#             print('-----------------------------------')
+#             print('Data added to database - woohoo!')
+#             print('-----------------------------------')
+#         except:
+#             print('---------------------------------------')
+#             db_write_error = 'Oops - could not write to database!'
+#             print('---------------------------------------')
+#             return render_template('error.html', error_type=db_write_error)
+#         return redirect(url_for('dashboard_data'))
 
 
 # Route for queried Project_Details pages -- fetches project data from database for display, writes an input field to database

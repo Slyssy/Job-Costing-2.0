@@ -65,20 +65,23 @@
       <hr />
 
       <!-- Begin Form -->
-      <form action="/new_time" method="POST" style="width: 500px; margin: auto">
-        <!-- Employee Name -->
+      <form action="/enter_expense" method="POST" style="width: 500px; margin: auto">
+        <!-- Expense TYPE -->
         <div class="form-group row was-validated">
           <label class="col-lg-4 col-form-label form-control-label text-muted"
             >Expense Type:</label
           >
           <div class="col-lg-8">
             <select
-              name="employee_name"
+              name="exp_typ"
               id="name"
               required=""
               class="form-control-lg"
             >
               <option value="">Expense Type</option>
+              <option value="Materials">Materials</option>
+              <option value="Subcontractor">Subcontractor</option>
+              <option value="Misc">Miscellaneous</option>
             </select>
             <div class="invalid-feedback">Required.</div>
           </div>
@@ -98,13 +101,16 @@
             >
               <!-- <option>Project</option> -->
               <option value="">Select Project</option>
+                <!-- {% for project in dropdown_dict['project_list'] %}
+                  <option value="{{project['name']}}">{{ project['name']}}</option>
+                {% endfor %} -->
             </select>
             <div class="invalid-feedback">Required.</div>
           </div>          
         </div>
 
         <!-- Start Date Picker -->
-        <div class="form-group row was-validated">
+        <!-- <div class="form-group row was-validated">
           <label class="col-lg-4 col-form-label form-control-label text-muted"
             >Expense Date:</label
           >
@@ -117,7 +123,7 @@
               class="form-control"
             />
           </div>
-        </div>
+        </div> -->
         <!-- Start Expense Amount-->
         <div class="form-group row was-validated">
           <label class="col-lg-4 col-form-label form-control-label text-muted"
@@ -158,7 +164,7 @@
         console.log(dropdown_dict)
       </script>
 
-      <script src="{{ url_for('static', filename='enterTime.js') }}"></script>
+      <script src="{{ url_for('static', filename='enterExpense.js') }}"></script>
     </div>
   </body>
 </html>

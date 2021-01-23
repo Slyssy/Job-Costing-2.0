@@ -15,6 +15,7 @@ geopy = "*"
 passlib = "*"
 requests = "*"
 sqlalchemy = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.9"

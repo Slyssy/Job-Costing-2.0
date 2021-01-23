@@ -6,3 +6,18 @@ Figure out hashing once sqlalchemy works
 In ddSort branch:
 - updated SQL query for new_time route to sort the User name and project names 
 alphabetical order (ascending)
+
+
+enterExpensejs
+
+// var expenseType = exp_dropdown_dict.expense_list.map((d) => d.expense);
+// var expEle = document.getElementById("expense");
+// for (let i = 0; i < expenseType.length; i++) {
+//   var opt = expenseType[i];
+
+//   var el = document.createElement("option");
+//   el.text = opt;
+//   el.value = opt;
+
+//   expEle.add(expEl);
+// }
