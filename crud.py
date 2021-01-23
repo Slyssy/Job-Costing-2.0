@@ -129,23 +129,14 @@ def search_by_id(project_id, conn):
         print('-----------------------------------------------------------')
 
         #getting the values (series?) for the amount columns in each expense dataframe
-        # mat_df_values = mat_df['expense_amount'].values
-        # subcon_df_values = subcon_df['expense_amount'].values
-        # misc_df_values = misc_df['expense_amount'].values
-
-        #Eds fix:
-        mat_df_values = mat_df['expense_amount'].values if 'expense_amount' in mat_df.columns else []
-        subcon_df_values = subcon_df['expense_amount'].values if 'expense_amount' in subcon_df.columns else []
-        misc_df_values = misc_df['expense_amount'].values if 'expense_amount' in misc_df.columns else []
-
-        list_mat_values = list(mat_df_values)
-        list_subcon_values = list(subcon_df_values)
-        list_misc_values = list(misc_df_values)
+        mat_df_values = mat_df['expense_amount'].values
+        subcon_df_values = subcon_df['expense_amount'].values
+        misc_df_values = misc_df['expense_amount'].values
         
         # turning df series into a list 
-        # list_mat_values = mat_df_values.tolist()
-        # list_subcon_values = subcon_df_values.tolist()
-        # list_misc_values = misc_df_values.tolist()
+        list_mat_values = mat_df_values.tolist()
+        list_subcon_values = subcon_df_values.tolist()
+        list_misc_values = misc_df_values.tolist()
 
         #adding values in list to get total expense per category 
         total_mat_exp = sum(list_mat_values)
@@ -171,10 +162,10 @@ def search_by_id(project_id, conn):
         fin_est_miscellaneous_expense = est_miscellaneous_expense
         project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
         #if we decide to keep oh expense as an amount entry (not %) in db
-        fin_est_overhead_expense = float(est_overhead_expense) 
-        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
-        # fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
-        # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
+        # fin_est_overhead_expense = float(est_overhead_expense) 
+        # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
+        fin_est_overhead_expense = float(est_overhead_expense) / float(revenue) * 100
+        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
         fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
         # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
         project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
@@ -200,9 +191,10 @@ def search_by_id(project_id, conn):
         fin_act_misc_exp = float(total_misc_exp)
         project_list['fin_act_miscellaneous_expense'] = "{:.2f}".format(fin_act_misc_exp)
         #if we decide to keep oh expense as an amoutn entry (not %) in db
-        fin_act_overhead_expense = float(est_overhead_expense) 
-        project_list['fin_act_overhead_expense'] = "{:.2f}".format(fin_act_overhead_expense)
-
+        # fin_act_overhead_expense = float(est_overhead_expense) 
+        # project_list['fin_act_overhead_expense'] = "{:.2f}".format(fin_act_overhead_expense)
+        fin_act_overhead_expense = float(est_overhead_expense) / float(revenue) * 100
+        project_list['fin_act_overhead_expense'] = "{:.2f}".format(fin_act_overhead_expense) + " %" 
 
         #updated gp calculation to include additional expenses
         fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp - fin_act_overhead_expense
