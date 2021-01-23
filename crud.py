@@ -91,16 +91,19 @@ def search_by_id(project_id, conn):
             subcon_exp_dict = {}
             misc_exp_dict = {}
             if db_row[1] == "Materials":
+            # if mat_exp_dict and db_row[1] == "Materials":
                 mat_exp_dict['exp_type'] = db_row[1]
                 mat_exp_dict['project_id'] = db_row[2]
                 mat_exp_dict['expense_amount'] = db_row[4]
                 mat_exp_list.append(mat_exp_dict)
+            # if subcon_exp_dict and db_row[1] == "Subcontractor":
             elif db_row[1] == "Subcontractor":
                 subcon_exp_dict['exp_type'] = db_row[1]
                 subcon_exp_dict['project_id'] = db_row[2]
                 subcon_exp_dict['expense_amount'] = db_row[4]
                 subcon_exp_list.append(subcon_exp_dict)
             else:
+            # if misc_exp_dict and db_row[1] == "Miscellaneous" :
                 misc_exp_dict['exp_type'] = db_row[1]
                 misc_exp_dict['project_id'] = db_row[2]
                 misc_exp_dict['expense_amount'] = db_row[4]
