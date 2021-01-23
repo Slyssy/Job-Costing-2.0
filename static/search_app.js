@@ -137,23 +137,23 @@ function dataGrab5({fin_est_subcontractor_expense, fin_act_subcontractor_expense
 
 const grabbedData1 = dataGrab1(project_dict)
 let data1 = Object.keys(grabbedData1).map(e => ({type: e, value: grabbedData1[e]}))
-console.log(data1)
+// console.log(data1)
 
 const grabbedData2 = dataGrab2(project_dict)
 let data2 = Object.keys(grabbedData2).map(e => ({type: e, value: grabbedData2[e]}))
-console.log(data2)
+// console.log(data2)
 
 const grabbedData3 = dataGrab3(project_dict)
 let data3 = Object.keys(grabbedData3).map(e => ({type: e, value: grabbedData3[e]}))
-console.log(data3)
+// console.log(data3)
 
 const grabbedData4 = dataGrab4(project_dict)
 let data4 = Object.keys(grabbedData4).map(e => ({type: e, value: grabbedData4[e]}))
-console.log(data4)
+// console.log(data4)
 
 const grabbedData5 = dataGrab5(project_dict)
 let data5 = Object.keys(grabbedData5).map(e => ({type: e, value: grabbedData5[e]}))
-console.log(data5)
+// console.log(data5)
 
 
 // set the dimensions and margins of the graph
