@@ -43,7 +43,9 @@ projectArray.sort((a, b) => a.project_name !== b.project_name ? a.project_name <
 // }
 //   buildTable(projectArray)
 // })
-
+function formatMoney(number) {
+  return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+}
 
 buildTable(projectArray)
 
@@ -53,7 +55,7 @@ function buildTable(data){
   for (let i = 0; i < data.length; i++){
     let  row = `<tr>
                              <td><a href="/search?project_id=${data[i].id}">${data[i].project_name}</a></td>
-                              <td>$${data[i].fin_act_revenue}</td>
+                              <td>$${(data[i].fin_act_revenue)}</td>
                               <td>${data[i].fin_est_labor_hours}</td>
                               <td>${data[i].fin_act_labor_hours}</td>
                               <td>$ ${data[i].fin_est_labor_expense}</td>

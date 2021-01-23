@@ -196,10 +196,10 @@ def search_by_id(project_id, conn):
         project_list['fin_est_labor_expense'] = "{:.2f}".format(fin_est_labor_expense)
         fin_est_material_expense = float(est_material_expense)
         project_list['fin_est_material_expense'] = "{:.2f}".format(fin_est_material_expense)
-        fin_est_subcontractor_expense = (est_subcontractor_expense)
-        project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
-        fin_est_miscellaneous_expense = est_miscellaneous_expense
-        project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
+        fin_est_subcontractor_expense = float(est_subcontractor_expense)
+        project_list['fin_est_subcontractor_expense'] = "{:.2f}".format(fin_est_subcontractor_expense)
+        fin_est_miscellaneous_expense = float(est_miscellaneous_expense)
+        project_list['fin_est_miscellaneous_expense'] = "{:.2f}".format(fin_est_miscellaneous_expense)
         #if we decide to keep oh expense as an amount entry (not %) in db
         fin_est_overhead_expense = float(est_overhead_expense) 
         project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
@@ -213,8 +213,8 @@ def search_by_id(project_id, conn):
 
 
         # Calculations for Project Financials - Actual
-        fin_act_revenue = revenue
-        project_list['fin_act_revenue'] = f'{float(fin_act_revenue):,}'
+        fin_act_revenue = float(revenue)
+        project_list['fin_act_revenue'] = "{:.2f}".format(fin_act_revenue)
         fin_act_labor_hours = act_labor_hours
         project_list['fin_act_labor_hours'] = str(fin_act_labor_hours)
         fin_act_labor_rate = act_labor_rate
