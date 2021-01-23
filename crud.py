@@ -218,19 +218,11 @@ def search_by_id(project_id, conn):
         fin_est_miscellaneous_expense = est_miscellaneous_expense
         project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
         #if we decide to keep oh expense as an amount entry (not %) in db
-<<<<<<< HEAD
         # fin_est_overhead_expense = float(est_overhead_expense) 
         # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
         fin_est_overhead_expense = float(est_overhead_expense) / float(revenue) * 100
         project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
         fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
-=======
-        fin_est_overhead_expense = float(est_overhead_expense) 
-        project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
-        # fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
-        # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
-        fin_est_gross_profit = round((float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)),2)
->>>>>>> 5699f0916d82791182f1f38a24fa9d4c93e3b063
         # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
         project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
         fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
