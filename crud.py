@@ -189,12 +189,13 @@ def search_by_id(project_id, conn):
         project_list['fin_est_revenue '] = f'{float(revenue):,}'
         fin_est_labor_hours = est_labor_hours
         project_list['fin_est_labor_hours'] = str(fin_est_labor_hours)
-        fin_est_labor_rate = est_labor_rate
-        project_list['fin_est_labor_rate'] = f'{float(fin_est_labor_rate):,}'
+        fin_est_labor_rate = float(est_labor_rate)
+        project_list['fin_est_labor_rate'] = "{:.2f}".format(fin_est_labor_rate)
         fin_est_labor_expense = float(fin_est_labor_hours) * float(fin_est_labor_rate)
-        project_list['fin_est_labor_expense'] = f'{float(fin_est_labor_expense):,}'
-        fin_est_material_expense = (est_material_expense)
-        project_list['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
+        # "{:.2f}".format(fin_act_labor_rate)
+        project_list['fin_est_labor_expense'] = "{:.2f}".format(fin_est_labor_expense)
+        fin_est_material_expense = float(est_material_expense)
+        project_list['fin_est_material_expense'] = "{:.2f}".format(fin_est_material_expense)
         fin_est_subcontractor_expense = (est_subcontractor_expense)
         project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
         fin_est_miscellaneous_expense = est_miscellaneous_expense
@@ -206,7 +207,7 @@ def search_by_id(project_id, conn):
         # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
         fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
         # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
-        project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
+        project_list['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
         fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
         project_list['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
 
@@ -239,7 +240,7 @@ def search_by_id(project_id, conn):
         #updated gp calculation to include additional expenses
         fin_act_gross_profit = round((float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp - fin_act_overhead_expense),2)
         # project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
-        project_list['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
+        project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
         fin_act_gross_margin = float(fin_act_gross_profit) / float(fin_act_revenue) * 100
         project_list['fin_act_gross_margin'] = "{:.2f}".format(fin_act_gross_margin) + " %"
 
