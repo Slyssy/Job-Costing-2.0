@@ -55,12 +55,20 @@ function buildTable(data){
   for (let i = 0; i < data.length; i++){
     let  row = `<tr>
                              <td><a href="/search?project_id=${data[i].id}">${data[i].project_name}</a></td>
-                              <td>$${(data[i].fin_act_revenue)}</td>
-                              <td>${data[i].fin_est_labor_hours}</td>
-                              <td>${data[i].fin_act_labor_hours}</td>
-                              <td>$ ${data[i].fin_est_labor_expense}</td>
-                              <td>$ ${data[i].fin_act_labor_expense}</td>
-                              <td>${data[i].act_start_date}</td>
+                              <td class="revenue">$${data[i].fin_act_revenue}</td>
+                              <td class="labor-hours border-secondary border-left">${data[i].fin_est_labor_hours}</td>
+                              <td class="labor-hours">${data[i].fin_act_labor_hours}</td>
+                              <td class="labor border-secondary border-left">$${data[i].fin_est_labor_expense}</td>
+                              <td class="labor">$${data[i].fin_act_labor_expense}</td>
+                              <td class="material border-secondary border-left">$${data[i].fin_est_material_expense}</td>
+                              <td class="material">Coming Soon</td>
+                              <td class="misc border-secondary border-left">$${data[i].fin_est_miscellaneous_expense}</td>
+                              <td class="misc">Coming Soon</td>
+                              <td class="overhead border-secondary border-left">${data[i].fin_est_overhead_expense}</td>
+                              <td class="overhead">Coming Soon</td>
+                              <td class="subcontractor border-secondary border-left">$${data[i].fin_est_subcontractor_expense}</td>
+                              <td class="subcontractor">Coming Soon</td>
+                              <td class="start-date">${data[i].act_start_date}</td>
                           </tr>`
        table.innerHTML += row   
   }
