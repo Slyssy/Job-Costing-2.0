@@ -692,6 +692,7 @@ def user_data_update_db():
             db_log_in = db_row[6]
             db_password = db_row[7]
 
+        print(db_user_id)
         print(db_name)
         print(db_job_title)
         print(db_pay_rate)
@@ -770,13 +771,16 @@ def user_data_update_db():
         print(full_values_string)
         print('-------------------------------------------------------------------')
         cur = conn.cursor()
+        print(f"UPDATE users SET name ='{name}', job_title ='{job_title}' , pay_rate ='{pay_rate}', email ='{email}', phone = '{phone}', log_in ='{log_in}', password = '{passw}'  WHERE user_id = {db_user_id}")
         # Adding form input data to PostgreSQL database
         try:
+            cur.execute(f"UPDATE users SET name ='{name}', job_title ='{job_title}' , pay_rate ='{pay_rate}', email ='{email}', phone = '{phone}', log_in ='{log_in}', password = '{passw}'  WHERE user_id = {db_user_id}")
+
             # cur.execute('UPDATE  users SET (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
             # cur.execute('UPDATE  users SET job_title = job_title , pay_rate = pay_rate , name = name , email = email, phone = phone, log_in = log_in, password = passw WHERE user_id = db_user_id ;')
             # cur.execute('UPDATE users SET name = name WHERE user_id = db_user_id ;')
             # cur.execute('UPDATE users SET name=%s',[name], ' WHERE user_id=%s;', [db_user_id])
-            cur.execute('UPDATE users SET name=%s',[name], ' WHERE user_id=' + [db_user_id] + ";")
+            # cur.execute('UPDATE users SET name=%s',[name], ' WHERE user_id=' + [db_user_id] + ";")
             # sql_insert_string = "UPDATE users SET name = ('" + name + "') WHERE project_id=" + db_user_id + ";"
             # print(sql_insert_string)
             # cur.execute(sql_insert_string)
