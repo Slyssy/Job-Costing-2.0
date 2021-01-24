@@ -1,5 +1,6 @@
 import datetime
 import pandas as pd
+from pprint import pprint
 
 
 def search_by_id(project_id, conn):
@@ -96,23 +97,38 @@ def search_by_id(project_id, conn):
                 mat_exp_dict['project_id'] = db_row[2]
                 mat_exp_dict['expense_amount'] = db_row[4]
                 mat_exp_list.append(mat_exp_dict)
-            # if subcon_exp_dict and db_row[1] == "Subcontractor":
-            elif db_row[1] == "Subcontractor":
-                subcon_exp_dict['exp_type'] = db_row[1]
-                subcon_exp_dict['project_id'] = db_row[2]
-                subcon_exp_dict['expense_amount'] = db_row[4]
-                subcon_exp_list.append(subcon_exp_dict)
-            else:
+
+            if db_row[1] == "Misc":
             # if misc_exp_dict and db_row[1] == "Miscellaneous" :
                 misc_exp_dict['exp_type'] = db_row[1]
                 misc_exp_dict['project_id'] = db_row[2]
                 misc_exp_dict['expense_amount'] = db_row[4]
                 misc_exp_list.append(misc_exp_dict)
+            # if subcon_exp_dict and db_row[1] == "Subcontractor":
+            if db_row[1] == "Subcontractor":
+                subcon_exp_dict['exp_type'] = db_row[1]
+                subcon_exp_dict['project_id'] = db_row[2]
+                subcon_exp_dict['expense_amount'] = db_row[4]
+                subcon_exp_list.append(subcon_exp_dict)
+
+            if db_row[1] == "Misc":
+            # if misc_exp_dict and db_row[1] == "Miscellaneous" :
+                misc_exp_dict['exp_type'] = db_row[1]
+                misc_exp_dict['project_id'] = db_row[2]
+                misc_exp_dict['expense_amount'] = db_row[4]
+                misc_exp_list.append(misc_exp_dict)
+            # else:
+            # if db_row[1] == "Misc":
+            # if misc_exp_dict and db_row[1] == "Miscellaneous" :
+                # misc_exp_dict['exp_type'] = db_row[1]
+                # misc_exp_dict['project_id'] = db_row[2]
+                # misc_exp_dict['expense_amount'] = db_row[4]
+                # misc_exp_list.append(misc_exp_dict)
         
         # print(exp_dict)
-        print(mat_exp_list)
-        print(subcon_exp_list)
-        print(misc_exp_list)
+        pprint(mat_exp_list)
+        pprint(subcon_exp_list)
+        pprint(misc_exp_list)
         print('-----------------------------------------------------------')
 
         #newstuff on saturday
@@ -127,15 +143,15 @@ def search_by_id(project_id, conn):
             subcon_values = dict_row['expense_amount']
             subcon_values_list.append(subcon_values)
         
-        misc_exp_list = []
+        misc_values_list = []
         for dict_row in misc_exp_list:
             misc_values = dict_row['expense_amount']
-            misc_exp_list.append(misc_values)
+            misc_values_list.append(misc_values)
 
         #expense totals
         total_materials_exp = round((sum(mat_values_list)),2)
         total_subcontractor_exp = round((sum(subcon_values_list)),2)
-        total_miscellaneous_exp = round((sum(misc_exp_list)),2)
+        total_miscellaneous_exp = round((sum(misc_values_list)),2)
         # total_subcontractor_exp = sum(list_subcon_values)
         # total_miscellaneous_exp = sum(list_misc_values)
 
