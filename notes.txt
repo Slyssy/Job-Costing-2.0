@@ -133,3 +133,5 @@ used the following code to test grabbing expenses from db
         # print(total_mat_exp)
         # print(total_subcon_exp)
         # print(total_misc_exp)
+
+        required=""

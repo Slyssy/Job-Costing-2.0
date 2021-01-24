@@ -60,8 +60,12 @@ def index():
         # cur.execute('SELECT password FROM users ;')
         cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
         rows = cur.fetchall()
+        print("this is the rows(fetch)")
         print(rows)
+        print("----------------------------------")
         tup=rows[0]
+        print("this is the tup")
+        print(tup)
         strpass = functools.reduce(operator.add,(tup))
         print(strpass)
         # print(hashed_in_pass)
@@ -632,7 +636,166 @@ def project_search():
             db_write_error = 'Oops - could not write to database!'
             return render_template('error.html', error_type=db_write_error)
         return render_template('search.html')
+
+ # Route for Enter New User page, saves inputs to db, then redirects to Dashboard
+@app.route('/update_user', methods=['GET', 'POST'])
+def user_data_update_db():
+    if request.method == 'GET':
+        print('*****************')
+        print('Getting form...')
+        print('*****************')
+    # Fetch all employee names from database for dropdown menu
+        cur = conn.cursor()
+        cur.execute('SELECT name FROM users ORDER BY name ASC')
+        employee_names_fetch = cur.fetchall()
+        print('------------------------------------------------------------')   
+        print('All employee names fetched from database for dropdown list')   
+        print('------------------------------------------------------------')   
+        print(employee_names_fetch)
+        print('------------------------------------------------------------')   
+        # Convert employee names to a JSON
+        employee_list = []
+        for db_row in employee_names_fetch:
+            employee_dict = {}
+            employee_dict['name'] = db_row[0]
+            employee_list.append(employee_dict)
+
+        # Create a dictionary for employee and convert to a JSON for the dropdown menus
+        dropdown_dict = {}
+        dropdown_dict['employee_list'] = employee_list
+        pprint(dropdown_dict)
+        return render_template('updateUser.html', dropdown_dict=json.dumps(dropdown_dict))
+
+
+        # return render_template('new_user.html')    
+    
+    if request.method == 'POST':
+        drop_name = request.form['employee_name']
         
+        print(drop_name)
+        cur = conn.cursor() 
+        # cur.execute('SELECT password FROM users ;')
+        cur.execute('SELECT * FROM users WHERE name=%s;', [drop_name])
+        user_info_fetch = cur.fetchall()
+        print(user_info_fetch)
+        print('*****************')
+        print('Posting form...')
+        print('*****************')
+
+        for db_row in user_info_fetch:
+            db_user_id = db_row[0]
+            db_name = db_row[3]
+            db_job_title = db_row[1]
+            db_pay_rate = db_row[2]
+            db_email = db_row[4]
+            db_phone = db_row[5]
+            db_log_in = db_row[6]
+            db_password = db_row[7]
+
+        print(db_name)
+        print(db_job_title)
+        print(db_pay_rate)
+        print(db_email)
+        print(db_phone)
+        print(db_log_in)
+        print(db_password)
+
+
+        name = request.form['user_name']
+        if name != "" :
+            name = request.form['user_name']
+        else:
+            name = db_name
+        
+        job_title = request.form['job_title']
+        if job_title != "" :
+            job_title = request.form['job_title']
+        else:
+            job_title = db_job_title
+
+        pay_rate = request.form['pay_rate']
+        if pay_rate != "" :
+            pay_rate = request.form['pay_rate']
+        else:
+            pay_rate = db_pay_rate
+                
+        email = request.form['email']
+        if email != "" :
+            email = request.form['email']
+        else:
+            email = db_email
+
+        phone = request.form['phone']
+        if phone != "" :
+            phone = request.form['phone']
+        else:
+            phone = db_phone
+
+
+        log_in = request.form['log_in']
+        if log_in != "" :
+            log_in = request.form['log_in']
+        else:
+            log_in = db_log_in
+
+        password = request.form['password']
+        if password != "" :
+            passw = sha256_crypt.hash(password)
+        else:
+            passw = db_password
+
+
+
+        full_values_string = ''
+        # name = request.form['user_name']
+        full_values_string += "(" + "'" + name + "'"
+        # job_title = request.form['job_title']
+        full_values_string += ',' + "'" + job_title + "'"
+        # pay_rate = request.form['pay_rate']
+        full_values_string += ',' + "'" + str(pay_rate) + "'"
+        # email = request.form['email']
+        full_values_string += ',' + "'" + email + "'"
+        # phone = request.form['phone']
+        full_values_string += ',' + "'" + phone + "'"
+        # #log-in and hashing password 
+        # log_in = request.form['log_in']
+        full_values_string += ',' + "'" + log_in + "'"
+        # password = request.form['password']
+        # passw = sha256_crypt.hash(password)
+        full_values_string += ',' + "'" + passw + "'" + ")"
+        # # Print data list for database entry
+        print('-------------------------------------------------------------------')
+        print('Data list prepared for entry to Users table in database')
+        print('-------------------------------------------------------------------')
+        print(full_values_string)
+        print('-------------------------------------------------------------------')
+        cur = conn.cursor()
+        # Adding form input data to PostgreSQL database
+        try:
+            # cur.execute('UPDATE  users SET (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
+            cur.execute('UPDATE  users SET job_title = job_title , pay_rate = pay_rate , name = name , email = email, phone = phone, log_in = log_in, password = passw WHERE user_id = db_user_id ;')
+            # cur.execute('UPDATE  users SET (name = name, job_title = job_title , pay_rate = pay_rate , email = email, phone = phone, log_in = log_in, password = passw) WHERE user_id = db_user_id ;')
+            print('-----------------------------------')
+            print('Data added to database - woohoo!')
+            print('-----------------------------------')
+        except:
+            print('---------------------------------------')
+            db_write_error = 'Oops - could not write to database!'
+            print('---------------------------------------')
+            return render_template('error.html', error_type=db_write_error)
+        return redirect(url_for('dashboard_data'))
+        
+
+        # try:
+        #     cur = conn.cursor() 
+        #     cur.execute("UPDATE users SET (job_title, pay_rate, name, email, phone, log_in, password) VALUES (%s, %s, %s, %s, %s, %s, %s)", (job_title, pay_rate, name, email, phone, log_in, passw))
+        #     print('-----------------------------------')
+        #     print('Data added to database - woohoo!')
+        #     print('-----------------------------------')
+        # except:
+        #     db_write_error = 'Oops - could not write to database!'
+        #     return render_template('error.html', error_type=db_write_error)
+        # return redirect(url_for('dashboard_data'))
 
 
 
