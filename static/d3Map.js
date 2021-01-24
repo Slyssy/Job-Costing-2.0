@@ -1,5 +1,5 @@
 const marginMap = {top: 0, right: 0, bottom: 0, left: 0};
-const widthMap = 1135 - marginMap.left - marginMap.right;
+const widthMap = 960 - marginMap.left - marginMap.right;
 const heightMap = 600 - marginMap.top - marginMap.bottom;
 
 const valueFormat = d3.format(',');
