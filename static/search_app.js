@@ -135,6 +135,21 @@ function dataGrab5({fin_est_subcontractor_expense, fin_act_subcontractor_expense
   return {'Budgeted Subcontractor': +fin_est_subcontractor_expense.replace(/,/g, ''), 'Actual Subcontractor': +fin_act_subcontractor_expense.replace(/,/g, '')}
 }
 
+function dataGrab6({fin_est_revenue , fin_est_labor_expense, fin_est_material_expense, fin_est_miscellaneous_expense, fin_est_subcontractor_expense}) {
+  return{'Estimated Revenue': +fin_est_revenue .replace(/,/g, ''),'Estimated Labor': +fin_est_labor_expense, 'Estimated Material': +fin_est_material_expense, 'Estimated Miscellaneous': +fin_est_miscellaneous_expense, 'Estimated Subcontractor': +fin_est_subcontractor_expense}
+}
+
+function dataGrab7({fin_act_revenue, fin_act_labor_expense, fin_act_material_expense, fin_act_miscellaneous_expense, fin_act_subcontractor_expense}) {
+  return{'Actual Revenue': +fin_act_revenue, 'Actual Labor': +fin_act_labor_expense, 'Actual Material': +fin_act_material_expense, 'Actual Miscellaneous': +fin_act_miscellaneous_expense, 'Actual Subcontractor': +fin_act_subcontractor_expense}
+}
+
+// function addKeyValue() {
+//   for (var i = 0; i < arguments.length; i += 2) {
+//     project_dict[arguments[i]] = arguments [i + 1];
+//   }
+// }
+// addKeyValue('expenseTypes')
+
 const grabbedData1 = dataGrab1(project_dict)
 let data1 = Object.keys(grabbedData1).map(e => ({type: e, value: grabbedData1[e]}))
 // console.log(data1)
@@ -154,6 +169,16 @@ let data4 = Object.keys(grabbedData4).map(e => ({type: e, value: grabbedData4[e]
 const grabbedData5 = dataGrab5(project_dict)
 let data5 = Object.keys(grabbedData5).map(e => ({type: e, value: grabbedData5[e]}))
 // console.log(data5)
+
+const grabbedData6 = dataGrab6(project_dict)
+let data6 = Object.keys(grabbedData6).map(e => ({type: e, value: grabbedData6[e]}))
+console.log(data6)
+
+const grabbedData7 = dataGrab7(project_dict)
+let data7 = Object.keys(grabbedData7).map(e => ({type: e, value: grabbedData7[e]}))
+console.log(data7)
+
+// const estExpenses = project_dict.split()
 
 
 // set the dimensions and margins of the graph
@@ -337,3 +362,104 @@ function update1(data) {
 }
 
 update1(data3)
+
+// Start Estmated Expense Comparison Chart
+// set the dimensions and margins of the graph
+const margin2 = {top: 70, right: 30, bottom: 70, left: 120},
+    width2 = 1120 - margin2.left - margin2.right,
+    height2 = 600 - margin2.top - margin2.bottom;
+// append the svg object to the body of the page
+const svg2 = d3.select("#expense_comparison")
+  .append("svg")
+    .attr("width", width2 + margin2.left + margin2.right)
+    .attr("height", height2 + margin2.top + margin2.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin2.left + "," + margin2.top + ")");
+
+// Initialize the X axis
+const x2 = d3.scaleBand()
+  .range([ 0, width2 ])
+  .padding(0.2);
+
+const xAxis2 = svg2.append("g")
+  .attr("transform", "translate(0," + height + ")")
+
+// Initialize the Y axis
+const y2 = d3.scaleLinear()
+  .range([ height, 0]);
+const yAxis2 = svg2.append("g")
+  .attr("class", "expenseCompYaxis") 
+
+  yAxis2
+  .append('text')
+    .attr('class', 'yAxis2')
+    .attr('y', -70)
+    .attr('x', -80)
+    .attr('transform', `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style('font-size', '1.5em')
+    .text("Values ($)")
+
+   svg2.append('text')
+    .attr('y', -10)
+    .attr('x', 400)
+    .attr('class', 'title')
+    .text("Expense Comparison")
+    .attr("fill", "#635f5d")
+    .style('font-size', '1.7em')
+
+
+// A function that create / update the plot for a given variable:
+function update2(data) {
+
+  // Update the X axis
+  x2.domain(data.map(d => d.type))
+  xAxisG2 = xAxis2.call(d3.axisBottom(x2))
+
+  xAxisG2
+  // .style("color", "#635f5d")
+  // .style('font-size', '2.0em')
+
+  // Update the Y axis
+  y2.domain([0, d3.max(data, d => d.value ) * 1.2 ]);
+  yAxis2.transition().duration(1000).call(d3.axisLeft(y2));
+
+  // Create the u variable
+  const u2 = svg2.selectAll("rect")
+    .data(data)
+
+    const colors = d3.scaleOrdinal()
+    .domain(['Estimated Revenue', 'Estimated Labor', 'Estimated Material', 'Estimated Miscellaneous', 'Estimated Subcontractor'])
+    .range([ '#1b71f2', '#eb2828', '#eb2828', '#eb2828','#eb2828'])
+
+  u2
+    .enter()
+    .append("rect") // Add a new rect for each new elements
+    .merge(u2) // get the already existing elements as well
+    .transition() // and apply changes to all of them
+    .duration(1000)
+      .attr("x", d => x2(d.type))
+      .attr("y", d => y2(d.value))
+      .attr("width", x2.bandwidth())
+      .attr("height", d => height - y2(d.value))
+      .attr("fill", function(d, i)  {return colors(d.type)})
+      .style("opacity", "0.5")    
+
+  // If less group in the new dataset, I delete the ones not in use anymore
+  u2
+    .exit()
+    .remove()
+}
+
+update2(data6)
+
+// // Start Stacked Bar Chart
+// const svg2 =d3.select(stacked_bar)
+// .append ('svg')
+// .attr("width", width + margin.left + margin.right)
+//   .attr("height", height + margin.top + margin.bottom)
+//   .append("g")
+//   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//   const dataset = d3.layout.stack() ([''])
