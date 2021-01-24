@@ -216,8 +216,8 @@ def dashboard_data():
             project_dict['fin_est_subcontractor_expense'] = "{:.2f}".format(fin_est_subcontractor_expense)
             fin_est_miscellaneous_expense = float(est_miscellaneous_expense)
             project_dict['fin_est_miscellaneous_expense'] = "{:.2f}".format(fin_est_miscellaneous_expense)
-            fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
-            project_dict['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
+            fin_est_overhead_expense = float(est_overhead_expense)
+            project_dict['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
             fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
             # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
             project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
