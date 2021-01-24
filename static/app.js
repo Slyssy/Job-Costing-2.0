@@ -64,7 +64,7 @@ function buildTable(data){
                               <td class="material">Coming Soon</td>
                               <td class="misc border-secondary border-left">$${data[i].fin_est_miscellaneous_expense}</td>
                               <td class="misc">Coming Soon</td>
-                              <td class="overhead border-secondary border-left">${data[i].fin_est_overhead_expense}</td>
+                              <td class="overhead border-secondary border-left">$${data[i].fin_est_overhead_expense}</td>
                               <td class="overhead">Coming Soon</td>
                               <td class="subcontractor border-secondary border-left">$${data[i].fin_est_subcontractor_expense}</td>
                               <td class="subcontractor">Coming Soon</td>
