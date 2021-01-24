@@ -186,7 +186,7 @@ def search_by_id(project_id, conn):
 
         # Calculations for Project Financials - Budgeted/Estimated
         fin_est_revenue = revenue
-        project_list['fin_est_revenue '] = f'{float(revenue):,}'
+        project_list['fin_est_revenue'] = f'{float(revenue):,}'
         fin_est_labor_hours = est_labor_hours
         project_list['fin_est_labor_hours'] = str(fin_est_labor_hours)
         fin_est_labor_rate = float(est_labor_rate)
