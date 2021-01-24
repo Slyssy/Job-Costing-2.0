@@ -53,11 +53,19 @@ function buildTable(data){
   let table = document.getElementById('dashboardTable')
   table.innerHTML = ''
   for (let i = 0; i < data.length; i++){
+
+    let hours_over = false
+    let flag = '';
+    if (data[i].fin_est_labor_hours - data[i].fin_act_labor_hours < 0 ) {
+      hours_over = true;
+      flag = 'flag';
+    }
+    
     let  row = `<tr>
-                             <td><a href="/search?project_id=${data[i].id}">${data[i].project_name}</a></td>
+                             <td><a class="${flag}" href="/search?project_id=${data[i].id}">${data[i].project_name}</a></td>
                               <td class="revenue">$${data[i].fin_act_revenue}</td>
                               <td class="labor-hours border-secondary border-left">${data[i].fin_est_labor_hours}</td>
-                              <td class="labor-hours">${data[i].fin_act_labor_hours}</td>
+                              <td class="labor-hours ${hours_over}">${data[i].fin_act_labor_hours}</td>
                               <td class="labor border-secondary border-left">$${data[i].fin_est_labor_expense}</td>
                               <td class="labor">$${data[i].fin_act_labor_expense}</td>
                               <td class="material border-secondary border-left">$${data[i].fin_est_material_expense}</td>

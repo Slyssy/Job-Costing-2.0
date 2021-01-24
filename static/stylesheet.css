@@ -147,3 +147,19 @@
 .start-date {
 
 }
+td span {
+  color: red;
+  font-weight: bold;
+}
+td.true {
+  background: #ff0000c2;
+  color: white;
+}
+
+td a.flag {
+  color: red;
+}
+
+td a.flag::after {
+  content: ' !'
+}
