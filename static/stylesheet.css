@@ -116,3 +116,34 @@
 #range {
   font-size: 32px;
 }
+
+.revenue {
+  
+}
+.labor-hours {
+  background-color: #ffff0033;
+  border-top: 0!important;
+}
+.labor {
+  background-color: #aeaee945;
+  border-top: 0!important;
+}
+.material {
+  background-color: #8000801f;
+  border-top: 0!important;
+}
+.misc {
+  background-color: #0080001a;
+  border-top: 0!important;
+}
+.overhead {
+  background-color: #ffa5003b;
+  border-top: 0!important;
+}
+.subcontractor {
+  background-color: #0053ff21;
+  border-top: 0!important;
+}
+.start-date {
+
+}
