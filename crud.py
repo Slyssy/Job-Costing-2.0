@@ -127,15 +127,15 @@ def search_by_id(project_id, conn):
             subcon_values = dict_row['expense_amount']
             subcon_values_list.append(subcon_values)
         
-        misc_exp_list = []
+        misc_values_list = []
         for dict_row in misc_exp_list:
             misc_values = dict_row['expense_amount']
-            misc_exp_list.append(misc_values)
+            misc_values_list.append(misc_values)
 
         #expense totals
         total_materials_exp = round((sum(mat_values_list)),2)
         total_subcontractor_exp = round((sum(subcon_values_list)),2)
-        total_miscellaneous_exp = round((sum(misc_exp_list)),2)
+        total_miscellaneous_exp = round((sum(misc_values_list)),2)
         # total_subcontractor_exp = sum(list_subcon_values)
         # total_miscellaneous_exp = sum(list_misc_values)
 
