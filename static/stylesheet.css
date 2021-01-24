@@ -152,6 +152,6 @@ td span {
   font-weight: bold;
 }
 td.true {
-  background: red;
+  background: #ff0000c2;
   color: white;
 }
