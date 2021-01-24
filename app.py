@@ -773,8 +773,9 @@ def user_data_update_db():
         # Adding form input data to PostgreSQL database
         try:
             # cur.execute('UPDATE  users SET (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
-            cur.execute('UPDATE  users SET job_title = job_title , pay_rate = pay_rate , name = name , email = email, phone = phone, log_in = log_in, password = passw WHERE user_id = db_user_id ;')
-            # cur.execute('UPDATE  users SET (name = name, job_title = job_title , pay_rate = pay_rate , email = email, phone = phone, log_in = log_in, password = passw) WHERE user_id = db_user_id ;')
+            # cur.execute('UPDATE  users SET job_title = job_title , pay_rate = pay_rate , name = name , email = email, phone = phone, log_in = log_in, password = passw WHERE user_id = db_user_id ;')
+            cur.execute('UPDATE users SET name = name WHERE user_id = db_user_id ;')
+           # cur.execute('UPDATE  users SET (name = name, job_title = job_title , pay_rate = pay_rate , email = email, phone = phone, log_in = log_in, password = passw) WHERE user_id = db_user_id ;')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
