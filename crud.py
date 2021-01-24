@@ -108,7 +108,6 @@ def search_by_id(project_id, conn):
                 misc_exp_dict['project_id'] = db_row[2]
                 misc_exp_dict['expense_amount'] = db_row[4]
                 misc_exp_list.append(misc_exp_dict)
-
         
         # print(exp_dict)
         print(mat_exp_list)
@@ -116,98 +115,132 @@ def search_by_id(project_id, conn):
         print(misc_exp_list)
         print('-----------------------------------------------------------')
 
-        #creating dataframes from list of dictionaries 
-        mat_df = pd.DataFrame(mat_exp_list) 
-        subcon_df = pd.DataFrame(subcon_exp_list)
-        misc_df = pd.DataFrame(misc_exp_list)
+        #newstuff on saturday
+        #putting expense values in list 
+        mat_values_list = []
+        for dict_row in mat_exp_list:
+            mat_values = dict_row['expense_amount']
+            mat_values_list.append(mat_values)
+        
+        subcon_values_list = []
+        for dict_row in subcon_exp_list:
+            subcon_values = dict_row['expense_amount']
+            subcon_values_list.append(subcon_values)
+        
+        misc_exp_list = []
+        for dict_row in misc_exp_list:
+            misc_values = dict_row['expense_amount']
+            misc_exp_list.append(misc_values)
+
+        #expense totals
+        total_materials_exp = round((sum(mat_values_list)),2)
+        total_subcontractor_exp = round((sum(subcon_values_list)),2)
+        total_miscellaneous_exp = round((sum(misc_exp_list)),2)
+        # total_subcontractor_exp = sum(list_subcon_values)
+        # total_miscellaneous_exp = sum(list_misc_values)
 
 
-        print("Dataframes")
-        print(mat_df)
-        print(subcon_df)
-        print(misc_df)
+        # print(exp_dict)
+        print('-----------------------------------------------------------') 
+        print(mat_exp_list)
+        print('-----------------------------------------------------------') 
+        print(mat_values_list)
+        print(f'this is the total materials value {total_materials_exp}')
+        print('-----------------------------------------------------------')
+        print(subcon_exp_list)
+        print(f'this is the total subcontractor value {total_subcontractor_exp}')
+        print('-----------------------------------------------------------') 
+        print(misc_exp_list)
+        print(f'this is the total misc value {total_miscellaneous_exp}')
         print('-----------------------------------------------------------')
 
+        #OLD CODE - For use with pandas
+        #creating dataframes from list of dictionaries 
+        # mat_df = pd.DataFrame(mat_exp_list) 
+        # subcon_df = pd.DataFrame(subcon_exp_list)
+        # misc_df = pd.DataFrame(misc_exp_list)
+
+
+        # print("Dataframes")
+        # print(mat_df)
+        # print(subcon_df)
+        # print(misc_df)
+        # print('-----------------------------------------------------------')
+
         #getting the values (series?) for the amount columns in each expense dataframe
+
         # mat_df_values = mat_df['expense_amount'].values
         # subcon_df_values = subcon_df['expense_amount'].values
         # misc_df_values = misc_df['expense_amount'].values
 
         #Eds fix:
-        mat_df_values = mat_df['expense_amount'].values if 'expense_amount' in mat_df.columns else []
-        subcon_df_values = subcon_df['expense_amount'].values if 'expense_amount' in subcon_df.columns else []
-        misc_df_values = misc_df['expense_amount'].values if 'expense_amount' in misc_df.columns else []
+        # mat_df_values = mat_df['expense_amount'].values if 'expense_amount' in mat_df.columns else []
+        # subcon_df_values = subcon_df['expense_amount'].values if 'expense_amount' in subcon_df.columns else []
+        # misc_df_values = misc_df['expense_amount'].values if 'expense_amount' in misc_df.columns else []
 
-        list_mat_values = list(mat_df_values)
-        list_subcon_values = list(subcon_df_values)
-        list_misc_values = list(misc_df_values)
+        # list_mat_values = list(mat_df_values)
+        # list_subcon_values = list(subcon_df_values)
+        # list_misc_values = list(misc_df_values)
         
-        # turning df series into a list 
-        # list_mat_values = mat_df_values.tolist()
-        # list_subcon_values = subcon_df_values.tolist()
-        # list_misc_values = misc_df_values.tolist()
-
-        #adding values in list to get total expense per category 
-        total_mat_exp = sum(list_mat_values)
-        total_subcon_exp = sum(list_subcon_values)
-        total_misc_exp = sum(list_misc_values)
-
-
-
+        #End old code#
 
         # Calculations for Project Financials - Budgeted/Estimated
         fin_est_revenue = revenue
         project_list['fin_est_revenue '] = f'{float(revenue):,}'
         fin_est_labor_hours = est_labor_hours
         project_list['fin_est_labor_hours'] = str(fin_est_labor_hours)
-        fin_est_labor_rate = est_labor_rate
-        project_list['fin_est_labor_rate'] = f'{float(fin_est_labor_rate):,}'
+        fin_est_labor_rate = float(est_labor_rate)
+        project_list['fin_est_labor_rate'] = "{:.2f}".format(fin_est_labor_rate)
         fin_est_labor_expense = float(fin_est_labor_hours) * float(fin_est_labor_rate)
-        project_list['fin_est_labor_expense'] = f'{float(fin_est_labor_expense):,}'
-        fin_est_material_expense = (est_material_expense)
-        project_list['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
-        fin_est_subcontractor_expense = (est_subcontractor_expense)
-        project_list['fin_est_subcontractor_expense'] = f'{float(fin_est_subcontractor_expense):,}'
-        fin_est_miscellaneous_expense = est_miscellaneous_expense
-        project_list['fin_est_miscellaneous_expense'] = f'{float(fin_est_miscellaneous_expense):,}'
+        # "{:.2f}".format(fin_act_labor_rate)
+        project_list['fin_est_labor_expense'] = "{:.2f}".format(fin_est_labor_expense)
+        fin_est_material_expense = float(est_material_expense)
+        project_list['fin_est_material_expense'] = "{:.2f}".format(fin_est_material_expense)
+        fin_est_subcontractor_expense = float(est_subcontractor_expense)
+        project_list['fin_est_subcontractor_expense'] = "{:.2f}".format(fin_est_subcontractor_expense)
+        fin_est_miscellaneous_expense = float(est_miscellaneous_expense)
+        project_list['fin_est_miscellaneous_expense'] = "{:.2f}".format(fin_est_miscellaneous_expense)
         #if we decide to keep oh expense as an amount entry (not %) in db
         fin_est_overhead_expense = float(est_overhead_expense) 
         project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense)
-        # fin_est_overhead_expense = float(est_overhead_expense) / float(revenue)
+        # fin_est_overhead_expense = float(est_overhead_expense) / float(revenue) * 100
         # project_list['fin_est_overhead_expense'] = "{:.2f}".format(fin_est_overhead_expense) + " %"
         fin_est_gross_profit = float(fin_est_revenue) - float(fin_est_labor_expense) - float(fin_est_material_expense)- float(fin_est_subcontractor_expense)- float(fin_est_miscellaneous_expense)- float(fin_est_overhead_expense)
         # project_dict['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
-        project_list['fin_est_gross_profit'] = f'{float(fin_est_gross_profit):,}'
+        project_list['fin_est_gross_profit'] = "{:.2f}".format(fin_est_gross_profit)
         fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
         project_list['fin_est_gross_margin'] = "{:.2f}".format(fin_est_gross_margin) + " %"
 
 
         # Calculations for Project Financials - Actual
-        fin_act_revenue = revenue
-        project_list['fin_act_revenue'] = f'{float(fin_act_revenue):,}'
+        fin_act_revenue = float(revenue)
+        project_list['fin_act_revenue'] = "{:.2f}".format(fin_act_revenue)
         fin_act_labor_hours = act_labor_hours
         project_list['fin_act_labor_hours'] = str(fin_act_labor_hours)
         fin_act_labor_rate = act_labor_rate
         project_list['fin_act_labor_rate'] = "{:.2f}".format(fin_act_labor_rate)
         fin_act_labor_expense = float(fin_act_labor_hours) * float(fin_act_labor_rate)
-        project_list['fin_act_labor_expense'] = f'{float(fin_act_labor_expense):,}'
+        project_list['fin_act_labor_expense'] = "{:.2f}".format(fin_act_labor_expense)
         
         #added in additional expense calculations here 
-        fin_act_mat_exp = float(total_mat_exp)
+        fin_act_mat_exp = float(total_materials_exp)
         project_list['fin_act_material_expense'] = "{:.2f}".format(fin_act_mat_exp)
-        fin_act_subcon_exp = float(total_subcon_exp)
+        # fin_act_material_expense = (total_materials_exp)
+        # project_list['fin_est_material_expense'] = f'{float(fin_est_material_expense):,}'
+        fin_act_subcon_exp = float(total_subcontractor_exp)
         project_list['fin_act_subcontractor_expense'] = "{:.2f}".format(fin_act_subcon_exp)
-        fin_act_misc_exp = float(total_misc_exp)
+        fin_act_misc_exp = float(total_miscellaneous_exp)
         project_list['fin_act_miscellaneous_expense'] = "{:.2f}".format(fin_act_misc_exp)
         #if we decide to keep oh expense as an amoutn entry (not %) in db
         fin_act_overhead_expense = float(est_overhead_expense) 
         project_list['fin_act_overhead_expense'] = "{:.2f}".format(fin_act_overhead_expense)
-
+        # fin_act_overhead_expense = float(est_overhead_expense) / float(revenue) * 100
+        # project_list['fin_act_overhead_expense'] = "{:.2f}".format(fin_act_overhead_expense) + " %" 
 
         #updated gp calculation to include additional expenses
-        fin_act_gross_profit = float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp - fin_act_overhead_expense
+        fin_act_gross_profit = round((float(fin_act_revenue) - float(fin_act_labor_expense) - fin_act_mat_exp - fin_act_subcon_exp - fin_act_misc_exp - fin_act_overhead_expense),2)
         # project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
-        project_list['fin_act_gross_profit'] = f'{float(fin_act_gross_profit):,}'
+        project_list['fin_act_gross_profit'] = "{:.2f}".format(fin_act_gross_profit)
         fin_act_gross_margin = float(fin_act_gross_profit) / float(fin_act_revenue) * 100
         project_list['fin_act_gross_margin'] = "{:.2f}".format(fin_act_gross_margin) + " %"
 
