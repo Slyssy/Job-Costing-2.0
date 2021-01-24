@@ -147,3 +147,11 @@
 .start-date {
 
 }
+td span {
+  color: red;
+  font-weight: bold;
+}
+td.true {
+  background: red;
+  color: white;
+}
