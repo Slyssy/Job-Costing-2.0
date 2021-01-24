@@ -202,7 +202,7 @@ def dashboard_data():
             
 
             # Calculations for Project Financials - Budgeted/Estimated
-            fin_est_revenue = revenue
+            fin_est_revenue = float(revenue)
             project_dict['fin_est_revenue'] = f'{float(revenue):,}'
             fin_est_labor_hours = est_labor_hours
             project_dict['fin_est_labor_hours'] = str(fin_est_labor_hours)
