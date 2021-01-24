@@ -681,16 +681,25 @@ def user_data_update_db():
         print('*****************')
         print('Posting form...')
         print('*****************')
-
+        user_dict_list = []
         for db_row in user_info_fetch:
+            user_dict = {}
             db_user_id = db_row[0]
+            
             db_name = db_row[3]
+            user_dict['name'] = db_name
             db_job_title = db_row[1]
+            user_dict['job_title'] = db_job_title
             db_pay_rate = db_row[2]
+            user_dict['pay_rate'] = db_pay_rate
             db_email = db_row[4]
+            user_dict['email'] = db_email
             db_phone = db_row[5]
+            user_dict['phone'] = db_phone
             db_log_in = db_row[6]
+            user_dict['log_in'] = db_log_in
             db_password = db_row[7]
+            user_dict_list.append(user_dict)
 
         print(db_user_id)
         print(db_name)

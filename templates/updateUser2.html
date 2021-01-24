@@ -50,7 +50,7 @@
       <div class="card bg-primary text-white h-100">
         <div class="card-body d-flex flex-column align-items-start">
           <h4 class="card-title">Update User Information</h4>
-          <p class="card-text">Complete the fields below to update user. Leave any field blank that should NOT be updated.</p>
+          <p class="card-text">Complete the fields below to update user.</p>
           <a href="/dashboard" class="btn btn-primary border-white mt-auto"
             >Return to Dashboard</a
           >
@@ -79,7 +79,77 @@
             </div>
           </div>
 
+          <div class="container financials_container">
+            <div class="card bg-primary text-white h-100">
+              <div class="card-body d-flex flex-column align-items-start">
+                <h4 class="card-title">User Information</h4>
+              </div>
+            </div>
 
+          <div class="container table_container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Current User</th>
+                  <!-- <th scope="col">Actual</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Name:</th>
+                  <td> {{db_name}}</td>
+                  <!-- <td>$ {{'{:,.2f}'.format(project_dict.fin_act_revenue | float)}}</td> -->
+                </tr>
+                <tr>
+                  <th scope="row">Job Title:</th>
+                  <td>{{project_dict.fin_est_labor_hours}}</td>
+                  <!-- <td>{{project_dict.fin_act_labor_hours}}</td> -->
+                </tr>
+                <tr>
+                  <th scope="row">Pay Rate ($/hr):</th>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_est_labor_rate | float)}} / Hour</td>
+                  <!-- <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_rate | float)}} / Hour</td> -->
+                </tr>
+                <tr>
+                  <th scope="row">Email:</th>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_est_labor_expense | float)}}</td>
+                  <!-- <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_expense | float)}}</td> -->
+                </tr>
+                <tr>
+                  <th scope="row">Phone Number:</th>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_est_material_expense | float)}}</td>
+                  <!-- <td>$ {{'{:,.2f}'.format(project_dict.fin_act_material_expense | float)}}</td> -->
+                </tr>
+                <tr>
+                  <th scope="row">User Name:</th>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_est_subcontractor_expense | float)}}</td>
+                  <!-- <td>$  {{'{:,.2f}'.format(project_dict.fin_act_subcontractor_expense | float)}}</td> -->
+                </tr>
+                <tr>
+                  <th scope="row">Password:</th>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_est_miscellaneous_expense | float)}}</td>
+                  <!-- <td>$ {{'{:,.2f}'.format(project_dict.fin_act_miscellaneous_expense | float)}}</td> -->
+                </tr>
+                <!-- <tr>
+    
+                  <th scope="row">Project Overhead Expense:</th>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_est_overhead_expense | float)}}</td>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_act_overhead_expense | float)}}</td>
+    
+                </tr>
+                <tr>
+                  <th scope="row">Project Gross Profit:</th>             
+                  <td>$  {{'{:,.2f}'.format(project_dict.fin_est_gross_profit | float)}}</td>
+                  <td>$ {{'{:,.2f}'.format(project_dict.fin_act_gross_profit | float)}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Project Gross Margin:</th>
+                  <td>{{project_dict.fin_est_gross_margin}}</td>
+                  <td>{{project_dict.fin_act_gross_margin}}</td>
+                </tr> -->
+              </tbody>
+            </table>
 
         <!-- User Name -->
         <div class="form-group row was-validated">
