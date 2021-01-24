@@ -58,11 +58,11 @@ function buildTable(data){
     let flag = '';
     if (data[i].fin_est_labor_hours - data[i].fin_act_labor_hours < 0 ) {
       hours_over = true;
-      flag = '!';
+      flag = 'flag';
     }
     
     let  row = `<tr>
-                             <td><a href="/search?project_id=${data[i].id}">${data[i].project_name}</a> <span>${flag}</span></td>
+                             <td><a class="${flag}" href="/search?project_id=${data[i].id}">${data[i].project_name}</a></td>
                               <td class="revenue">$${data[i].fin_act_revenue}</td>
                               <td class="labor-hours border-secondary border-left">${data[i].fin_est_labor_hours}</td>
                               <td class="labor-hours ${hours_over}">${data[i].fin_act_labor_hours}</td>

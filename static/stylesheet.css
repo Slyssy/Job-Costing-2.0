@@ -155,3 +155,11 @@ td.true {
   background: #ff0000c2;
   color: white;
 }
+
+td a.flag {
+  color: red;
+}
+
+td a.flag::after {
+  content: ' !'
+}
