@@ -158,7 +158,7 @@
     </div>
 
     <!-- Start Barchart -->
-    <div class="container project_updates_container">
+    <div class="container-fluid performanceVisualizations" style="max-width:1600px">
       <div
         class="card bg-primary text-white h-100"
         style="margin: 30px 0px 30px 0px"
@@ -173,13 +173,14 @@
       </div>
     <div
       id="performanceVisualizations"
-      class="container dashboard_visualizations"
+      class="container-fluid dashboard_visualizations" style="max-width:1600px"
     >
+    <select id="year" align=left></select>
       <div class="row">
-        <div class="col-md-12">
-          <select id="year" align=left></select>
-          <svg id="estimate-to-actual" width="1115" height="600"></svg>      
-         </div> 
+        <!-- <div class="col-md-16"> -->
+         
+          <svg id="estimate-to-actual" width="1515" height="600"></svg>      
+         <!-- </div>  -->
         <div id="tooltip-line">
           Estimated Labor Expense:<span id="est_labor_exp" class="info"></span><br>          
         </div> 
@@ -190,7 +191,7 @@
     </div>
   </div>
   <!-- Start Map -->
-    <div class="container project_updates_container">
+    <div class="container-fluid project_map_container" style="max-width:1600px">
       <div
         class="card bg-primary text-white h-100"
         style="margin: 30px 0px 30px 0px"
@@ -202,16 +203,16 @@
           </p>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
+      <!-- <div class="row"> -->
+        <!-- <div class="col-md-12"> -->
           <select id="mapYear" align=left></select>
-          <div id="project-map">            
+          <div id="project-map" align=center style="width:100%; height:100%x">            
             <div id="sliderContainer">
               <input id="timeslide" type="range" min="0" max="11" value="0" step="1"/><br>
               <span id="range">January</span>
             </div>            
           </div> 
-        </div>
+          
         <div id="tooltip">
           Name:<span id="name" class="info"></span><br>
           Address:<span id="address" class="info"></span><br>
@@ -219,7 +220,7 @@
           Gross Profit:<span id="grossProfit" class="info"></span><br>
           Start Date:<span id="startDate" class="info"></span><br>
         </div>        
-      </div>
+      <!-- </div> -->
       <br>  
       <br>
       <br>

@@ -54,7 +54,7 @@ const options = d3.select("#year").selectAll("option")
           .text(d => d)
 
 var svg = d3.select("#estimate-to-actual"),
-margin = {top: 70, right: -75, bottom: 0, left: 110},
+margin = {top: 70, right: -55, bottom: 0, left: 110},
 width = +svg.attr("width") - margin.left - margin.right,
 height = +svg.attr("height") - margin.top - margin.bottom;
 
