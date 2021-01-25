@@ -664,7 +664,7 @@ var select = d3
     .select("#miscYear")
     // .style("border-radius", "5px")
     .on("change", function () {
-      matChart.update(this.value, 750);
+      miscChart.update(this.value, 750);
     });
 
 
