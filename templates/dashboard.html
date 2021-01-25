@@ -157,7 +157,7 @@
       </table>
     </div>
 
-    <!-- Start Barchart -->
+    
     <div class="container-fluid performanceVisualizations" style="max-width:1600px">
       <div
         class="card bg-primary text-white h-100"
@@ -171,6 +171,30 @@
           </p>
         </div>
       </div>
+<!-- Start Revenue Barchart -->
+<div
+      id="performanceVisualizations"
+      class="container-fluid dashboard_visualizations" style="max-width:1600px"
+    >
+    <select id="rev-year" align=left></select>
+    <input type="checkbox" id="sort">	
+Toggle sort by Revenue
+      <div class="row">
+        <!-- <div class="col-md-16"> -->
+         
+          <svg id="revenue_barchart" width="1515" height="600"></svg>      
+         <!-- </div>  -->
+        <!-- <div id="tooltip-line">
+          Estimated Labor Expense:<span id="est_labor_exp" class="info"></span><br>          
+        </div>  -->
+        <div id="tooltip-revenue-bar">
+          Monthly Revenue:<span id="monthlyRevenue" class="info"></span><br>          
+        </div>               
+      </div>      
+    </div>
+
+
+      <!-- Start Labor Barchart -->
     <div
       id="performanceVisualizations"
       class="container-fluid dashboard_visualizations" style="max-width:1600px"

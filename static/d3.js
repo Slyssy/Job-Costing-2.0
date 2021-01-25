@@ -4,7 +4,7 @@ projectArray = Object.keys(project_list).map((i) => project_list[i]);
 console.log(projectArray)
 
 // Filtering data to be used for plot
-const chartData = projectArray.map(({act_start_date, fin_est_labor_expense, fin_act_labor_expense}) => ({act_start_date, fin_est_labor_expense: parseFloat((fin_est_labor_expense).replace(/,/g, '')), fin_act_labor_expense: parseFloat((fin_act_labor_expense).replace(/,/g, ''))}));
+const chartData = projectArray.map(({act_start_date, fin_est_labor_expense, fin_act_labor_expense, fin_act_revenue}) => ({act_start_date, fin_est_labor_expense: parseFloat((fin_est_labor_expense).replace(/,/g, '')), fin_act_labor_expense: parseFloat((fin_act_labor_expense).replace(/,/g, '')), fin_act_revenue: parseFloat((fin_act_revenue).replace(/,/g, ''))}));
 // console.log(chartData)
 
 // Grouping dates into months and summing estimated and actual labor expense by month
@@ -12,7 +12,8 @@ const mapper = single => {
   let d = single.act_start_date.split('-');
   let e = Number(single.fin_est_labor_expense);
   let a = Number(single.fin_act_labor_expense);
-  return { year: d[0], month: d[1], fin_est_labor_expense: e , fin_act_labor_expense: a};
+  let r = Number(single.fin_act_revenue);
+  return { year: d[0], month: d[1], fin_est_labor_expense: e , fin_act_labor_expense: a, fin_act_revenue: r};
 }
  
 const reducer = (group, current) => {
@@ -20,9 +21,9 @@ const reducer = (group, current) => {
   if (i == -1) {
     return [ ...group, current ];
   }
-
+  group[i].fin_est_revenue += current.fin_est_revenue;
   group[i].fin_est_labor_expense += current.fin_est_labor_expense;
-  group[i].fin_act_labor_expense += current.fin_act_labor_expense
+  group[i].fin_act_labor_expense += current.fin_act_labor_expense;
   return group;
 };
 
@@ -39,13 +40,13 @@ const months = ["Jan", "Feb","Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","N
 const data = data0.map(
   o => ({...o, month: months[o.month - 1]})
 );
-// console.log(data)
+console.log(data)
 
 function chart(data) {
   // Looping through data to pull the Unique years in the data set.
 const years = data.map(a => a.year)
 .filter((value, index, self) => self.indexOf(value) === index)
-years.sort(function(a, b){return b - a});
+years.sort(function(a, b){return a - b});
 // console.log(years)
 
 const options = d3.select("#year").selectAll("option")
@@ -204,3 +205,146 @@ var select = d3.select("#year")
 .on("change", function() {
 chart.update(this.value, 750)
 })
+
+
+
+
+
+
+
+
+
+
+
+function revChart(data) {
+  // Looping through data to pull the Unique years in the data set.
+const revYears = data.map(a => a.year)
+.filter((value, index, self) => self.indexOf(value) === index)
+revYears.sort(function(a, b){return a - b});
+// console.log(years)
+
+const options = d3.select("#rev-year").selectAll("option")
+          .data(revYears)
+      .enter().append("option")
+          .text(d => d)
+
+var svg = d3.select("#revenue_barchart"),
+margin = {top: 70, right: -55, bottom: 0, left: 110},
+width = +svg.attr("width") - margin.left - margin.right,
+height = +svg.attr("height") - margin.top - margin.bottom;
+
+// Setting x Scale
+const x = d3.scaleBand()
+.range([margin.left, width - margin.right])
+.padding(0.1)
+.paddingOuter(0.2);
+
+var y = d3.scaleLinear()
+.range([height - margin.bottom, margin.top])
+
+var xAxis = g => g
+.attr("transform", "translate(0," + (height - margin.bottom) + ")")
+.call(d3.axisBottom(x).tickSizeOuter(0))
+
+var yAxis = g => g
+.attr("transform", "translate(" + margin.left + ",0)")
+.call(d3.axisLeft(y).tickSize(-width))
+
+
+svg.append("g")
+.attr("class", "x-axis")
+
+svg.append("g")
+.attr("class", "y-axis")
+.append('text')
+    .attr('class', 'yAxis')
+    .attr('y', -70)
+    .attr('x', -220)
+    .attr('transform', `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style('font-size', '2.5em')
+    .text("Revenue ($)")
+
+
+revUpdate(d3.select("#rev-year").property("value"), 0)
+
+function revUpdate(year, speed) {
+
+var dataf = data.filter(f => f.year == year)
+console.log(dataf)
+
+y.domain([0, d3.max(data, d => d.fin_act_revenue)]).nice()
+
+svg.selectAll(".y-axis").transition().duration(speed)
+    .call(yAxis);
+
+data.sort(d3.select("#sort").property("checked")
+    ? (a, b) => b.fin_act_revenue - a.fin_act_revenue
+    : (a, b) => months.indexOf(a.month) - months.indexOf(b.month))
+
+x.domain(data.map(d => d.month))
+
+svg.selectAll(".x-axis").transition().duration(speed)
+    .call(xAxis)
+
+var bar = svg.selectAll(".bar")
+    .data(dataf, d => d.month)
+
+bar.exit().remove();
+
+var bar1 = bar.enter().append("rect")
+    .attr("class", "bar")
+    .style("fill", '#1b71f2')
+    .attr("opacity", ".5")
+    .attr("width", x.bandwidth())
+    .merge(bar)
+
+    bar1    
+    .transition().duration(speed)
+    .attr("x", d => x(d.month))
+    .attr("y", d => y(d.fin_act_revenue))
+    .attr("height", d => y(0) - y(d.fin_act_revenue))
+
+  // Adding Tooltip Behavior    
+bar1.on('mouseover', function(d)  {
+  d3.select(this).style('fill', '#a834eb')
+  d3.select("#monthlyRevenue").text(" $" + valueFormat(d.fin_act_revenue))
+
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
+
+//Position tooltip and make it visible
+d3.select('#tooltip-revenue-bar')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
+
+.on('mouseout', function() {
+  d3.select(this).style('fill',  '#1b71f2');      
+
+  //Hide the tooltip
+  d3.select('#tooltip-revenue-bar')
+      .style('opacity', '0');
+});
+
+}
+revChart.update = revUpdate;
+}
+revChart(data)
+
+
+var checkbox = d3.select("#sort")
+	.style("margin-left", "45%")
+	.on("click", function() {
+	  revChart.update(select.property("value"), 750)
+  })
+  
+var select = d3.select("#rev-year")
+.style("border-radius", "5px")
+.on("change", function() {
+revChart.update(this.value, 750)
+})
+
+
