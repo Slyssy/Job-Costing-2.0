@@ -287,10 +287,23 @@ def new_project_data():
         full_values_string += ',' + est_labor_hours
         est_labor_expense = str("{:.2f}".format(float(est_labor_hours) * float(est_labor_rate)))
         full_values_string += ',' + est_labor_expense
+        #adding in new expenses to grab from user input 
+        est_material_expense = str("{:.2f}".format(float(request.form['est_material_expense'])))
+        full_values_string += ',' + est_material_expense
+        est_subcontractor_expense = str("{:.2f}".format(float(request.form['est_subcontractor_expense'])))
+        full_values_string += ',' + est_subcontractor_expense
+        est_miscellaneous_expense = str("{:.2f}".format(float(request.form['est_miscellaneous_expense'])))
+        full_values_string += ',' + est_miscellaneous_expense
+        est_overhead_rate = request.form['est_overhead_expense']
+        est_overhead_expense =  float(est_overhead_rate) * float(revenue)
+        est_overhead_expense = str(est_overhead_expense)
+        full_values_string += ',' + est_overhead_expense
         if 'act_start_date' in request.form and request.form['act_start_date'] != "":
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
-            act_start_date = datetime.datetime.now() 
+            act_start_date = datetime.datetime.now()
+        full_values_string += ',' + "'" + str(act_start_date) + "'" + ')'
+        
 
         # Print data list for database entry
         print('-------------------------------------------------------------------')
@@ -301,7 +314,10 @@ def new_project_data():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date, est_material_expense, est_subcontractor_expense, est_miscellaneous_expense, est_overhead_expense) VALUES ' + full_values_string + ';')
+            # cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense, act_start_date, est_material_expense, est_subcontractor_expense, est_miscellaneous_expense, est_overhead_expense) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO project_details (name, street, street2, city, state, zip, revenue, est_labor_rate, est_labor_hours, est_labor_expense,  est_material_expense, est_subcontractor_expense, est_miscellaneous_expense, est_overhead_expense, act_start_date) VALUES ' + full_values_string + ';')
+
+           
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
@@ -804,17 +820,264 @@ def user_data_update_db():
             return render_template('error.html', error_type=db_write_error)
         return redirect(url_for('dashboard_data'))
         
+@app.route('/update_project', methods=['GET', 'POST'])
+def project_data_update_db():
+    if request.method == 'GET':
+        print('*****************')
+        print('Getting form...')
+        print('*****************')
+    # Fetch all project names from database for dropdown menu
+        cur = conn.cursor()
+        cur.execute('SELECT name FROM project_details ORDER BY name ASC')    
+        project_names_fetch = cur.fetchall()
+        print('-----------------------------------------------------------')   
+        print('All project names fetched from database for dropdown list')   
+        print('-----------------------------------------------------------')   
+        print(project_names_fetch)
+        print('-----------------------------------------------------------') 
+        # Convert project names to a list
+        project_list = []
+        for db_row in project_names_fetch:
+            project_dict = {}
+            project_dict['name'] = db_row[0]
+            project_list.append(project_dict)
+        
+        # Create a dictionary for employee and project names, and convert to a JSON for the dropdown menus
+        dropdown_dict = {}
+        dropdown_dict['project_list'] = project_list
+        pprint(dropdown_dict)
+        return render_template('updateProject.html', dropdown_dict=json.dumps(dropdown_dict))
 
-        # try:
-        #     cur = conn.cursor() 
-        #     cur.execute("UPDATE users SET (job_title, pay_rate, name, email, phone, log_in, password) VALUES (%s, %s, %s, %s, %s, %s, %s)", (job_title, pay_rate, name, email, phone, log_in, passw))
-        #     print('-----------------------------------')
-        #     print('Data added to database - woohoo!')
-        #     print('-----------------------------------')
-        # except:
-        #     db_write_error = 'Oops - could not write to database!'
-        #     return render_template('error.html', error_type=db_write_error)
-        # return redirect(url_for('dashboard_data'))
+
+        # return render_template('new_user.html')    
+    
+    if request.method == 'POST':
+        drop_name = request.form['project_name']
+        
+        print(drop_name)
+        cur = conn.cursor() 
+        # cur.execute('SELECT password FROM users ;')
+        cur.execute('SELECT * FROM project_details WHERE name=%s;', [drop_name])
+        project_info_fetch = cur.fetchall()
+        print(project_info_fetch)
+        print('*****************')
+        print('Posting form...')
+        print('*****************')
+        project_dict_list = []
+        for db_row in project_info_fetch:
+            project_dict = {}
+            db_project_id = db_row[0]
+            
+            db_name = db_row[1]
+            user_dict['name'] = db_name
+
+            db_street = db_row[2]
+            user_dict['street'] = db_street
+
+            db_street2 = db_row[3]
+            user_dict['street2'] = db_street2
+
+            db_city = db_row[4]
+            user_dict['city'] = db_city
+
+            db_state = db_row[5]
+            user_dict['state'] = db_state
+
+            db_zip = db_row[6]
+            user_dict['zip'] = db_zip
+
+            db_revenue = db_row[7]
+            user_dict['revenue'] = db_revenue
+
+            db_est_labor_rate = db_row[8]
+            user_dict['est_labor_rate'] = db_est_labor_rate
+
+            db_est_labor_hours = db_row[9]
+            user_dict['est_labor_hours'] = db_est_labor_hours
+
+            db_est_labor_expense = db_row[10]
+            user_dict['est_labor_rate'] = db_est_labor_rate
+
+            db_act_start_date = db_row[11]
+            user_dict['act_start_date'] = db_act_start_date
+
+            db_act_comp_date = db_row[12]
+            user_dict['act_comp_date'] = db_act_comp_date
+            
+            #13 lat
+            #14 lon
+
+            db_est_material_expense = db_row[15]
+            user_dict['est_material_expense'] = db_est_material_expense
+
+            db_est_subcontractor_expense = db_row[16]
+            user_dict['est_subcontractor_expense'] = db_est_subcontractor_expense
+
+            db_est_miscellaneous_expense = db_row[17]
+            user_dict['est_miscellaneous_expense'] = db_est_miscellaneous_expense
+
+            db_est_overhead_expense = db_row[17]
+            user_dict['est_overhead_expense'] = db_est_overhead_expense
+
+
+
+
+            project_dict_list.append(project_dict)
+
+        print(db_project_id)
+        print(db_name)
+        print(db_revenue)
+        print(db_est_labor_hours)
+        print(db_est_labor_rate)
+        print(db_est_labor_expense)
+        print(db_act_start_date)
+        print(db_act_comp_date)
+        print(db_est_material_expense)
+        print(db_est_subcontractor_expense)
+        print(db_est_miscellaneous_expense)
+        print(db_est_overhead_expense)
+
+
+        name = request.form['project_name']
+        if name != "" :
+            name = request.form['project_name']
+        else:
+            name = db_name
+        
+        street = request.form['street']
+        if street != "" :
+            street = request.form['street']
+        else:
+            street = db_street
+
+        street2 = request.form['street2']
+        if pay_rate != "" :
+            pay_rate = request.form['street2']
+        else:
+            street2 = db_street2
+                
+        city = request.form['city']
+        if city != "" :
+            city = request.form['city']
+        else:
+            city = db_city
+
+        state = request.form['state']
+        if state != "" :
+            state = request.form['state']
+        else:
+            state = db_state
+
+
+        zipcode = request.form['zipcode']
+        if zipcode != "" :
+            zipcode = request.form['zipcode']
+        else:
+            zipcode = db_zip
+
+        revenue = request.form['revenue']
+        if revenue != "" :
+            revenue = request.form['revenue']
+        else:
+            revenue = db_revenue
+
+        est_labor_rate = request.form['est_labor_rate']
+        if est_labor_rate != "" :
+            est_labor_rate = request.form['est_labor_rate']
+        else:
+            est_labor_rate = db_est_labor_rate
+        
+        est_labor_hours = request.form['est_labor_hours']
+        if est_labor_hours != "" :
+            est_labor_hours = request.form['est_labor_hours']
+        else:
+            est_labor_hours = db_est_labor_hours
+
+        #calulation of est_expense_labor based on est hours and rate
+        est_labor_expense = str((float(est_labor_hours) * float(est_labor_rate)))
+        # est_labor_expense = request.form['est_labor_expense']
+        # if est_labor_expense != "" :
+        #     est_labor_expense = request.form['est_labor_expense']
+        # else:
+        #     est_labor_expense = db_est_labor_expense
+
+        est_material_expense = request.form['est_material_expense']
+        if est_material_expense != "" :
+            est_material_expense = request.form['est_material_expense']
+        else:
+            est_material_expense = db_est_material_expense
+
+        est_subcontractor_expense = request.form['est_subcontractor_expense']
+        if est_subcontractor_expense != "" :
+            est_subcontractor_expense = request.form['est_subcontractor_expense']
+        else:
+            est_subcontractor_expense = db_est_subcontractor_expense
+        
+        est_miscellaneous_expense = request.form['est_miscellaneous_expense']
+        if est_miscellaneous_expense != "" :
+            est_miscellaneous_expense = request.form['est_miscellaneous_expense']
+        else:
+            est_miscellaneous_expense = db_est_miscellaneous_expense
+
+        est_overhead_expense = request.form['est_overhead_expense']
+        if est_overhead_expense != "" :
+            est_overhead_expense = request.form['est_overhead_expense']
+        else:
+            est_overhead_expense = db_est_overhead_expense
+
+        # act_start_date = request.form['act_start_date']
+        if 'act_start_date' in request.form and request.form['act_start_date'] != "":
+            act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
+        else:
+            act_start_date = db_act_start_date
+        
+        if 'act_comp_date' in request.form and request.form['act_comp_date'] != "":
+            act_comp_date = datetime.datetime.strptime(request.form['act_comp_date'], '%m/%d/%Y').date()
+        else:
+            act_comp_date = db_act_comp_date          
+
+        
+
+
+
+        # full_values_string = ''
+        # name = request.form['user_name']
+        # full_values_string += "(" + "'" + name + "'"
+        # job_title = request.form['job_title']
+        # full_values_string += ',' + "'" + job_title + "'"
+        # pay_rate = request.form['pay_rate']
+        # full_values_string += ',' + "'" + str(pay_rate) + "'"
+        # email = request.form['email']
+        # full_values_string += ',' + "'" + email + "'"
+        # phone = request.form['phone']
+        # full_values_string += ',' + "'" + phone + "'"
+        # #log-in and hashing password 
+        # log_in = request.form['log_in']
+        # full_values_string += ',' + "'" + log_in + "'"
+        # password = request.form['password']
+        # passw = sha256_crypt.hash(password)
+        # full_values_string += ',' + "'" + passw + "'" + ")"
+        # # Print data list for database entry
+        # print('-------------------------------------------------------------------')
+        # print('Data list prepared for entry to Users table in database')
+        # print('-------------------------------------------------------------------')
+        # print(full_values_string)
+        print('-------------------------------------------------------------------')
+        cur = conn.cursor()
+        print(f"UPDATE project_details SET name ='{name}', street ='{street}' , street2 ='{street2}', city ='{city}', state = '{state}', zip ='{zipcode}', revenue = '{revenue}', est_labor_rate = '{est_labor_rate}', est_labor_hours = '{est_labor_hours}', est_labor_expense = '{est_labor_expense}', act_start_date = '{act_start_date}', act_comp_date = '{act_comp_date}', est_material_expense = '{est_material_expense}', est_subcontractor_expense = '{est_subcontractor_expense}', est_miscellaneous_expense = '{est_miscellaneous_expense}', est_overhead_expense = '{est_overhead_expense}'  WHERE project_id = {db_project_id}")
+        # Adding form input data to PostgreSQL database
+        try:
+            # cur.execute(f"UPDATE users SET name ='{name}', job_title ='{job_title}' , pay_rate ='{pay_rate}', email ='{email}', phone = '{phone}', log_in ='{log_in}', password = '{passw}'  WHERE user_id = {db_user_id}")
+            cure.execute(f"UPDATE project_details SET name ='{name}', street ='{street}' , street2 ='{street2}', city ='{city}', state = '{state}', zip ='{zipcode}', revenue = '{revenue}', est_labor_rate = '{est_labor_rate}', est_labor_hours = '{est_labor_hours}', est_labor_expense = '{est_labor_expense}', act_start_date = '{act_start_date}', act_comp_date = '{act_comp_date}', est_material_expense = '{est_material_expense}', est_subcontractor_expense = '{est_subcontractor_expense}', est_miscellaneous_expense = '{est_miscellaneous_expense}', est_overhead_expense = '{est_overhead_expense}'  WHERE project_id = {db_project_id}")
+            print('-----------------------------------')
+            print('Data added to database - woohoo!')
+            print('-----------------------------------')
+        except:
+            print('---------------------------------------')
+            db_write_error = 'Oops - could not write to database!'
+            print('---------------------------------------')
+            return render_template('error.html', error_type=db_write_error)
+        return redirect(url_for('dashboard_data'))
 
 
 
