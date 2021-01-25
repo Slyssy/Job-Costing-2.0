@@ -133,3 +133,40 @@ used the following code to test grabbing expenses from db
         # print(total_mat_exp)
         # print(total_subcon_exp)
         # print(total_misc_exp)
+
+        required=""
+
+Thoughts on updating new_project route to calculate the overhead expense to save to db using revenue input and oh RATE input:
+
+        #We have the revenue:
+        revenue = str("{:.2f}".format(float(request.form['revenue'])))
+        full_values_string += ',' + revenue
+
+        #... whole bunch of other data in between....
+
+        #the estimated lbaor expense calculation:
+        est_labor_expense = str("{:.2f}".format(float(est_labor_hours) * float(est_labor_rate)))
+
+        we need to add the est_oh_rate & oh_expense:        
+        est_overhead_rate = request.form['est_overhead_expense']
+        est_overhead_expense = str("{:.2f}".format(float(request.form['revenue']))) * float(est_labor_rate)))
+        full_values_string += ',' + est_over_expense
+
+        est_labor_rate = str("{:.2f}".format(float(request.form['est_labor_rate'])))
+
+Missing code in app.py :
+new_project page from project 2 app.py
+full_values_string += ',' + est_labor_expense
+        if 'act_start_date' in request.form and request.form['act_start_date'] != "":
+            act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
+        else:
+            act_start_date = datetime.datetime.now()           
+        full_values_string += ',' + "'" + str(act_start_date) + "'" + ')'
+
+
+CURRENT in PRO 3 (not right):
+full_values_string += ',' + est_labor_expense
+        if 'act_start_date' in request.form and request.form['act_start_date'] != "":
+            act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
+        else:
+            act_start_date = datetime.datetime.now()
