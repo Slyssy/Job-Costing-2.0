@@ -194,7 +194,8 @@ Toggle sort by Revenue
 
       <div class="row">
          <!-- Start Labor Expense Bar Chart -->
-         <select id="year" align="center"></select>  
+         <select id="year" class="dropdown center-block" style="margin-left: 5%;"></select>  
+         <select id="matYear" class="dropdown center-block" style="margin-left: 55%;"></select>
           <svg id="estimate-to-actual" width="715" height="600"></svg>      
          <!-- </div>  -->
         <div id="tooltip-line">
@@ -204,7 +205,7 @@ Toggle sort by Revenue
           Actual Labor Expense:<span id="act_labor_exp" class="info"></span><br>          
         </div>  
          <!--Start Material Expense Bar Chart  -->
-        <select id="matYear" align="center"></select>
+        <!-- <select id="matYear" class="dropdown center-block" style="margin-left: 25%;"></select> -->
         <svg id="estimate-to-actual-material" width="715" height="600"></svg>      
          <!-- </div>  -->
         <div id="tooltip-mat-line">
@@ -213,7 +214,30 @@ Toggle sort by Revenue
         <div id="tooltip-mat-bar">
           Actual Material Expense:<span id="act_material_exp" class="info"></span><br>          
         </div>       
-      </div>      
+      </div>   
+      <div class="row">
+        <!-- Start Miscellaneous Expense Bar Chart -->
+        <select id="miscYear" class="dropdown center-block" style="margin-left: 5%;"></select>  
+        <select id="subtYear" class="dropdown center-block" style="margin-left: 55%;"></select>
+         <svg id="estimate-to-actual-miscellaneous" width="715" height="600"></svg>      
+        <!-- </div>  -->
+       <div id="tooltip-misc-line">
+         Estimated Miscellaneous Expense:<span id="est_miscellaneous_exp" class="info"></span><br>          
+       </div> 
+       <div id="tooltip-misc-bar">
+         Actual Miscellaneous Expense:<span id="act_miscellaneous_exp" class="info"></span><br>          
+       </div>  
+        <!--Start Subcontractor Expense Bar Chart  -->
+       <!-- <select id="matYear" class="dropdown center-block" style="margin-left: 25%;"></select> -->
+       <svg id="estimate-to-actual-subcontractor" width="715" height="600"></svg>      
+        <!-- </div>  -->
+       <div id="tooltip-sub-line">
+         Estimated Subcontractor Expense:<span id="est_subcontractor_exp" class="info"></span><br>          
+       </div> 
+       <div id="tooltip-sub-bar">
+         Actual Subcontractor Expense:<span id="act_subcontractor_exp" class="info"></span><br>          
+       </div>       
+     </div>     
     </div>
   
   <!-- Start Map -->
