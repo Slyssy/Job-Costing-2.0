@@ -1,4 +1,4 @@
- // Select Employee Name
+// Select Employee Name
 var employees = dropdown_dict.employee_list.map((d) => d.name);
 var ele = document.getElementById("name");
 for (var i = 0; i < employees.length; i++) {
