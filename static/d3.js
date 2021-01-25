@@ -67,7 +67,7 @@ const options = d3.select("#year").selectAll("option")
           .text(d => d)
 
 var svg = d3.select("#estimate-to-actual"),
-margin = {top: 70, right: -55, bottom: 0, left: 110},
+margin = {top: 70, right: -45, bottom: 0, left: 90},
 width = +svg.attr("width") - margin.left - margin.right,
 height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -234,7 +234,7 @@ const options = d3.select("#matYear").selectAll("option")
           .text(d => d)
 
 var svg = d3.select("#estimate-to-actual-material"),
-margin = {top: 70, right: -55, bottom: 0, left: 110},
+margin = {top: 70, right: -45, bottom: 0, left: 90},
 width = +svg.attr("width") - margin.left - margin.right,
 height = +svg.attr("height") - margin.top - margin.bottom;
 
