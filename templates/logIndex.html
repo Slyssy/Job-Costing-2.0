@@ -113,8 +113,8 @@
                 <h1>Please login</h1>
                 <br>
                 <form action="" method="post">
-                    <!-- <div class="form-group row was-validated">
-                        <label class="col-lg-4 col-form-label form-control-label text-muted"
+                    <div class="form-group row was-validated">
+                        <!-- <label class="col-lg-4 col-form-label form-control-label text-muted"
                           >Employee Name:</label
                         >
                         <div class="col-lg-8">
@@ -125,10 +125,31 @@
                             class="form-control-lg"
                           >
                             <option value="">Employee Name</option>
-                          </select>
+                          </select> -->
                           <div class="invalid-feedback">Required.</div>
                         </div>
-                      </div> -->
+                      </div>
+<!-- 
+                      {% extends "layout.html" %}
+                {% block body %}
+                  <h1>Login</h1>
+                  {% if error %}
+                    <p class=error><strong>Error:</strong> {{ error }}
+                  {% endif %}
+                  <form method=post>
+                    <dl>
+                      <dt>Username:
+                      <dd><input type=text name=username value="{{
+                          request.form.username }}">
+                      <dt>Password:
+                      <dd><input type=password name=password>
+                    </dl>
+                    <p><input type=submit value=Login>
+                  </form>
+                {% endblock %} -->
+                
+
+                    <!-- previous log-in input. Update above inludes flash message on incorrect login -->
                     <input type="text" placeholder="Username" name="username" value="{{
                     request.form.username }}">
                     <input type="password" placeholder="Password" name="password" value="{{
@@ -161,7 +182,7 @@
                 {% if error %}
                     <p class="error"><strong>Error:</strong> {{ error }}</p>
                 {% endif %}
-
+              
 
             </div>
         </div>

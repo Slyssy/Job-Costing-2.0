@@ -59,6 +59,16 @@
       <br />
 
       <!-- Begin Form -->
+      {% extends "layout.html" %}
+      {% block body %}
+        <!-- <h1>Attention</h1> -->
+        {% if error %}
+          <h1>Attention</h1>
+          <p class=error><strong>Error:</strong> {{ error }}
+           
+        {% endif %}
+     
+
       <form action="/new_user" method="POST" style="width: 500px; margin: auto">
         <!-- User Name -->
         <div class="form-group row was-validated">
@@ -214,7 +224,7 @@
           </div>
         </div>
       </form>
-      ​
+      ​ {% endblock %}
     </div>
   </body>
 </html>
