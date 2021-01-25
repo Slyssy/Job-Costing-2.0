@@ -12,7 +12,7 @@ from passlib.hash import sha256_crypt
 import functools
 import operator
 from collections import OrderedDict
-import pandas as pd
+
 
 # Import Postgres database details from config file
 pg_ipaddress = os.getenv("pg_ipaddress")
