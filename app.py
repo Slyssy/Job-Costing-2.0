@@ -118,9 +118,7 @@ def dashboard_data():
         # Fetch data from Project_Details table
         cur.execute('SELECt * FROM project_details' + ';')
         project_details_data = cur.fetchall()
-        print('*****************************************')
-        print('Data fetched from Project_Details table')
-        print('*****************************************')
+
         # Create a dictionary of dictionaries with Project_Details table data
         project_list = {}
         for proj in project_details_data:
@@ -175,15 +173,81 @@ def dashboard_data():
             est_subcontractor_expense = str(proj[16])
             est_miscellaneous_expense = str(proj[17])
             est_overhead_expense = str(proj[18])
+            
 
-                        
+            #adding calculations from work on expense route to try to get expenses into the project dict
+            cur = conn.cursor()
+            cur.execute('SELECT * FROM expenses WHERE project_id=' + str(project_id) + ';')   
+            expenses_fetch = cur.fetchall()
+            print('-----------------------------------------------------------') 
+            print(expenses_fetch)
+
+            #empty lists
+            mat_exp_list = []
+            subcon_exp_list = []
+            misc_exp_list = []
+            #creating dictionaries of material expenses and appending to empty lists
+            for db_row in expenses_fetch:
+                mat_exp_dict = {}
+                subcon_exp_dict = {}
+                misc_exp_dict = {}
+                if db_row[1] == "Materials":
+                # if mat_exp_dict and db_row[1] == "Materials":
+                    mat_exp_dict['exp_type'] = db_row[1]
+                    mat_exp_dict['project_id'] = db_row[2]
+                    mat_exp_dict['expense_amount'] = db_row[4]
+                    mat_exp_list.append(mat_exp_dict)
+                # if subcon_exp_dict and db_row[1] == "Subcontractor":
+                elif db_row[1] == "Subcontractor":
+                    subcon_exp_dict['exp_type'] = db_row[1]
+                    subcon_exp_dict['project_id'] = db_row[2]
+                    subcon_exp_dict['expense_amount'] = db_row[4]
+                    subcon_exp_list.append(subcon_exp_dict)
+                else:
+                # if misc_exp_dict and db_row[1] == "Miscellaneous" :
+                    misc_exp_dict['exp_type'] = db_row[1]
+                    misc_exp_dict['project_id'] = db_row[2]
+                    misc_exp_dict['expense_amount'] = db_row[4]
+                    misc_exp_list.append(misc_exp_dict)
+
+
+            #newstuff on saturday
+            #putting expense values in list 
+            mat_values_list = []
+            for dict_row in mat_exp_list:
+                mat_values = dict_row['expense_amount']
+                mat_values_list.append(mat_values)
+            
+            subcon_values_list = []
+            for dict_row in subcon_exp_list:
+                subcon_values = dict_row['expense_amount']
+                subcon_values_list.append(subcon_values)
+            
+            misc_values_list = []
+            for dict_row in misc_exp_list:
+                misc_values = dict_row['expense_amount']
+                misc_values_list.append(misc_values)
+
+            #expense totals
+            total_materials_exp = round((sum(mat_values_list)),2)
+            total_subcontractor_exp = round((sum(subcon_values_list)),2)
+            total_miscellaneous_exp = round((sum(misc_values_list)),2)                 
+            
+            fin_act_mat_exp = float(total_materials_exp)
+            fin_act_misc_exp = float(total_miscellaneous_exp)
+            fin_act_sub_exp = float(total_subcontractor_exp)
+            
+            project_dict['fin_act_material_expense'] = "{:,.2f}".format(fin_act_mat_exp)
+            project_dict['fin_act_miscellaneous_expense'] = "{:,.2f}".format(float(fin_act_misc_exp))
+            project_dict['fin_act_subcontractor_expense'] = "{:,.2f}".format(float(fin_act_sub_exp))
+            project_dict['fin_act_overhead_expense'] = "{:,.2f}".format(float(est_overhead_expense)) 
+
+
             # Fetch Time_Sheets data for given project_id
             cur = conn.cursor()
             cur.execute('SELECT * FROM time_sheets WHERE project_id=' + str(project_id) + ';')
             timesheet_data = cur.fetchall()
-            print('------------------------------------------')
-            print('Data fetched from Time_Sheets table')
-            print('------------------------------------------')
+
             # Create a list of dictionaries with Time_Sheets table data
             timesheet_all = []
             act_labor_hours = float(0)
@@ -196,6 +260,9 @@ def dashboard_data():
                 timesheet_all.append(timesheet_dict)
             # Using the predefined function for actual labor hours, calculate actual labor rate
             act_labor_rate = get_actual_labor_rate(timesheet_all, act_labor_hours, conn)
+            project_dict['act_material_expense'] = "{:,.2f}".format(total_materials_exp)
+            project_dict['act_subcontractor_expense'] = total_subcontractor_exp
+            project_dict['act_miscellaneous_expense'] = total_miscellaneous_exp
             project_dict["timesheets"] = timesheet_all
             project_list["project_id: "+ str(project_id)] = project_dict
             project_dict['id'] = str(project_id)
@@ -223,6 +290,10 @@ def dashboard_data():
             project_dict['fin_est_gross_profit'] = "{:,.2f}".format(fin_est_gross_profit)
             fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
             project_dict['fin_est_gross_margin'] = "{:,.2f}".format(fin_est_gross_margin) + " %"
+
+            fin_est_gross_margin = float(fin_est_gross_profit) / float(fin_est_revenue) * 100
+            project_dict['fin_est_gross_margin'] = "{:,.2f}".format(fin_est_gross_margin) + " %"
+
 
             # Calculations for Project Financials - Actual
             fin_act_revenue = float(revenue)
