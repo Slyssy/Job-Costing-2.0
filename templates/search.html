@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Details</title>
-​
+    ​
     <!-- Bootstrap Greyson Liabraries and Oswald Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
@@ -21,7 +21,7 @@
       type="text/css"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
-​
+    ​
     <!-- Datepicker links and dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script
@@ -35,10 +35,10 @@
     />
     <!-- Plotly CDN -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-​
+    ​
     <!-- D3 CDN -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
-​
+    ​
     <link
       rel="stylesheet"
       type="text/css"
@@ -86,7 +86,9 @@
                   <a class="nav-link" href="/new_project">Create New Project</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/enter_expense">Enter Project Expense</a>
+                  <a class="nav-link" href="/enter_expense"
+                    >Enter Project Expense</a
+                  >
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/new_user">Create User</a>
@@ -106,7 +108,7 @@
             <th scope="col">Actual labor Hours</th>
             <th scope="col">Budget Labor Expense</th>
             <th scope="col">Actual Labor Expense</th>
-​
+            ​
           </tr>
         </thead>
         <tbody>
@@ -146,8 +148,15 @@
           <form action="/search" method="POST">
             <div class="col-lg-5 px-md-5">
               <label class="form-control-label text-muted">End Date:</label>
-              <input id="end_datepicker" name="end_date" class="form-control" placeholder={{project_dict.act_end_date}} type="text" />
-              <input id="project_id" name="project_id" value={{ request.args.get('project_id') }} type="hidden" readonly>
+              <input
+                id="end_datepicker"
+                name="end_date"
+                class="form-control"
+                placeholder="{{project_dict.act_end_date}}"
+                type="text"
+              />
+              <input id="project_id" name="project_id" value={{
+              request.args.get('project_id') }} type="hidden" readonly>
             </div>
             <script>
               $("#end_datepicker").datepicker({});
@@ -158,126 +167,186 @@
                 class="btn btn-outline-secondary mr-2"
                 value="Cancel"
               />
-              <input type="submit" class="btn btn-primary mr-2" value="Submit" />
+              <input
+                type="submit"
+                class="btn btn-primary mr-2"
+                value="Submit"
+              />
             </div>
           </form>
         </div>
       </div>
     </div>
-      <!--Project Financials  -->
-      <div class="container financials_container">
-        <div class="card bg-primary text-white h-100">
-          <div class="card-body d-flex flex-column align-items-start">
-            <h4 class="card-title">Project Financials</h4>
-          </div>
+    <!--Project Financials  -->
+    <div class="container financials_container">
+      <div class="card bg-primary text-white h-100">
+        <div class="card-body d-flex flex-column align-items-start">
+          <h4 class="card-title">Project Financials</h4>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">Budgeted</th>
-              <th scope="col">Actual</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">Project Revenue:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_revenue | float)}}</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_revenue | float)}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Project Labor Hours:</th>
-              <td>{{project_dict.fin_est_labor_hours}}</td>
-              <td>{{project_dict.fin_act_labor_hours}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Project Labor Rate:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_labor_rate | float)}} / Hour</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_rate | float)}} / Hour</td>
-            </tr>
-            <tr>
-              <th scope="row">Project Labor Expense:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_labor_expense | float)}}</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_labor_expense | float)}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Project Material Expense:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_material_expense | float)}}</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_material_expense | float)}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Project Subcontractor Expense:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_subcontractor_expense | float)}}</td>
-              <td>$  {{'{:,.2f}'.format(project_dict.fin_act_subcontractor_expense | float)}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Miscelleanous Expense:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_miscellaneous_expense | float)}}</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_miscellaneous_expense | float)}}</td>
-            </tr>
-            <tr>
-
-              <th scope="row">Project Overhead Expense:</th>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_est_overhead_expense | float)}}</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_overhead_expense | float)}}</td>
-
-            </tr>
-            <tr>
-              <th scope="row">Project Gross Profit:</th>             
-              <td>$  {{'{:,.2f}'.format(project_dict.fin_est_gross_profit | float)}}</td>
-              <td>$ {{'{:,.2f}'.format(project_dict.fin_act_gross_profit | float)}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Project Gross Margin:</th>
-              <td>{{project_dict.fin_est_gross_margin}}</td>
-              <td>{{project_dict.fin_act_gross_margin}}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
-​
-      <div class="container visualizations_container">
-        <div
-          class="card bg-primary text-white h-100"
-          style="margin: 30px 0px 30px 0px"
-        >
-          <div class="card-body d-flex flex-column align-items-start">
-            <h4 class="card-title">Estimate vs. Actual Visualization</h4>
-            <p class="card-text">
-              The following visualizations compare the actual to estimated values for the expenses associated with this project.
-            </p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Budgeted</th>
+            <th scope="col">Actual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Project Revenue:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_revenue | float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_revenue | float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Labor Hours:</th>
+            <td>{{project_dict.fin_est_labor_hours}}</td>
+            <td>{{project_dict.fin_act_labor_hours}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Project Labor Rate:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_labor_rate | float)}} /
+              Hour
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_labor_rate | float)}} /
+              Hour
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Labor Expense:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_labor_expense | float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_labor_expense | float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Material Expense:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_material_expense |
+              float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_material_expense |
+              float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Subcontractor Expense:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_subcontractor_expense |
+              float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_subcontractor_expense |
+              float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Miscelleanous Expense:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_miscellaneous_expense |
+              float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_miscellaneous_expense |
+              float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Overhead Expense:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_overhead_expense |
+              float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_overhead_expense |
+              float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Gross Profit:</th>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_est_gross_profit | float)}}
+            </td>
+            <td>
+              $ {{'{:,.2f}'.format(project_dict.fin_act_gross_profit | float)}}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Project Gross Margin:</th>
+            <td>{{project_dict.fin_est_gross_margin}}</td>
+            <td>{{project_dict.fin_act_gross_margin}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    ​
+    <div class="container visualizations_container">
+      <div
+        class="card bg-primary text-white h-100"
+        style="margin: 30px 0px 30px 0px"
+      >
+        <div class="card-body d-flex flex-column align-items-start">
+          <h4 class="card-title">Estimate vs. Actual Visualization</h4>
+          <p class="card-text">
+            The following visualizations compare the actual to estimated values
+            for the expenses associated with this project.
+          </p>
+        </div>
+      </div>
+      ​
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-primary mr-2" onclick="update(data1)">
+            Labor Expense
+          </button>
+          <button class="btn btn-primary mr-2" onclick="update(data2)">
+            Labor Hours
+          </button>
+          <div id="eva_exp_bar"></div>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-primary mr-2" onclick="update1(data3)">
+            Material Expense
+          </button>
+          <button class="btn btn-primary mr-2" onclick="update1(data4)">
+            Miscelleanous Expense
+          </button>
+          <button class="btn btn-primary mr-2" onclick="update1(data5)">
+            Subcontractor Expense
+          </button>
+          <div id="eva_mat_misc_sub_bar"></div>
+        </div>
+        <div class="col-md-12">
+          <button class="btn btn-primary mr-2" onclick="update2(data6)">
+            Estimate
+          </button>
+          <button class="btn btn-primary mr-2" onclick="update2(data7)">
+            Actual
+          </button>
+          <div id="expense_comparison"></div>
+          <div id="tooltip-bar">
+            Value:<span id="bar_value" class="info"></span><br />
           </div>
         </div>
-​
         <div class="row">
-          <div class="col-md-6">
-            <button class="btn btn-primary mr-2" onclick="update(data1)">Labor Expense</button>
-            <button class="btn btn-primary mr-2" onclick="update(data2)">Labor Hours</button>
-            <div id="eva_exp_bar"></div>
-          </div>
-          <div class="col-md-6">
-            <button class="btn btn-primary mr-2" onclick="update1(data3)">Material Expense</button>
-            <button class="btn btn-primary mr-2" onclick="update1(data4)">Miscelleanous Expense</button>
-            <button class="btn btn-primary mr-2" onclick="update1(data5)">Subcontractor Expense</button>
-            <div id="eva_mat_misc_sub_bar"></div>
-          </div>
           <div class="col-md-12">
-            <button class="btn btn-primary mr-2" onclick="update2(data6)">Estimate</button>
-            <button class="btn btn-primary mr-2" onclick="update2(data7)">Actual</button>            
-            <div id="expense_comparison"></div>
-            <div id="tooltip-bar">
-              Value:<span id="bar_value" class="info"></span><br>          
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div id="eva_gp_bar"></div>
-            </div>
+            <div id="eva_gp_bar"></div>
           </div>
         </div>
-      </div>    
+      </div>
+    </div>
   </body>
   <script>
     const project_dict = {{ project_dict | safe }}
   </script>
   <script src="{{ url_for('static', filename='search_app.js') }}"></script>
+</html>

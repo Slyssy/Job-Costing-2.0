@@ -174,46 +174,48 @@
 <!-- Start Revenue Barchart -->
 <div
       id="performanceVisualizations"
-      class="container-fluid dashboard_visualizations" style="max-width:1600px"
+      class="container-fluid dashboard_visualizations"
     >
     <select id="rev-year" align=left></select>
     <input type="checkbox" id="sort">	
 Toggle sort by Revenue
-      <div class="row">
-        <!-- <div class="col-md-16"> -->
-         
-          <svg id="revenue_barchart" width="1515" height="600"></svg>      
-         <!-- </div>  -->
-        <!-- <div id="tooltip-line">
-          Estimated Labor Expense:<span id="est_labor_exp" class="info"></span><br>          
-        </div>  -->
+      <div class="row">         
+          <svg id="revenue_barchart" width="1515" height="600"></svg>              
         <div id="tooltip-revenue-bar">
           Monthly Revenue:<span id="monthlyRevenue" class="info"></span><br>          
         </div>               
       </div>      
     </div>
-
-
       <!-- Start Labor Barchart -->
     <div
       id="performanceVisualizations"
-      class="container-fluid dashboard_visualizations" style="max-width:1600px"
-    >
-    <select id="year" align=left></select>
+      class="container-fluid dashboard_visualizations" 
+    >   
+
       <div class="row">
-        <!-- <div class="col-md-16"> -->
-         
-          <svg id="estimate-to-actual" width="1515" height="600"></svg>      
+         <!-- Start Labor Expense Bar Chart -->
+         <select id="year" align="center"></select>  
+          <svg id="estimate-to-actual" width="715" height="600"></svg>      
          <!-- </div>  -->
         <div id="tooltip-line">
           Estimated Labor Expense:<span id="est_labor_exp" class="info"></span><br>          
         </div> 
         <div id="tooltip-bar">
           Actual Labor Expense:<span id="act_labor_exp" class="info"></span><br>          
-        </div>               
+        </div>  
+         <!--Start Material Expense Bar Chart  -->
+        <select id="matYear" align="center"></select>
+        <svg id="estimate-to-actual-material" width="715" height="600"></svg>      
+         <!-- </div>  -->
+        <div id="tooltip-mat-line">
+          Estimated Material Expense:<span id="est_material_exp" class="info"></span><br>          
+        </div> 
+        <div id="tooltip-mat-bar">
+          Actual Material Expense:<span id="act_material_exp" class="info"></span><br>          
+        </div>       
       </div>      
     </div>
-  </div>
+  
   <!-- Start Map -->
     <div class="container-fluid project_map_container" style="max-width:1600px">
       <div

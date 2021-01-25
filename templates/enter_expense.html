@@ -55,7 +55,9 @@
         <div class="card-body d-flex flex-column align-items-start">
           <h4 class="card-title">Enter Expense</h4>
           <p class="card-text">
-            Select expense type, project and expense date and enter expense amount (as a float). Click "Add Expense" to enter new expense to project.
+            Select expense type, project and expense date and enter expense
+            amount (as a float). Click "Add Expense" to enter new expense to
+            project.
           </p>
           <a href="/dashboard" class="btn btn-primary border-white mt-auto"
             >Return to Dashboard</a
@@ -65,7 +67,11 @@
       <hr />
 
       <!-- Begin Form -->
-      <form action="/enter_expense" method="POST" style="width: 500px; margin: auto">
+      <form
+        action="/enter_expense"
+        method="POST"
+        style="width: 500px; margin: auto"
+      >
         <!-- Expense TYPE -->
         <div class="form-group row was-validated">
           <label class="col-lg-4 col-form-label form-control-label text-muted"
@@ -101,12 +107,12 @@
             >
               <!-- <option>Project</option> -->
               <option value="">Select Project</option>
-                <!-- {% for project in dropdown_dict['project_list'] %}
+              <!-- {% for project in dropdown_dict['project_list'] %}
                   <option value="{{project['name']}}">{{ project['name']}}</option>
                 {% endfor %} -->
             </select>
             <div class="invalid-feedback">Required.</div>
-          </div>          
+          </div>
         </div>
 
         <!-- Start Date Picker -->
@@ -156,7 +162,6 @@
       <script>
         $("#exp_datepicker").datepicker({});
       </script>
-      
 
       ​
       <script>

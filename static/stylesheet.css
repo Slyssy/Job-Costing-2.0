@@ -1,13 +1,12 @@
-.divider{
-  width:5px;
-  height:auto;
-  display:inline-block;
+.divider {
+  width: 5px;
+  height: auto;
+  display: inline-block;
 }
-
 
 .xAxisLabel {
   font-size: 3.5em;
-    fill: #635f5d;
+  fill: #635f5d;
 }
 
 .bars {
@@ -15,7 +14,7 @@
 }
 
 .tick line {
-  stroke: #C0C0BB
+  stroke: #c0c0bb;
 }
 
 .tick text {
@@ -28,9 +27,8 @@
   z-index: -1;
   fill: #3c3d3d;
   opacity: 0.5;
-  stroke: rgb(255, 255, 255)
+  stroke: rgb(255, 255, 255);
 }
-
 
 #project-map path:hover {
   fill: #818180;
@@ -42,11 +40,11 @@
 }
 
 .cities {
-  fill:rgba(28, 114, 242);
+  fill: rgba(28, 114, 242);
 }
 
 .cityName {
-  fill:rgba(28, 114, 242);
+  fill: rgba(28, 114, 242);
   font-size: 6px;
 }
 
@@ -69,7 +67,7 @@
   pointer-events: none;
 }
 
-#tooltip{
+#tooltip {
   position: absolute;
   top: 0;
   left: 0;
@@ -102,12 +100,50 @@
   font-size: 12px;
   font-weight: bold;
   text-align: left;
-  background-color:rgba(34, 35, 36, 0.75);
+  background-color: rgba(34, 35, 36, 0.75);
   opacity: 0;
   pointer-events: none;
 }
 
 #tooltip-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 10px;
+  width: auto;
+  height: auto;
+  color: white;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+  background-color: rgba(34, 35, 36, 0.75);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#tooltip-mat-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 10px;
+  width: auto;
+  height: auto;
+  color: white;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+  background-color: rgba(34, 35, 36, 0.75);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#tooltip-mat-bar {
   position: absolute;
   top: 0;
   left: 0;
@@ -137,34 +173,32 @@
 }
 
 .revenue {
-  
 }
 .labor-hours {
   background-color: #ffff0033;
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 .labor {
   background-color: #aeaee945;
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 .material {
   background-color: #8000801f;
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 .misc {
   background-color: #0080001a;
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 .overhead {
   background-color: #ffa5003b;
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 .subcontractor {
   background-color: #0053ff21;
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 .start-date {
-
 }
 td span {
   color: red;
@@ -180,5 +214,5 @@ td a.flag {
 }
 
 td a.flag::after {
-  content: ' !'
+  content: " !";
 }
