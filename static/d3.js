@@ -221,169 +221,169 @@ chart.update(this.value, 750)
 
 
 
-// function matChart(data) {
-//   // Looping through data to pull the Unique years in the data set.
-// const years = data.map(a => a.year)
-// .filter((value, index, self) => self.indexOf(value) === index)
-// years.sort(function(a, b){return a - b});
-// // console.log(years)
+function matChart(data) {
+  // Looping through data to pull the Unique years in the data set.
+const matYears = data.map(a => a.year)
+.filter((value, index, self) => self.indexOf(value) === index)
+matYears.sort(function(a, b){return a - b});
+// console.log(years)
 
-// const options = d3.select("#year").selectAll("option")
-//           .data(years)
-//       .enter().append("option")
-//           .text(d => d)
+const options = d3.select("#matYear").selectAll("option")
+          .data(matYears)
+      .enter().append("option")
+          .text(d => d)
 
-// var svg = d3.select("#estimate-to-actual"),
-// margin = {top: 70, right: -55, bottom: 0, left: 110},
-// width = +svg.attr("width") - margin.left - margin.right,
-// height = +svg.attr("height") - margin.top - margin.bottom;
+var svg = d3.select("#estimate-to-actual-material"),
+margin = {top: 70, right: -55, bottom: 0, left: 110},
+width = +svg.attr("width") - margin.left - margin.right,
+height = +svg.attr("height") - margin.top - margin.bottom;
 
-// // Setting x Scale
-// const x = d3.scaleBand()
-// .range([margin.left, width - margin.right])
-// .padding(0.1)
-// .paddingOuter(0.2);
+// Setting x Scale
+const x = d3.scaleBand()
+.range([margin.left, width - margin.right])
+.padding(0.1)
+.paddingOuter(0.2);
 
-// var y = d3.scaleLinear()
-// .range([height - margin.bottom, margin.top])
+var y = d3.scaleLinear()
+.range([height - margin.bottom, margin.top])
 
-// var xAxis = g => g
-// .attr("transform", "translate(0," + (height - margin.bottom) + ")")
-// .call(d3.axisBottom(x).tickSizeOuter(0))
+var xAxis = g => g
+.attr("transform", "translate(0," + (height - margin.bottom) + ")")
+.call(d3.axisBottom(x).tickSizeOuter(0))
 
-// var yAxis = g => g
-// .attr("transform", "translate(" + margin.left + ",0)")
-// .call(d3.axisLeft(y).tickSize(-width))
-
-
-// svg.append("g")
-// .attr("class", "x-axis")
-
-// svg.append("g")
-// .attr("class", "y-axis")
-// .append('text')
-//     .attr('class', 'yAxis')
-//     .attr('y', -70)
-//     .attr('x', -190)
-//     .attr('transform', `rotate(-90)`)
-//     .attr("fill", "#635f5d")
-//     .style('font-size', '2.5em')
-//     .text("Labor Expense ($)")
+var yAxis = g => g
+.attr("transform", "translate(" + margin.left + ",0)")
+.call(d3.axisLeft(y).tickSize(-width))
 
 
-// update(d3.select("#year").property("value"), 0)
+svg.append("g")
+.attr("class", "x-axis")
 
-// function update(year, speed) {
+svg.append("g")
+.attr("class", "y-axis")
+.append('text')
+    .attr('class', 'yAxis')
+    .attr('y', -70)
+    .attr('x', -190)
+    .attr('transform', `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style('font-size', '2.5em')
+    .text("Material Expense ($)")
 
-// var dataf = data.filter(f => f.year == year)
 
-// y.domain([0, d3.max(data, d => d.fin_est_labor_expense)]).nice()
+matUpdate(d3.select("#matYear").property("value"), 0)
 
-// svg.selectAll(".y-axis").transition().duration(speed)
-//     .call(yAxis);
+function matUpdate(year, speed) {
 
-// x.domain(data.map(d => d.month))
+var dataf = data.filter(f => f.year == year)
 
-// svg.selectAll(".x-axis").transition().duration(speed)
-//     .call(xAxis)
+y.domain([0, d3.max(data, d => d.fin_est_material_expense)]).nice()
 
-// var bar = svg.selectAll(".bar")
-//     .data(dataf, d => d.month)
+svg.selectAll(".y-axis").transition().duration(speed)
+    .call(yAxis);
 
-// bar.exit().remove();
+x.domain(data.map(d => d.month))
 
-// var bar1 = bar.enter().append("rect")
-//     .attr("class", "bar")
-//     .style("fill", d => d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828')
-//     .attr("opacity", ".5")
-//     .attr("width", x.bandwidth())
+svg.selectAll(".x-axis").transition().duration(speed)
+    .call(xAxis)
 
-//   bar1 .merge(bar)    
-//     .transition().duration(speed)
-//     .attr("x", d => x(d.month))
-//     .attr("y", d => y(d.fin_act_labor_expense))
-//     .attr("height", d => y(0) - y(d.fin_act_labor_expense))
+var bar = svg.selectAll(".bar")
+    .data(dataf, d => d.month)
 
-//   // Adding Tooltip Behavior    
-// bar1.on('mouseover', function(d)  {
-//   d3.select(this).style('fill', '#a834eb')
-//   d3.select("#act_labor_exp").text(" $" + valueFormat(d.fin_act_labor_expense))
+bar.exit().remove();
 
-// //Position the tooltip <div> and set its content
-// let x = d3.event.pageX;
-// let y = d3.event.pageY - 40;
+var bar1 = bar.enter().append("rect")
+    .attr("class", "bar")
+    .style("fill", d => d.act_material_expense < d.fin_est_material_expense ? '#1b71f2': '#eb2828')
+    .attr("opacity", ".5")
+    .attr("width", x.bandwidth())
 
-// //Position tooltip and make it visible
-// d3.select('#tooltip-bar')
-// .style('left', x +'px')
-// .style('top', y + 'px')
-// .style('opacity', 1)
-// })
+  bar1 .merge(bar)    
+    .transition().duration(speed)
+    .attr("x", d => x(d.month))
+    .attr("y", d => y(d.act_material_expense))
+    .attr("height", d => y(0) - y(d.act_material_expense))
 
-// .on('mouseout', function() {
-//   d3.select(this).style('fill', function (d) {return d.fin_act_labor_expense < d.fin_est_labor_expense ? '#1b71f2': '#eb2828'
-//   });        
+  // Adding Tooltip Behavior    
+bar1.on('mouseover', function(d)  {
+  d3.select(this).style('fill', '#a834eb')
+  d3.select("#act_material_exp").text(" $" + valueFormat(d.act_material_expense))
 
-//   //Hide the tooltip
-//   d3.select('#tooltip-bar')
-//       .style('opacity', '0');
-// });
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
 
-//   // Defining limit lines for estimated labor expense
-//   var line = svg.selectAll(".line")
-//     .data(dataf, d => d.month)
+//Position tooltip and make it visible
+d3.select('#tooltip-mat-bar')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
 
-// line.exit().remove();
+.on('mouseout', function() {
+  d3.select(this).style('fill', function (d) {return d.act_material_expense < d.fin_est_material_expense ? '#1b71f2': '#eb2828'
+  });        
+
+  //Hide the tooltip
+  d3.select('#tooltip-mat-bar')
+      .style('opacity', '0');
+});
+
+  // Defining limit lines for estimated labor expense
+  var line = svg.selectAll(".line")
+    .data(dataf, d => d.month)
+
+line.exit().remove();
  
-//     var line1 = line.enter().append("line")
-//      .attr("class", "line")
-//       .style("fill", 'none')
-//   		.attr("x1", d => x(d.month) + x.bandwidth() +5)
-//       .attr("x2", d => x(d.month) -5)
+    var line1 = line.enter().append("line")
+     .attr("class", "line")
+      .style("fill", 'none')
+  		.attr("x1", d => x(d.month) + x.bandwidth() +5)
+      .attr("x2", d => x(d.month) -5)
      
-//       line1.merge(line)
-//       .transition().duration(speed)
-//       .attr("y1", d => y(+d.fin_est_labor_expense))
-//       .attr("y2", d => y(+d.fin_est_labor_expense))
-//       .style("stroke-dasharray", [6,2])
-//   		.style("stroke", "#eb2828")
-//       .style("stroke-width", 3)
+      line1.merge(line)
+      .transition().duration(speed)
+      .attr("y1", d => y(+d.fin_est_material_expense))
+      .attr("y2", d => y(+d.fin_est_material_expense))
+      .style("stroke-dasharray", [6,2])
+  		.style("stroke", "#eb2828")
+      .style("stroke-width", 3)
 
-// // Adding Tooltip Behavior    
-// line1.on('mouseover', function(d)  {
-//   d3.select(this).style('stroke', '#a834eb')
-//   d3.select("#est_labor_exp").text(" $" + valueFormat(d.fin_est_labor_expense))
+// Adding Tooltip Behavior    
+line1.on('mouseover', function(d)  {
+  d3.select(this).style('stroke', '#a834eb')
+  d3.select("#est_material_exp").text(" $" + valueFormat(d.fin_est_labor_expense))
 
-// //Position the tooltip <div> and set its content
-// let x = d3.event.pageX;
-// let y = d3.event.pageY - 40;
+//Position the tooltip <div> and set its content
+let x = d3.event.pageX;
+let y = d3.event.pageY - 40;
 
-// //Position tooltip and make it visible
-// d3.select('#tooltip-line')
-// .style('left', x +'px')
-// .style('top', y + 'px')
-// .style('opacity', 1)
-// })
+//Position tooltip and make it visible
+d3.select('#tooltip-mat-line')
+.style('left', x +'px')
+.style('top', y + 'px')
+.style('opacity', 1)
+})
 
-// .on('mouseout', function() {
-//   d3.select(this).style('stroke', '#eb2828');        
+.on('mouseout', function() {
+  d3.select(this).style('stroke', '#eb2828');        
 
-//   //Hide the tooltip
-//   d3.select('#tooltip-line')
-//       .style('opacity', '0');
-// });
-// }
+  //Hide the tooltip
+  d3.select('#tooltip-mat-line')
+      .style('opacity', '0');
+});
+}
 
-// chart.update = update;
-// }
-// chart(data)
+matChart.update = matUpdate;
+}
+matChart(data)
 
 
-// var select = d3.select("#year")
-// .style("border-radius", "5px")
-// .on("change", function() {
-// chart.update(this.value, 750)
-// })
+var select = d3.select("#matYear")
+.style("border-radius", "5px")
+.on("change", function() {
+matChart.update(this.value, 750)
+})
 
 
 
