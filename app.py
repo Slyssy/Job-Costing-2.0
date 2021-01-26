@@ -55,6 +55,7 @@ def index():
     error = None
     if request.method == 'POST':
         log_in = request.form['username']
+        
         in_password = request.form['password']
         print(in_password)
         cur = conn.cursor() 
@@ -65,17 +66,18 @@ def index():
         tup=rows[0]
         strpass = functools.reduce(operator.add,(tup))
         print(strpass)
-        # print(hashed_in_pass)
+        # verify in_password -- returns a boolean
         hashed_in_pass = sha256_crypt.verify(in_password, strpass)
         if hashed_in_pass:
-            flash('You were successfully logged in')
+            # flash('You were successfully logged in')
             return redirect(url_for('dashboard_data'))
             # print("matched")
         else:
             error = 'Invalid Credentials. Please try again.'
-            flash('Invalid Credentials. Please try again')
+            # flash('Invalid Credentials. Please try again')
             print(error)
             return render_template('logIndex.html', error=error)
+                
     return render_template('logIndex.html')
 
 # def index():
