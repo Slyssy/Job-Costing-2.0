@@ -1,118 +1,5 @@
-// // Estimated Labor Expense vs. Actual Labor Expense
-// let keys = Object.keys(project_dict);
 
-// const filter = ["Labor Expense", "Labor_Hours"]
-
-// let values = Object.values(project_dict);
-// console.log(project_dict)
-// console.log(values)
-// console.log(keys)
-
-// let trace1 = {
-//   x: ["Bdg. Labor Exp."],
-//   y: [values[7]],
-//   name: "Budgeted Labor Expense",
-//   type: "bar",
-//   marker: {
-//     color: "rgb(27, 113, 242)",
-//     opacity: 0.5,
-//   },
-// };
-
-// let trace2 = {
-//   x: ["Act. Labor Exp."],
-//   y: [values[13]],
-//   name: "Actual Labor Expense",
-//   type: "bar",
-//   marker: {
-//     color: "rgb(235, 40, 40)",
-//     opacity: 0.5,
-//   },
-// };
-
-// let expData = [trace1, trace2];
-
-// let expLayout = {
-//   title: "Estimated vs. Actual Labor Expense",
-//   barmode: "group",
-//   yaxis: {
-//     title: "Labor Expense ($)",
-//   },
-// };
-
-// Plotly.newPlot("eva_exp_bar", expData, expLayout);
-
-// // Estimated Labor hours vs Actual Labor Hours
-// let trace3 = {
-//   x: ["Bdg. Labor Hours"],
-//   y: [values[5]],
-//   name: "Budgeted Labor Hours",
-//   type: "bar",
-//   marker: {
-//     color: "rgb(27, 113, 242)",
-//     opacity: 0.5,
-//   },
-// };
-
-// let trace4 = {
-//   x: ["Act. Labor Hours"],
-//   y: [values[11]],
-//   name: "Actual Labor Hours",
-//   type: "bar",
-//   marker: {
-//     color: "rgb(235, 40, 40)",
-//     opacity: 0.5,
-//   },
-// };
-
-// let hourData = [trace3, trace4];
-
-// let hourLayout = {
-//   title: "Estimated vs. Actual Labor Hours",
-//   barmode: "group",
-//   yaxis: {
-//     title: "Labor Hours",
-//   },
-// };
-
-// Plotly.newPlot("eva_hr_bar", hourData, hourLayout);
-
-// // Estimated Gross Profit vs. Actual Gross Profit
-// let trace5 = {
-//   x: ["Bdg. Gross Profit"],
-//   y: [values[8]],
-//   name: "Budgeted Gross Profit",
-//   type: "bar",
-//   marker: {
-//     color: "rgb(27, 113, 242)",
-//     opacity: 0.5,
-//   },
-// };
-
-// let trace6 = {
-//   x: ["Act. Gross Profit"],
-//   y: [values[14]],
-//   name: "Actual Gross Profit",
-//   type: "bar",
-//   marker: {
-//     color: "rgb(235, 40, 40)",
-//     opacity: 0.5,
-//   },
-// };
-
-// let gpData = [trace5, trace6];
-
-// let gpLayout = {
-//   title: "Estimated vs. Actual Gross Profit",
-//   barmode: "group",
-//   yaxis: {
-//     title: "Gross Profit",
-//   },
-// };
-
-// Plotly.newPlot("eva_gp_bar", gpData, gpLayout);
-
-console.log(project_dict);
+// console.log(project_dict);
 
 // Function to grab data from object necessary to create plots and handle transitions
 function dataGrab1({ fin_est_labor_expense, fin_act_labor_expense }) {
@@ -158,42 +45,39 @@ function dataGrab5({
 
 function dataGrab6({
   fin_est_revenue,
+  fin_est_gross_profit,
   fin_est_labor_expense,
   fin_est_material_expense,
   fin_est_miscellaneous_expense,
   fin_est_subcontractor_expense,
 }) {
   return {
-    "Estimated Revenue": +fin_est_revenue.replace(/,/g, ""),
-    "Estimated Labor": +fin_est_labor_expense,
-    "Estimated Material": +fin_est_material_expense,
-    "Estimated Miscellaneous": +fin_est_miscellaneous_expense,
-    "Estimated Subcontractor": +fin_est_subcontractor_expense,
+    "Est. Revenue": +fin_est_revenue.replace(/,/g, ""),
+    "Est. Gross Profit": +fin_est_gross_profit,
+    "Est. Labor": +fin_est_labor_expense,
+    "Est. Material": +fin_est_material_expense,
+    "Est. Miscellaneous": +fin_est_miscellaneous_expense,
+    "Est. Subcontractor": +fin_est_subcontractor_expense,
   };
 }
 
 function dataGrab7({
   fin_act_revenue,
+  fin_act_gross_profit,
   fin_act_labor_expense,
   fin_act_material_expense,
   fin_act_miscellaneous_expense,
   fin_act_subcontractor_expense,
 }) {
   return {
-    "Actual Revenue": +fin_act_revenue,
-    "Actual Labor": +fin_act_labor_expense,
-    "Actual Material": +fin_act_material_expense,
-    "Actual Miscellaneous": +fin_act_miscellaneous_expense,
-    "Actual Subcontractor": +fin_act_subcontractor_expense,
+    "Act. Revenue": +fin_act_revenue,
+    "Act. Gross Profit": +fin_act_gross_profit,
+    "Act. Labor": +fin_act_labor_expense,
+    "Act. Material": +fin_act_material_expense,
+    "Act. Miscellaneous": +fin_act_miscellaneous_expense,
+    "Act. Subcontractor": +fin_act_subcontractor_expense,
   };
 }
-
-// function addKeyValue() {
-//   for (var i = 0; i < arguments.length; i += 2) {
-//     project_dict[arguments[i]] = arguments [i + 1];
-//   }
-// }
-// addKeyValue('expenseTypes')
 
 const grabbedData1 = dataGrab1(project_dict);
 let data1 = Object.keys(grabbedData1).map((e) => ({
@@ -235,22 +119,20 @@ let data6 = Object.keys(grabbedData6).map((e) => ({
   type: e,
   value: grabbedData6[e],
 }));
-console.log(data6);
+// console.log(data6);
 
 const grabbedData7 = dataGrab7(project_dict);
 let data7 = Object.keys(grabbedData7).map((e) => ({
   type: e,
   value: grabbedData7[e],
 }));
-console.log(data7);
-
-// const estExpenses = project_dict.split()
+// console.log(data7);
 
 // set the dimensions and margins of the graph
 const margin = { top: 70, right: 30, bottom: 70, left: 120 },
   width = 560 - margin.left - margin.right,
   height = 400 - margin.top - margin.bottom;
-
+// Start Labor Expense Est vs. Actual//////////////////////////////////////////////////////////////////////////////////////
 // append the svg object to the body of the page
 const svg = d3
   .select("#eva_exp_bar")
@@ -294,10 +176,6 @@ function update(data) {
   x.domain(data.map((d) => d.type));
   xAxisG = xAxis.call(d3.axisBottom(x));
 
-  xAxisG;
-  // .style("color", "#635f5d")
-  // .style('font-size', '2.0em')
-
   // Update the Y axis
   y.domain([0, d3.max(data, (d) => d.value) * 1.2]);
   yAxis.transition().duration(1000).call(d3.axisLeft(y));
@@ -323,7 +201,6 @@ function update(data) {
       return colors(d.type);
     })
     .style("opacity", "0.5");
-  // "#1b71f2", "#eb2828"
   // If less group in the new dataset, I delete the ones not in use anymore
   u.exit().remove();
 }
@@ -331,7 +208,7 @@ function update(data) {
 // Initialize the plot with the first dataset
 update(data1);
 
-// Start Estmated Material, Misc and Subcontractor
+// Start Estmated Material, Misc and Subcontractor///////////////////////////////////////////////////////////////
 // set the dimensions and margins of the graph
 
 // append the svg object to the body of the page
@@ -379,10 +256,6 @@ function update1(data) {
   x1.domain(data.map((d) => d.type));
   xAxisG1 = xAxis1.call(d3.axisBottom(x1));
 
-  xAxisG1;
-  // .style("color", "#635f5d")
-  // .style('font-size', '2.0em')
-
   // Update the Y axis
   y1.domain([0, d3.max(data, (d) => d.value) * 1.2]);
   yAxis1.transition().duration(1000).call(d3.axisLeft(y1));
@@ -408,14 +281,13 @@ function update1(data) {
       return colors(d.type);
     })
     .style("opacity", "0.5");
-  // "#1b71f2", "#eb2828"
   // If less group in the new dataset, I delete the ones not in use anymore
   u1.exit().remove();
 }
 
 update1(data3);
 
-// Start Estmated Expense Comparison Chart
+// Start Estmated Expense Comparison Chart/////////////////////////////////////////////////////////////////////////
 // set the dimensions and margins of the graph
 const margin2 = { top: 70, right: 30, bottom: 70, left: 120 },
   width2 = 1120 - margin2.left - margin2.right,
@@ -466,7 +338,6 @@ function update2(data) {
   xAxisG2 = xAxis2.call(d3.axisBottom(x2));
 
   xAxisG2;
-  // .style("color", "#635f5d")
   // .style('font-size', '2.0em')
 
   // Update the Y axis
@@ -479,13 +350,14 @@ function update2(data) {
   const colors = d3
     .scaleOrdinal()
     .domain([
-      "Estimated Revenue",
-      "Estimated Labor",
-      "Estimated Material",
-      "Estimated Miscellaneous",
-      "Estimated Subcontractor",
+      "Est. Revenue",
+      "Est. Gross Profit",
+      "Est. Labor",
+      "Est. Material",
+      "Est. Miscellaneous",
+      "Est. Subcontractor",
     ])
-    .range(["#1b71f2", "#eb2828", "#eb2828", "#eb2828", "#eb2828"]);
+    .range(["#1b71f2", "#29e026", "#eb2828", "#eb2828", "#eb2828", "#eb2828"]);
 
   u2.enter()
     .append("rect") // Add a new rect for each new elements
@@ -507,12 +379,3 @@ function update2(data) {
 
 update2(data6);
 
-// // Start Stacked Bar Chart
-// const svg2 =d3.select(stacked_bar)
-// .append ('svg')
-// .attr("width", width + margin.left + margin.right)
-//   .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-//   const dataset = d3.layout.stack() ([''])
