@@ -56,30 +56,75 @@ def index():
         return render_template('logIndex.html') 
     error = None
     if request.method == 'POST':
-        log_in = request.form['username']
+        input_log_in = request.form['username']
         in_password = request.form['password']
         print(in_password)
+
+        # grabbing log_in names from db to check against input
         cur = conn.cursor() 
-        # cur.execute('SELECT password FROM users ;')
-        cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
-        rows = cur.fetchall()
-        print("this is the rows(fetch)")
-        print(rows)
-        print("----------------------------------")
-        tup=rows[0]
-        print("this is the tup")
-        print(tup)
-        strpass = functools.reduce(operator.add,(tup))
-        print(strpass)
-        # print(hashed_in_pass)
-        hashed_in_pass = sha256_crypt.verify(in_password, strpass)
-        if hashed_in_pass:
-            return redirect(url_for('dashboard_data'))
-            # print("matched")
-        else:
-            error = 'Invalid Credentials. Please try again.'
-            print(error)
-            return render_template('logIndex.html', error=error)
+        cur.execute('SELECT log_in FROM users;')
+        login_fetch = cur.fetchall()
+        print("this is the fetch")
+        print(login_fetch)
+        print("----------------------------------") 
+
+        length = len(login_fetch)
+        
+        login_names_list = []
+        for db_row in login_fetch:
+            login_name_dict = {}
+            login_name_dict['log_name'] = db_row[0]
+            login_names_list.append(login_name_dict)
+            
+        print(login_names_list) 
+
+        res = [] 
+        for key, value in ( 
+            itertools.chain.from_iterable( 
+                [itertools.product((k, ), v) for k, v in test_dict.items()])): 
+                    res.append(value) 
+      
+        # printing result  
+        print("The list values of keys are : " + str(res))
+
+        # cur = conn.cursor()
+        # cur.execute('SELECT log_in FROM users;')
+        # user_login_fetch = cur.fetchall()
+
+        # #prints a tupple
+        # print(user_login_fetch)
+        # log_in = request.form['username']
+        # for login in user_login_fetch:
+        #     print(login)
+        #     login = functools.reduce(operator.add,(login))
+        #     print(login)
+        #     if login == log_in: 
+            
+                # cur = conn.cursor() 
+                # cur.execute('SELECT password FROM users ;')
+                # cur.execute('SELECT password FROM users WHERE log_in=%s;', [input_log_in])
+                # rows = cur.fetchall()
+                # print("this is the rows(fetch)")
+                # print(rows)
+                # print("----------------------------------")
+                # tup=rows[0]
+                # print("this is the tup")
+                # print(tup)
+                # strpass = functools.reduce(operator.add,(tup))
+                # print(strpass)
+                # print(hashed_in_pass)
+                # hashed_in_pass = sha256_crypt.verify(in_password, strpass)
+                # if hashed_in_pass:
+                #     return redirect(url_for('dashboard_data'))
+                    # print("matched")
+            #     else:
+            #         error = 'Invalid p Credentials. Please try again.'
+            #         print(error)
+            #         return render_template('logIndex.html', error=error)
+            # else:
+            #     error = 'Invalid login. Please try again.'
+            #     print(error)
+            #     return render_template('logIndex.html', error=error)
     return render_template('logIndex.html')
 
 # def index():
@@ -373,6 +418,7 @@ def new_project_data():
         est_overhead_expense = str(est_overhead_expense)
         full_values_string += ',' + est_overhead_expense
         if 'act_start_date' in request.form and request.form['act_start_date'] != "":
+        # if request.form['act_start_date'] != "":
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
             act_start_date = datetime.datetime.now()

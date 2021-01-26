@@ -170,3 +170,32 @@ full_values_string += ',' + est_labor_expense
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
             act_start_date = datetime.datetime.now()
+
+login_name_list = []
+        for log_in_name in login_fetch:
+            print(log_in_name)
+            login_dict = {}
+            str_login = functools.reduce(operator.add,(log_in_name))
+            print(str_login)
+            login_dict['log_in_name'] = str_login
+            login_name_list.append(login_dict)
+
+            print("Login Dict:")
+            print(login_dict)
+            print("----------------------------------") 
+            print("Login List:")
+            print(login_name_list)
+
+            login_values_list = []
+            for dict_row in login_name_list:
+                login_values = dict_row['log_in_name']
+                login_values_list.append(login_values)
+            
+            # print("----------------------------------") 
+            # print("Login Values List:")
+            # print(login_values_list)
+            print(input_log_in)
+            print(str_login)
+
+            if input_log_in in login_values_list:
+            # if input_log_in == str_login:   
