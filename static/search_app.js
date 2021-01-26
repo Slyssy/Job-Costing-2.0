@@ -1,5 +1,4 @@
-
-// console.log(project_dict);
+console.log(project_dict);
 
 // Function to grab data from object necessary to create plots and handle transitions
 function dataGrab1({ fin_est_labor_expense, fin_act_labor_expense }) {
@@ -378,4 +377,3 @@ function update2(data) {
 }
 
 update2(data6);
-
