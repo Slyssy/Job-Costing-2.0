@@ -106,11 +106,18 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Revenue</th>
-            <th scope="col">Budget Labor Hours</th>
-            <th scope="col">Actual labor Hours</th>
-            <th scope="col">Budget Labor Expense</th>
-            <th scope="col">Actual Labor Expense</th>
+            <th scope="col">Project Revenue</th>
+            <th scope="col">Est. Labor Hrs.</th>
+            <th scope="col">Act. Labor Hrs.</th>
+            <th scope="col">Est. Labor Expense</th>
+            <th scope="col">Act. Labor Expense</th>
+            <th scope="col">Est. Material Expense</th>
+            <th scope="col">Act. Material Expense</th>
+            <th scope="col">Est. Misc. Expense</th>
+            <th scope="col">Act. Misc. Expense</th>
+            <th scope="col">Est. Sub. Expense</th>
+            <th scope="col">Act. Sub. Expense</th>
+
             ​
           </tr>
         </thead>
@@ -121,6 +128,12 @@
             <td>{{project_dict.fin_act_labor_hours}}</td>
             <td>$ {{project_dict.fin_est_labor_expense}}</td>
             <td>$ {{project_dict.fin_act_labor_expense}}</td>
+            <td>$ {{project_dict.fin_est_material_expense}}</td>
+            <td>$ {{project_dict.fin_act_material_expense}}</td>
+            <td>$ {{project_dict.fin_est_miscellaneous_expense}}</td>
+            <td>$ {{project_dict.fin_act_miscellaneous_expense}}</td>
+            <td>$ {{project_dict.fin_est_subcontractor_expense}}</td>
+            <td>$ {{project_dict.fin_act_subcontractor_expense}}</td>
           </tr>
         </tbody>
       </table>
