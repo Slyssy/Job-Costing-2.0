@@ -1,7 +1,7 @@
-console.log(project_list);
+// console.log(project_list);
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
-console.log(projectArray);
+// console.log(projectArray);
 
 // Filtering data to be used for plot
 const chartData = projectArray.map(
@@ -109,7 +109,7 @@ const months = [
 ];
 
 const data = data0.map((o) => ({ ...o, month: months[o.month - 1] }));
-console.log(data);
+// console.log(data);
 
 // let result = data.map(a => a.fin_est_miscellaneous_expense)
 // console.log(result)

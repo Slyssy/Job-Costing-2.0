@@ -147,7 +147,7 @@ const mapper1 = (single) => {
 const mapData0 = mapData.map(mapper1);
 
 const mapData1 = mapData0.map((o) => ({ ...o, month: month[o.month - 1] }));
-console.log(mapData1)
+// console.log(mapData1)
 
 // Grabbing years and pulling unique years to create a variable that will be used to populate the dropdown selector.
 const mapYears = mapData1.map((a) => a.year);
