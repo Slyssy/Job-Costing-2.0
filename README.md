@@ -44,10 +44,10 @@ This app will allow for the leads to see progress in the financial and day to da
 
 ## Screenshots:
 
-![dashboard](images/dashboard.png)
-![dashboard_labor_bar](images/dashboard_labor_bar.png)
+![dashboard](images/dashboard_table.png)
+![performance_visualizations](images/performance_visualizations.png)
 ![dashboard_map](images/dashboard_map.png)
-![details](images/project_details.png)
+![details](images/project_details_visualizations.png)
 ![project](images/new_project.png)
 ![time](images/enter_time.png)
 ![user](images/new_user.png)

@@ -883,10 +883,6 @@ var select = d3
       subChart.update(this.value, 750);
     });
 
-
-
-
-
 //Start Revenue Bar Chart////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function revChart(data) {
   // Looping through data to pull the Unique years in the data set.
