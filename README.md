@@ -26,6 +26,11 @@ This app will allow for the leads to see progress in the financial and day to da
 * A project map has been added to track project locations for the years and months. This visualization allows the user to see where there projects are located and how big or small they are in relation to other projects they have been awarded.
 * Additional expense tracking has been added to allow the usere to get a better understanding of how their project is performing. These expenses include material expense, miscellaneous expense, subcontractor expense and overhead expense.
 
+- New user page to include log-in name and password.
+    - Password is hashed before saving to database.
+- Home (logIndex) page includes log-in authentication.
+    - Verifies hashed password. 
+- Update user page (and route) added. 
 
 ## App Workflow:
 <img src=images/app_workflow.jpg width="600" />
