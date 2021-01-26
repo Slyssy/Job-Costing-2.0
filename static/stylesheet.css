@@ -301,3 +301,12 @@ td a.flag {
 td a.flag::after {
   content: " !";
 }
+
+.dropdown-group {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dropdown-wrapper {
+  width: 100%;
+}

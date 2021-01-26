@@ -176,7 +176,7 @@
       id="performanceVisualizations"
       class="container-fluid dashboard_visualizations"
     >
-    <select id="rev-year" align=left></select>
+    <select id="rev-year"></select>
     <input type="checkbox" id="sort">	
 Toggle sort by Revenue
       <div class="row">         
@@ -194,8 +194,10 @@ Toggle sort by Revenue
 
       <div class="row">
          <!-- Start Labor Expense Bar Chart -->
-         <select id="year" class="dropdown center-block" style="margin-left: 5%;"></select>  
-         <select id="matYear" class="dropdown center-block" style="margin-left: 55%;"></select>
+         <div class="dropdown-group">
+          <div class="dropdown-wrapper"><select id="year" class="dropdown"></select>  </div>
+          <div class="dropdown-wrapper"><select id="matYear" class="dropdown"></select></div>
+        </div>
           <svg id="estimate-to-actual" width="715" height="600"></svg>      
          <!-- </div>  -->
         <div id="tooltip-line">
@@ -217,8 +219,10 @@ Toggle sort by Revenue
       </div>   
       <div class="row">
         <!-- Start Miscellaneous Expense Bar Chart -->
-        <select id="miscYear" class="dropdown center-block" style="margin-left: 5%;"></select>  
-        <select id="subYear" class="dropdown center-block" style="margin-left: 55%;"></select>
+        <div class="dropdown-group">
+          <div class="dropdown-wrapper"><select id="miscYear" class="dropdown"></select></div>
+          <div class="dropdown-wrapper"><select id="subYear" class="dropdown"></select></div>
+        </div>
          <svg id="estimate-to-actual-miscellaneous" width="715" height="600"></svg>      
         <!-- </div>  -->
        <div id="tooltip-misc-line">
@@ -253,8 +257,8 @@ Toggle sort by Revenue
           </p>
         </div>
       </div>
-          <select id="mapYear" align=left></select>
-          <div id="project-map" align=center style="width:100%; height:100%x">            
+          <select id="mapYear"></select>
+          <div id="project-map" style="width:100%; height:100%; text-align: center">            
             <div id="sliderContainer">
               <input id="timeslide" type="range" min="0" max="11" value="0" step="1"/><br>
               <span id="range">January</span>
