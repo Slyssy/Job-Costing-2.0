@@ -81,6 +81,7 @@ const reducer = (group, current) => {
   group[i].fin_est_material_expense += current.fin_est_material_expense;
   group[i].fin_est_miscellaneous_expense +=
     current.fin_est_miscellaneous_expense;
+    group[i].fin_est_subcontractor_expense += current.fin_est_subcontractor_expense; 
   return group;
 };
 
@@ -163,19 +164,26 @@ function chart(data) {
     .attr("class", "y-axis")
     .append("text")
     .attr("class", "yAxis")
-    .attr("y", -70)
+    .attr("y", -60)
     .attr("x", -195)
     .attr("transform", `rotate(-90)`)
     .attr("fill", "#635f5d")
     .style("font-size", "2.5em")
     .text("Labor Expense ($)");
 
+    svg
+    .append('text')
+    .attr('y', 35)
+    .attr('x', 240)
+    .attr('class', 'title')
+    .text("Labor Estimate vs Actual")
+
   update(d3.select("#year").property("value"), 0);
 
   function update(year, speed) {
     var dataf = data.filter((f) => f.year == year);
 
-    y.domain([0, d3.max(data, (d) => d.fin_est_labor_expense)]).nice();
+    y.domain([0, d3.max(data, (d) => d.fin_est_labor_expense) * 1.4]).nice();
 
     svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
 
@@ -347,19 +355,26 @@ function matChart(data) {
     .attr("class", "y-axis")
     .append("text")
     .attr("class", "yAxis")
-    .attr("y", -70)
+    .attr("y", -60)
     .attr("x", -190)
     .attr("transform", `rotate(-90)`)
     .attr("fill", "#635f5d")
     .style("font-size", "2.5em")
     .text("Material Expense ($)");
 
+    svg
+    .append('text')
+    .attr('y', 35)
+    .attr('x', 235)
+    .attr('class', 'title')
+    .text("Material Estimate vs Actual")
+
   matUpdate(d3.select("#matYear").property("value"), 0);
 
   function matUpdate(year, speed) {
     var dataf = data.filter((f) => f.year == year);
 
-    y.domain([0, d3.max(data, (d) => d.fin_est_material_expense)]).nice();
+    y.domain([0, d3.max(data, (d) => d.fin_est_material_expense) * 1.4]).nice();
 
     svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
 
@@ -532,19 +547,26 @@ var select = d3
       .attr("class", "y-axis")
       .append("text")
       .attr("class", "yAxis")
-      .attr("y", -70)
-      .attr("x", -190)
+      .attr("y", -60)
+      .attr("x", -150)
       .attr("transform", `rotate(-90)`)
       .attr("fill", "#635f5d")
       .style("font-size", "2.5em")
       .text("Miscellaneous Expense ($)");
+
+      svg
+      .append('text')
+      .attr('y', 35)
+      .attr('x', 190)
+      .attr('class', 'title')
+      .text("Miscellaneous Estimate vs Actual")
   
     miscUpdate(d3.select("#miscYear").property("value"), 0);
   
     function miscUpdate(year, speed) {
       var dataf = data.filter((f) => f.year == year);
   
-      y.domain([0, d3.max(data, (d) => d.fin_est_miscellaneous_expense)]).nice();
+      y.domain([0, d3.max(data, (d) => d.fin_est_miscellaneous_expense) * 1.4]).nice();
   
       svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
   
@@ -705,7 +727,8 @@ var select = d3
       g
         .attr("transform", "translate(0," + (height - margin.bottom) + ")")
         .call(d3.axisBottom(x).tickSizeOuter(0));
-  
+
+        
     var yAxis = (g) =>
       g
         .attr("transform", "translate(" + margin.left + ",0)")
@@ -719,18 +742,25 @@ var select = d3
       .append("text")
       .attr("class", "yAxis")
       .attr("y", -60)
-      .attr("x", -150)
+      .attr("x", -170)
       .attr("transform", `rotate(-90)`)
       .attr("fill", "#635f5d")
-      .style("font-size", "2.5em")
+      .style("font-size", "2em")
       .text("Subcontractor Expense ($)");
+
+     svg
+      .append('text')
+      .attr('y', 35)
+      .attr('x', 190)
+      .attr('class', 'title')
+      .text("Subcontractor Estimate vs Actual")
   
     subUpdate(d3.select("#subYear").property("value"), 0);
   
     function subUpdate(year, speed) {
       var dataf = data.filter((f) => f.year == year);
   
-      y.domain([0, d3.max(data, (d) => d.fin_est_subcontractor_expense)*1.5]).nice();
+      y.domain([0, d3.max(data, (d) => d.fin_est_subcontractor_expense)*1.4]).nice();
   
       svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
   
@@ -792,7 +822,7 @@ var select = d3
           d3.select("#tooltip-sub-bar").style("opacity", "0");
         });
       
-      // Defining limit lines for estimated miscellaneous expense
+      // Defining limit lines for estimated subcontractor expense
       var line = svg.selectAll(".line").data(dataf, (d) => d.month);
   
       line.exit().remove();
@@ -913,6 +943,13 @@ function revChart(data) {
     .attr("fill", "#635f5d")
     .style("font-size", "2.5em")
     .text("Revenue ($)");
+
+    svg
+    .append('text')
+    .attr('y', 35)
+    .attr('x', 630)
+    .attr('class', 'title')
+    .text("Monthly Revenue Totals")
 
   revUpdate(d3.select("#rev-year").property("value"), 0);
 

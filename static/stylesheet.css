@@ -9,6 +9,11 @@
   fill: #635f5d;
 }
 
+.title {
+  font-size: 2em;
+  fill: #635f5d;
+}
+
 .bars {
   opacity: 0.5;
 }
