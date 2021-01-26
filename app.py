@@ -21,6 +21,8 @@ pg_username = os.getenv("pg_username")
 pg_password = os.getenv("pg_password")
 pg_dbname = os.getenv("pg_dbname")
 
+
+
 # Setup connection with Postgres
 try:
        conn = psycopg2.connect(dbname=pg_dbname, host=pg_ipaddress, user=pg_username, password=pg_password)
@@ -39,6 +41,7 @@ if conn:
 
 # Create Flask app instance
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 
