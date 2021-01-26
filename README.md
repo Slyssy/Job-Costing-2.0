@@ -27,6 +27,8 @@ This app will allow for the leads to see progress in the financial and day to da
 
 - Hashed Password have been add for App Authentication.
 - All Plotly visualizations have been updated to D3 Visualizations allowing for more custimizations.
+- Color coded table on dashboard. As projects exceed their budgetted expenses, the table cells turn red. This is to draw attention to potential problems with estimating.
+- Geocoded project addresses so that they could be properly mapped using lattitude and longitude in United States map built in D3.
 - A project map has been added to track project locations for the years and months. This visualization allows the user to see where there projects are located and how big or small they are in relation to other projects they have been awarded.
 - Additional expense tracking has been added to allow the usere to get a better understanding of how their project is performing. These expenses include material expense, miscellaneous expense, subcontractor expense and overhead expense.
 
