@@ -246,10 +246,7 @@ function map(mapData) {
         // d3.select(this).style("fill", "#a834eb");
         d3.select("#name").text(" " + d.project_name);
         d3.select("#address").text(" " + d.project_address);
-        d3.select("#revenue").text(" $" + valueFormat(d.fin_act_revenue));
-        d3.select("#grossProfit").text(
-          " $" + valueFormat(d.fin_act_gross_profit)
-        );
+        d3.select("#revenue").text(" $" + valueFormat(d.fin_act_revenue));        
         d3.select("#startDate").text(
           " " + d.month + " " + d.day + ", " + d.year
         );
