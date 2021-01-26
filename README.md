@@ -26,17 +26,17 @@ This app will allow for the leads to see progress in the financial and day to da
 ## App Updates:
 
 - Home (logIndex) page includes log-in authentication.
-    - Verifies hashed password. 
+  - Verifies hashed password.
 - New user page includes log-in name and password collection.
-    - Log-in name is checked against ones already in the database. If the log-in name already exist, 
-    then a message is displayed to the user to choose another. 
-    - Password is hashed before saving to database.
+  - Log-in name is checked against ones already in the database. If the log-in name already exist,
+    then a message is displayed to the user to choose another.
+  - Password is hashed before saving to database.
 - All Plotly visualizations have been updated to D3 Visualizations allowing for more custimizations.
 - Color coded table on dashboard. As projects exceed their budgetted expenses, the table cells turn red. This is to draw attention to potential problems with estimating.
 - Geocoded project addresses so that they could be properly mapped using lattitude and longitude in United States map built in D3.
 - A project map has been added to track project locations for the years and months. This visualization allows the user to see where their projects are located and how big or small they are in relation to other projects they have been awarded.
 - Additional expense tracking has been added to allow the users to get a better understanding of how their project is performing. These expenses include material expense, miscellaneous expense, subcontractor expense and overhead expense.
-- Update User page added. 
+- Update User page added.
 
 ## App Workflow:
 
@@ -44,10 +44,10 @@ This app will allow for the leads to see progress in the financial and day to da
 
 ## Screenshots:
 
-![dashboard](images/dashboard.png)
-![dashboard_labor_bar](images/dashboard_labor_bar.png)
+![dashboard](images/dashboard_table.png)
+![performance_visualizations](images/performance_visualizations.png)
 ![dashboard_map](images/dashboard_map.png)
-![details](images/project_details.png)
+![details](images/project_details_visualizations.png)
 ![project](images/new_project.png)
 ![time](images/enter_time.png)
 ![user](images/new_user.png)

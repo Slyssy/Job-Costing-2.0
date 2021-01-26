@@ -1,7 +1,7 @@
-console.log(project_list);
+// console.log(project_list);
 // load the data
 projectArray = Object.keys(project_list).map((i) => project_list[i]);
-console.log(projectArray);
+// console.log(projectArray);
 
 // Filtering data to be used for plot
 const chartData = projectArray.map(
@@ -81,7 +81,8 @@ const reducer = (group, current) => {
   group[i].fin_est_material_expense += current.fin_est_material_expense;
   group[i].fin_est_miscellaneous_expense +=
     current.fin_est_miscellaneous_expense;
-    group[i].fin_est_subcontractor_expense += current.fin_est_subcontractor_expense; 
+  group[i].fin_est_subcontractor_expense +=
+    current.fin_est_subcontractor_expense;
   return group;
 };
 
@@ -109,7 +110,7 @@ const months = [
 ];
 
 const data = data0.map((o) => ({ ...o, month: months[o.month - 1] }));
-console.log(data);
+// console.log(data);
 
 // let result = data.map(a => a.fin_est_miscellaneous_expense)
 // console.log(result)
@@ -171,12 +172,12 @@ function chart(data) {
     .style("font-size", "2.5em")
     .text("Labor Expense ($)");
 
-    svg
-    .append('text')
-    .attr('y', 35)
-    .attr('x', 240)
-    .attr('class', 'title')
-    .text("Labor Estimate vs Actual")
+  svg
+    .append("text")
+    .attr("y", 35)
+    .attr("x", 240)
+    .attr("class", "title")
+    .text("Labor Estimate vs Actual");
 
   update(d3.select("#year").property("value"), 0);
 
@@ -362,12 +363,12 @@ function matChart(data) {
     .style("font-size", "2.5em")
     .text("Material Expense ($)");
 
-    svg
-    .append('text')
-    .attr('y', 35)
-    .attr('x', 235)
-    .attr('class', 'title')
-    .text("Material Estimate vs Actual")
+  svg
+    .append("text")
+    .attr("y", 35)
+    .attr("x", 235)
+    .attr("class", "title")
+    .text("Material Estimate vs Actual");
 
   matUpdate(d3.select("#matYear").property("value"), 0);
 
@@ -498,394 +499,394 @@ var select = d3
   });
 
 //Starting Miscellaneous Expense Bar Chart/////////////////////////////////////////////////////////////////////////////////////////////
-  function miscChart(data) {
-    // Looping through data to pull the Unique years in the data set.
-    const miscYears = data
-      .map((a) => a.year)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    miscYears.sort(function (a, b) {
-      return a - b;
-    });
-    // console.log(years)
-  
-    const options = d3
-      .select("#miscYear")
-      .selectAll("option")
-      .data(miscYears)
-      .enter()
-      .append("option")
-      .text((d) => d);
-  
-    var svg = d3.select("#estimate-to-actual-miscellaneous"),
-      margin = { top: 70, right: -45, bottom: 0, left: 90 },
-      width = +svg.attr("width") - margin.left - margin.right,
-      height = +svg.attr("height") - margin.top - margin.bottom;
-  
-    // Setting x Scale
-    const x = d3
-      .scaleBand()
-      .range([margin.left, width - margin.right])
-      .padding(0.1)
-      .paddingOuter(0.2);
-  
-    var y = d3.scaleLinear().range([height - margin.bottom, margin.top]);
-  
-    var xAxis = (g) =>
-      g
-        .attr("transform", "translate(0," + (height - margin.bottom) + ")")
-        .call(d3.axisBottom(x).tickSizeOuter(0));
-  
-    var yAxis = (g) =>
-      g
-        .attr("transform", "translate(" + margin.left + ",0)")
-        .call(d3.axisLeft(y).tickSize(-width));
-  
-    svg.append("g").attr("class", "x-axis");
-  
-    svg
-      .append("g")
-      .attr("class", "y-axis")
-      .append("text")
-      .attr("class", "yAxis")
-      .attr("y", -60)
-      .attr("x", -150)
-      .attr("transform", `rotate(-90)`)
-      .attr("fill", "#635f5d")
-      .style("font-size", "2.5em")
-      .text("Miscellaneous Expense ($)");
+function miscChart(data) {
+  // Looping through data to pull the Unique years in the data set.
+  const miscYears = data
+    .map((a) => a.year)
+    .filter((value, index, self) => self.indexOf(value) === index);
+  miscYears.sort(function (a, b) {
+    return a - b;
+  });
+  // console.log(years)
 
-      svg
-      .append('text')
-      .attr('y', 35)
-      .attr('x', 190)
-      .attr('class', 'title')
-      .text("Miscellaneous Estimate vs Actual")
-  
-    miscUpdate(d3.select("#miscYear").property("value"), 0);
-  
-    function miscUpdate(year, speed) {
-      var dataf = data.filter((f) => f.year == year);
-  
-      y.domain([0, d3.max(data, (d) => d.fin_est_miscellaneous_expense) * 1.4]).nice();
-  
-      svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
-  
-      x.domain(data.map((d) => d.month));
-  
-      svg.selectAll(".x-axis").transition().duration(speed).call(xAxis);
-  
-      var bar = svg.selectAll(".bar").data(dataf, (d) => d.month);
-    
-      bar.exit().remove();
-  
-      var bar1 = bar
-        .enter()
-        .append("rect")
-        .attr("class", "bar")
-        .style("fill", (d) =>
-          d.act_miscellaneous_expense < d.fin_est_miscellaneous_expense
-            ? "#1b71f2"
-            : "#eb2828"
-        )
-        .attr("opacity", ".5")
-        .attr("width", x.bandwidth());
-  
-      bar1
-        .merge(bar)
-        .transition()
-        .duration(speed)
-        .attr("x", (d) => x(d.month))
-        .attr("y", (d) => y(d.act_miscellaneous_expense))
-        .attr("height", (d) => y(0) - y(d.act_miscellaneous_expense));
-  
-      // Adding Tooltip Behavior
-      bar1
-        .on("mouseover", function (d) {
-          d3.select(this).style("fill", "#a834eb");
-          d3.select("#act_miscellaneous_exp").text(
-            " $" + valueFormat(d.act_miscellaneous_expense)
-          );
-  
-          //Position the tooltip <div> and set its content
-          let x = d3.event.pageX;
-          let y = d3.event.pageY - 40;
-  
-          //Position tooltip and make it visible
-          d3.select("#tooltip-misc-bar")
-            .style("left", x + "px")
-            .style("top", y + "px")
-            .style("opacity", 1);
-        })
-  
-        .on("mouseout", function () {
-          d3.select(this).style("fill", function (d) {
-            return d.act_miscellaneous_expense < d.fin_est_miscellaneous_expense
-              ? "#1b71f2"
-              : "#eb2828";
-          });
-  
-          //Hide the tooltip
-          d3.select("#tooltip-misc-bar").style("opacity", "0");
-        });
-      
-      // Defining limit lines for estimated miscellaneous expense
-      var line = svg.selectAll(".line").data(dataf, (d) => d.month);
-  
-      line.exit().remove();
-  
-      var line1 = line
-        .enter()
-        .append("line")
-        .attr("class", "line")
-        .style("fill", "none")
-        .attr("x1", (d) => x(d.month) + x.bandwidth() + 5)
-        .attr("x2", (d) => x(d.month) - 5);
-  
-      line1
-        .merge(line)
-        .transition()
-        .duration(speed)
-        .attr("y1", (d) => y(+d.fin_est_miscellaneous_expense))
-        .attr("y2", (d) => y(+d.fin_est_miscellaneous_expense))
-        .style("stroke-dasharray", [6, 2])
-        .style("stroke", "#eb2828")
-        .style("stroke-width", 3);
-  
-      // Adding Tooltip Behavior
-      line1
-        .on("mouseover", function (d) {
-          d3.select(this).style("stroke", "#a834eb");
-          d3.select("#est_miscellaneous_exp").text(
-            " $" + valueFormat(d.fin_est_miscellaneous_expense)
-          );
-  
-          //Position the tooltip <div> and set its content
-          let x = d3.event.pageX;
-          let y = d3.event.pageY - 40;
-  
-          //Position tooltip and make it visible
-          d3.select("#tooltip-misc-line")
-            .style("left", x + "px")
-            .style("top", y + "px")
-            .style("opacity", 1);
-        })
-  
-        .on("mouseout", function () {
-          d3.select(this).style("stroke", "#eb2828");
-  
-          //Hide the tooltip
-          d3.select("#tooltip-misc-line").style("opacity", "0");
-        });
-    }
-  
-    miscChart.update = miscUpdate;
-  }
-  miscChart(data);
-  
-  var select = d3
+  const options = d3
     .select("#miscYear")
-    // .style("border-radius", "5px")
-    .on("change", function () {
-      miscChart.update(this.value, 750);
-    });
+    .selectAll("option")
+    .data(miscYears)
+    .enter()
+    .append("option")
+    .text((d) => d);
 
+  var svg = d3.select("#estimate-to-actual-miscellaneous"),
+    margin = { top: 70, right: -45, bottom: 0, left: 90 },
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom;
 
-    //Starting Subcontractor Expense Bar Chart/////////////////////////////////////////////////////////////////////////////////////////////
-  function subChart(data) {
-    // Looping through data to pull the Unique years in the data set.
-    const subYears = data
-      .map((a) => a.year)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    subYears.sort(function (a, b) {
-      return a - b;
-    });
-    // console.log(years)
-  
-    const options = d3
-      .select("#subYear")
-      .selectAll("option")
-      .data(subYears)
+  // Setting x Scale
+  const x = d3
+    .scaleBand()
+    .range([margin.left, width - margin.right])
+    .padding(0.1)
+    .paddingOuter(0.2);
+
+  var y = d3.scaleLinear().range([height - margin.bottom, margin.top]);
+
+  var xAxis = (g) =>
+    g
+      .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+      .call(d3.axisBottom(x).tickSizeOuter(0));
+
+  var yAxis = (g) =>
+    g
+      .attr("transform", "translate(" + margin.left + ",0)")
+      .call(d3.axisLeft(y).tickSize(-width));
+
+  svg.append("g").attr("class", "x-axis");
+
+  svg
+    .append("g")
+    .attr("class", "y-axis")
+    .append("text")
+    .attr("class", "yAxis")
+    .attr("y", -60)
+    .attr("x", -150)
+    .attr("transform", `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style("font-size", "2.5em")
+    .text("Miscellaneous Expense ($)");
+
+  svg
+    .append("text")
+    .attr("y", 35)
+    .attr("x", 190)
+    .attr("class", "title")
+    .text("Miscellaneous Estimate vs Actual");
+
+  miscUpdate(d3.select("#miscYear").property("value"), 0);
+
+  function miscUpdate(year, speed) {
+    var dataf = data.filter((f) => f.year == year);
+
+    y.domain([
+      0,
+      d3.max(data, (d) => d.fin_est_miscellaneous_expense) * 1.4,
+    ]).nice();
+
+    svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
+
+    x.domain(data.map((d) => d.month));
+
+    svg.selectAll(".x-axis").transition().duration(speed).call(xAxis);
+
+    var bar = svg.selectAll(".bar").data(dataf, (d) => d.month);
+
+    bar.exit().remove();
+
+    var bar1 = bar
       .enter()
-      .append("option")
-      .text((d) => d);
-  
-    var svg = d3.select("#estimate-to-actual-subcontractor"),
-      margin = { top: 70, right: -45, bottom: 0, left: 90 },
-      width = +svg.attr("width") - margin.left - margin.right,
-      height = +svg.attr("height") - margin.top - margin.bottom;
-  
-    // Setting x Scale
-    const x = d3
-      .scaleBand()
-      .range([margin.left, width - margin.right])
-      .padding(0.1)
-      .paddingOuter(0.2);
-  
-    var y = d3.scaleLinear().range([height - margin.bottom, margin.top]);
-  
-    var xAxis = (g) =>
-      g
-        .attr("transform", "translate(0," + (height - margin.bottom) + ")")
-        .call(d3.axisBottom(x).tickSizeOuter(0));
+      .append("rect")
+      .attr("class", "bar")
+      .style("fill", (d) =>
+        d.act_miscellaneous_expense < d.fin_est_miscellaneous_expense
+          ? "#1b71f2"
+          : "#eb2828"
+      )
+      .attr("opacity", ".5")
+      .attr("width", x.bandwidth());
 
-        
-    var yAxis = (g) =>
-      g
-        .attr("transform", "translate(" + margin.left + ",0)")
-        .call(d3.axisLeft(y).tickSize(-width));
-  
-    svg.append("g").attr("class", "x-axis");
-  
-    svg
-      .append("g")
-      .attr("class", "y-axis")
-      .append("text")
-      .attr("class", "yAxis")
-      .attr("y", -60)
-      .attr("x", -170)
-      .attr("transform", `rotate(-90)`)
-      .attr("fill", "#635f5d")
-      .style("font-size", "2em")
-      .text("Subcontractor Expense ($)");
+    bar1
+      .merge(bar)
+      .transition()
+      .duration(speed)
+      .attr("x", (d) => x(d.month))
+      .attr("y", (d) => y(d.act_miscellaneous_expense))
+      .attr("height", (d) => y(0) - y(d.act_miscellaneous_expense));
 
-     svg
-      .append('text')
-      .attr('y', 35)
-      .attr('x', 190)
-      .attr('class', 'title')
-      .text("Subcontractor Estimate vs Actual")
-  
-    subUpdate(d3.select("#subYear").property("value"), 0);
-  
-    function subUpdate(year, speed) {
-      var dataf = data.filter((f) => f.year == year);
-  
-      y.domain([0, d3.max(data, (d) => d.fin_est_subcontractor_expense)*1.4]).nice();
-  
-      svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
-  
-      x.domain(data.map((d) => d.month));
-  
-      svg.selectAll(".x-axis").transition().duration(speed).call(xAxis);
-  
-      var bar = svg.selectAll(".bar").data(dataf, (d) => d.month);
-    
-      bar.exit().remove();
-  
-      var bar1 = bar
-        .enter()
-        .append("rect")
-        .attr("class", "bar")
-        .style("fill", (d) =>
-          d.act_subcontractor_expense < d.fin_est_subcontractor_expense
+    // Adding Tooltip Behavior
+    bar1
+      .on("mouseover", function (d) {
+        d3.select(this).style("fill", "#a834eb");
+        d3.select("#act_miscellaneous_exp").text(
+          " $" + valueFormat(d.act_miscellaneous_expense)
+        );
+
+        //Position the tooltip <div> and set its content
+        let x = d3.event.pageX;
+        let y = d3.event.pageY - 40;
+
+        //Position tooltip and make it visible
+        d3.select("#tooltip-misc-bar")
+          .style("left", x + "px")
+          .style("top", y + "px")
+          .style("opacity", 1);
+      })
+
+      .on("mouseout", function () {
+        d3.select(this).style("fill", function (d) {
+          return d.act_miscellaneous_expense < d.fin_est_miscellaneous_expense
             ? "#1b71f2"
-            : "#eb2828"
-        )
-        .attr("opacity", ".5")
-        .attr("width", x.bandwidth());
-  
-      bar1
-        .merge(bar)
-        .transition()
-        .duration(speed)
-        .attr("x", (d) => x(d.month))
-        .attr("y", (d) => y(d.act_subcontractor_expense))
-        .attr("height", (d) => y(0) - y(d.act_subcontractor_expense));
-  
-      // Adding Tooltip Behavior
-      bar1
-        .on("mouseover", function (d) {
-          d3.select(this).style("fill", "#a834eb");
-          d3.select("#act_subcontractor_exp").text(
-            " $" + valueFormat(d.act_subcontractor_expense)
-          );
-  
-          //Position the tooltip <div> and set its content
-          let x = d3.event.pageX;
-          let y = d3.event.pageY - 40;
-  
-          //Position tooltip and make it visible
-          d3.select("#tooltip-sub-bar")
-            .style("left", x + "px")
-            .style("top", y + "px")
-            .style("opacity", 1);
-        })
-  
-        .on("mouseout", function () {
-          d3.select(this).style("fill", function (d) {
-            return d.act_subcontractor_expense < d.fin_est_subcontractor_expense
-              ? "#1b71f2"
-              : "#eb2828";
-          });
-  
-          //Hide the tooltip
-          d3.select("#tooltip-sub-bar").style("opacity", "0");
+            : "#eb2828";
         });
-      
-      // Defining limit lines for estimated subcontractor expense
-      var line = svg.selectAll(".line").data(dataf, (d) => d.month);
-  
-      line.exit().remove();
-  
-      var line1 = line
-        .enter()
-        .append("line")
-        .attr("class", "line")
-        .style("fill", "none")
-        .attr("x1", (d) => x(d.month) + x.bandwidth() + 5)
-        .attr("x2", (d) => x(d.month) - 5);
-  
-      line1
-        .merge(line)
-        .transition()
-        .duration(speed)
-        .attr("y1", (d) => y(+d.fin_est_subcontractor_expense))
-        .attr("y2", (d) => y(+d.fin_est_subcontractor_expense))
-        .style("stroke-dasharray", [6, 2])
-        .style("stroke", "#eb2828")
-        .style("stroke-width", 3);
-  
-      // Adding Tooltip Behavior
-      line1
-        .on("mouseover", function (d) {
-          d3.select(this).style("stroke", "#a834eb");
-          d3.select("#est_subcontractor_exp").text(
-            " $" + valueFormat(d.fin_est_subcontractor_expense)
-          );
-  
-          //Position the tooltip <div> and set its content
-          let x = d3.event.pageX;
-          let y = d3.event.pageY - 40;
-  
-          //Position tooltip and make it visible
-          d3.select("#tooltip-sub-line")
-            .style("left", x + "px")
-            .style("top", y + "px")
-            .style("opacity", 1);
-        })
-  
-        .on("mouseout", function () {
-          d3.select(this).style("stroke", "#eb2828");
-  
-          //Hide the tooltip
-          d3.select("#tooltip-sub-line").style("opacity", "0");
-        });
-    }
-  
-    subChart.update = subUpdate;
+
+        //Hide the tooltip
+        d3.select("#tooltip-misc-bar").style("opacity", "0");
+      });
+
+    // Defining limit lines for estimated miscellaneous expense
+    var line = svg.selectAll(".line").data(dataf, (d) => d.month);
+
+    line.exit().remove();
+
+    var line1 = line
+      .enter()
+      .append("line")
+      .attr("class", "line")
+      .style("fill", "none")
+      .attr("x1", (d) => x(d.month) + x.bandwidth() + 5)
+      .attr("x2", (d) => x(d.month) - 5);
+
+    line1
+      .merge(line)
+      .transition()
+      .duration(speed)
+      .attr("y1", (d) => y(+d.fin_est_miscellaneous_expense))
+      .attr("y2", (d) => y(+d.fin_est_miscellaneous_expense))
+      .style("stroke-dasharray", [6, 2])
+      .style("stroke", "#eb2828")
+      .style("stroke-width", 3);
+
+    // Adding Tooltip Behavior
+    line1
+      .on("mouseover", function (d) {
+        d3.select(this).style("stroke", "#a834eb");
+        d3.select("#est_miscellaneous_exp").text(
+          " $" + valueFormat(d.fin_est_miscellaneous_expense)
+        );
+
+        //Position the tooltip <div> and set its content
+        let x = d3.event.pageX;
+        let y = d3.event.pageY - 40;
+
+        //Position tooltip and make it visible
+        d3.select("#tooltip-misc-line")
+          .style("left", x + "px")
+          .style("top", y + "px")
+          .style("opacity", 1);
+      })
+
+      .on("mouseout", function () {
+        d3.select(this).style("stroke", "#eb2828");
+
+        //Hide the tooltip
+        d3.select("#tooltip-misc-line").style("opacity", "0");
+      });
   }
-  subChart(data);
-  
-  var select = d3
+
+  miscChart.update = miscUpdate;
+}
+miscChart(data);
+
+var select = d3
+  .select("#miscYear")
+  // .style("border-radius", "5px")
+  .on("change", function () {
+    miscChart.update(this.value, 750);
+  });
+
+//Starting Subcontractor Expense Bar Chart/////////////////////////////////////////////////////////////////////////////////////////////
+function subChart(data) {
+  // Looping through data to pull the Unique years in the data set.
+  const subYears = data
+    .map((a) => a.year)
+    .filter((value, index, self) => self.indexOf(value) === index);
+  subYears.sort(function (a, b) {
+    return a - b;
+  });
+  // console.log(years)
+
+  const options = d3
     .select("#subYear")
-    // .style("border-radius", "5px")
-    .on("change", function () {
-      subChart.update(this.value, 750);
-    });
+    .selectAll("option")
+    .data(subYears)
+    .enter()
+    .append("option")
+    .text((d) => d);
 
+  var svg = d3.select("#estimate-to-actual-subcontractor"),
+    margin = { top: 70, right: -45, bottom: 0, left: 90 },
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom;
 
+  // Setting x Scale
+  const x = d3
+    .scaleBand()
+    .range([margin.left, width - margin.right])
+    .padding(0.1)
+    .paddingOuter(0.2);
 
+  var y = d3.scaleLinear().range([height - margin.bottom, margin.top]);
 
+  var xAxis = (g) =>
+    g
+      .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+      .call(d3.axisBottom(x).tickSizeOuter(0));
+
+  var yAxis = (g) =>
+    g
+      .attr("transform", "translate(" + margin.left + ",0)")
+      .call(d3.axisLeft(y).tickSize(-width));
+
+  svg.append("g").attr("class", "x-axis");
+
+  svg
+    .append("g")
+    .attr("class", "y-axis")
+    .append("text")
+    .attr("class", "yAxis")
+    .attr("y", -60)
+    .attr("x", -170)
+    .attr("transform", `rotate(-90)`)
+    .attr("fill", "#635f5d")
+    .style("font-size", "2em")
+    .text("Subcontractor Expense ($)");
+
+  svg
+    .append("text")
+    .attr("y", 35)
+    .attr("x", 190)
+    .attr("class", "title")
+    .text("Subcontractor Estimate vs Actual");
+
+  subUpdate(d3.select("#subYear").property("value"), 0);
+
+  function subUpdate(year, speed) {
+    var dataf = data.filter((f) => f.year == year);
+
+    y.domain([
+      0,
+      d3.max(data, (d) => d.fin_est_subcontractor_expense) * 1.4,
+    ]).nice();
+
+    svg.selectAll(".y-axis").transition().duration(speed).call(yAxis);
+
+    x.domain(data.map((d) => d.month));
+
+    svg.selectAll(".x-axis").transition().duration(speed).call(xAxis);
+
+    var bar = svg.selectAll(".bar").data(dataf, (d) => d.month);
+
+    bar.exit().remove();
+
+    var bar1 = bar
+      .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .style("fill", (d) =>
+        d.act_subcontractor_expense < d.fin_est_subcontractor_expense
+          ? "#1b71f2"
+          : "#eb2828"
+      )
+      .attr("opacity", ".5")
+      .attr("width", x.bandwidth());
+
+    bar1
+      .merge(bar)
+      .transition()
+      .duration(speed)
+      .attr("x", (d) => x(d.month))
+      .attr("y", (d) => y(d.act_subcontractor_expense))
+      .attr("height", (d) => y(0) - y(d.act_subcontractor_expense));
+
+    // Adding Tooltip Behavior
+    bar1
+      .on("mouseover", function (d) {
+        d3.select(this).style("fill", "#a834eb");
+        d3.select("#act_subcontractor_exp").text(
+          " $" + valueFormat(d.act_subcontractor_expense)
+        );
+
+        //Position the tooltip <div> and set its content
+        let x = d3.event.pageX;
+        let y = d3.event.pageY - 40;
+
+        //Position tooltip and make it visible
+        d3.select("#tooltip-sub-bar")
+          .style("left", x + "px")
+          .style("top", y + "px")
+          .style("opacity", 1);
+      })
+
+      .on("mouseout", function () {
+        d3.select(this).style("fill", function (d) {
+          return d.act_subcontractor_expense < d.fin_est_subcontractor_expense
+            ? "#1b71f2"
+            : "#eb2828";
+        });
+
+        //Hide the tooltip
+        d3.select("#tooltip-sub-bar").style("opacity", "0");
+      });
+
+    // Defining limit lines for estimated subcontractor expense
+    var line = svg.selectAll(".line").data(dataf, (d) => d.month);
+
+    line.exit().remove();
+
+    var line1 = line
+      .enter()
+      .append("line")
+      .attr("class", "line")
+      .style("fill", "none")
+      .attr("x1", (d) => x(d.month) + x.bandwidth() + 5)
+      .attr("x2", (d) => x(d.month) - 5);
+
+    line1
+      .merge(line)
+      .transition()
+      .duration(speed)
+      .attr("y1", (d) => y(+d.fin_est_subcontractor_expense))
+      .attr("y2", (d) => y(+d.fin_est_subcontractor_expense))
+      .style("stroke-dasharray", [6, 2])
+      .style("stroke", "#eb2828")
+      .style("stroke-width", 3);
+
+    // Adding Tooltip Behavior
+    line1
+      .on("mouseover", function (d) {
+        d3.select(this).style("stroke", "#a834eb");
+        d3.select("#est_subcontractor_exp").text(
+          " $" + valueFormat(d.fin_est_subcontractor_expense)
+        );
+
+        //Position the tooltip <div> and set its content
+        let x = d3.event.pageX;
+        let y = d3.event.pageY - 40;
+
+        //Position tooltip and make it visible
+        d3.select("#tooltip-sub-line")
+          .style("left", x + "px")
+          .style("top", y + "px")
+          .style("opacity", 1);
+      })
+
+      .on("mouseout", function () {
+        d3.select(this).style("stroke", "#eb2828");
+
+        //Hide the tooltip
+        d3.select("#tooltip-sub-line").style("opacity", "0");
+      });
+  }
+
+  subChart.update = subUpdate;
+}
+subChart(data);
+
+var select = d3
+  .select("#subYear")
+  // .style("border-radius", "5px")
+  .on("change", function () {
+    subChart.update(this.value, 750);
+  });
 
 //Start Revenue Bar Chart////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function revChart(data) {
@@ -944,12 +945,12 @@ function revChart(data) {
     .style("font-size", "2.5em")
     .text("Revenue ($)");
 
-    svg
-    .append('text')
-    .attr('y', 35)
-    .attr('x', 630)
-    .attr('class', 'title')
-    .text("Monthly Revenue Totals")
+  svg
+    .append("text")
+    .attr("y", 35)
+    .attr("x", 630)
+    .attr("class", "title")
+    .text("Monthly Revenue Totals");
 
   revUpdate(d3.select("#rev-year").property("value"), 0);
 

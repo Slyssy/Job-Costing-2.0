@@ -50,7 +50,10 @@
       <div class="card bg-primary text-white h-100">
         <div class="card-body d-flex flex-column align-items-start">
           <h4 class="card-title">Update User Information</h4>
-          <p class="card-text">Complete the fields below to update user. Leave any field blank that should NOT be updated.</p>
+          <p class="card-text">
+            Complete the fields below to update user. Leave any field blank that
+            should NOT be updated.
+          </p>
           <a href="/dashboard" class="btn btn-primary border-white mt-auto"
             >Return to Dashboard</a
           >
@@ -59,27 +62,29 @@
       <br />
 
       <!-- Begin Form -->
-      <form action="/update_user" method="POST" style="width: 500px; margin: auto">
-          <!-- Employee Names -->
-          <div class="form-group row was-validated">
-            <label class="col-lg-4 col-form-label form-control-label text-muted"
-              >Employee Name:</label
+      <form
+        action="/update_user"
+        method="POST"
+        style="width: 500px; margin: auto"
+      >
+        <!-- Employee Names -->
+        <div class="form-group row was-validated">
+          <label class="col-lg-4 col-form-label form-control-label text-muted"
+            >Employee Name:</label
+          >
+          <div class="col-lg-8">
+            <select
+              name="employee_name"
+              id="name"
+              required=""
+              class="form-control-lg"
+              data-order="desc"
             >
-            <div class="col-lg-8">
-              <select
-                name="employee_name"
-                id="name"
-                required=""
-                class="form-control-lg"
-                data-order="desc"
-              >
-                <option value="">Employee Name</option>
-              </select>
-              <div class="invalid-feedback">Required.</div>
-            </div>
+              <option value="">Employee Name</option>
+            </select>
+            <div class="invalid-feedback">Required.</div>
           </div>
-
-
+        </div>
 
         <!-- User Name -->
         <div class="form-group row was-validated">
@@ -90,7 +95,6 @@
             <input
               class="form-control"
               type="text"
-              
               id="un"
               name="user_name"
               placeholder="Ex: John Smith"
@@ -108,7 +112,6 @@
             <input
               class="form-control"
               type="text"
-              
               id="un"
               name="job_title"
               placeholder="Ex: Project Manager, Foreman, etc."
@@ -126,7 +129,6 @@
             <input
               class="form-control"
               type="text"
-              
               id="un"
               name="pay_rate"
               placeholder="Ex: 12.00"
@@ -194,31 +196,42 @@
         <!-- Log In Information 
             add on feature later -->
         <div class="form-group row">
-          <label class="col-lg-3 col-form-label form-control-label text-muted">User Name:</label>
-              <div class="col-lg-9">
-                  <input 
-                    class="form-control"
-                    type="text"
-                    name="log_in"
-                    placeholder="Input a user name"
-                  /> 
-                  <small id="usernameHelpBlock" class="form-text text-muted">
-                   Your username must be 8-20 characters long and must not contain spaces, special characters, or emoji.
-                   </small>
-              </div> 
+          <label class="col-lg-3 col-form-label form-control-label text-muted"
+            >User Name:</label
+          >
+          <div class="col-lg-9">
+            <input
+              class="form-control"
+              type="text"
+              name="log_in"
+              placeholder="Input a user name"
+            />
+            <small id="usernameHelpBlock" class="form-text text-muted">
+              Your username must be 8-20 characters long and must not contain
+              spaces, special characters, or emoji.
+            </small>
           </div>
-            
-            <div class="form-group row">
-                <label class="col-lg-3 col-form-label form-control-label text-muted">Password:</label>
-                    <div class="col-lg-9">
-                        <input type="password" name="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
-                        <small id="passwordHelpBlock" class="form-text text-muted">
-                         Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
-                        </small>
-                        
-                        
-                    </div>
-            </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-3 col-form-label form-control-label text-muted"
+            >Password:</label
+          >
+          <div class="col-lg-9">
+            <input
+              type="password"
+              name="password"
+              id="inputPassword5"
+              class="form-control"
+              aria-describedby="passwordHelpBlock"
+            />
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              Your password must be 8-20 characters long, contain letters and
+              numbers, and must not contain spaces, special characters, or
+              emoji.
+            </small>
+          </div>
+        </div>
 
         <br />
 
@@ -239,7 +252,8 @@
         const dropdown_dict = {{ dropdown_dict | safe }}
         console.log(dropdown_dict)
       </script>
-      ​<script src="{{ url_for('static', filename='updateUser.js') }}"></script>
+      ​
+      <script src="{{ url_for('static', filename='updateUser.js') }}"></script>
     </div>
   </body>
 </html>
