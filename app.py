@@ -2,7 +2,7 @@
 import os
 import psycopg2
 import requests
-from flask import Flask, render_template, request, redirect, url_for, json, jsonify
+from flask import Flask, render_template, request, redirect, url_for, json, jsonify, flash
 import datetime
 from pprint import pprint
 import ssl
@@ -20,6 +20,8 @@ pg_port = os.getenv("pg_port")
 pg_username = os.getenv("pg_username")
 pg_password = os.getenv("pg_password")
 pg_dbname = os.getenv("pg_dbname")
+
+
 
 # Setup connection with Postgres
 try:
@@ -39,6 +41,7 @@ if conn:
 
 # Create Flask app instance
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 
@@ -414,29 +417,45 @@ def userdata_html_to_db():
         print('*****************')
         print('Posting form...')
         print('*****************')
-        full_values_string = ''
-        name = request.form['user_name']
-        full_values_string += "(" + "'" + name + "'"
-        job_title = request.form['job_title']
-        full_values_string += ',' + "'" + job_title + "'"
-        pay_rate = request.form['pay_rate']
-        full_values_string += ',' + "'" + pay_rate + "'"
-        email = request.form['email']
-        full_values_string += ',' + "'" + email + "'"
-        phone = request.form['phone']
-        full_values_string += ',' + "'" + phone + "'"
-        #log-in and hashing password 
+        cur = conn.cursor()
+        cur.execute('SELECT log_in FROM users;')
+        user_login_fetch = cur.fetchall()
+
+        #prints a tupple
+        print(user_login_fetch)
         log_in = request.form['log_in']
-        full_values_string += ',' + "'" + log_in + "'"
-        password = request.form['password']
-        passw = sha256_crypt.hash(password)
-        full_values_string += ',' + "'" + passw + "'" + ")"
-        # Print data list for database entry
-        print('-------------------------------------------------------------------')
-        print('Data list prepared for entry to Users table in database')
-        print('-------------------------------------------------------------------')
-        print(full_values_string)
-        print('-------------------------------------------------------------------')
+        for login in user_login_fetch:
+            login = functools.reduce(operator.add,(login))
+            print(login)
+            if login == log_in: 
+                error = 'Log-in name already taken Please choose another.'
+                flash('Log-in name already taken Please choose another')
+                print(error)
+                return render_template('new_user.html', error=error)
+            else:
+                full_values_string = ''
+                name = request.form['user_name']
+                full_values_string += "(" + "'" + name + "'"
+                job_title = request.form['job_title']
+                full_values_string += ',' + "'" + job_title + "'"
+                pay_rate = request.form['pay_rate']
+                full_values_string += ',' + "'" + pay_rate + "'"
+                email = request.form['email']
+                full_values_string += ',' + "'" + email + "'"
+                phone = request.form['phone']
+                full_values_string += ',' + "'" + phone + "'"
+                #log-in and hashing password 
+                log_in = request.form['log_in']
+                full_values_string += ',' + "'" + log_in + "'"
+                password = request.form['password']
+                passw = sha256_crypt.hash(password)
+                full_values_string += ',' + "'" + passw + "'" + ")"
+                # Print data list for database entry
+                print('-------------------------------------------------------------------')
+                print('Data list prepared for entry to Users table in database')
+                print('-------------------------------------------------------------------')
+                print(full_values_string)
+                print('-------------------------------------------------------------------')
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
