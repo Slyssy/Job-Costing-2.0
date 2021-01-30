@@ -142,8 +142,11 @@
                     request.form.password }}">
                     <input class="btn btn-default" type="submit" value="Login">
                     <br>
+                    {% if error %}
+                    <p class="error"><strong>Error:</strong> {{ error }}</p>
+                    {% endif %}
                     <br>
-                    <br>
+                    <!-- <br> -->
                     <h3 class="team">Meet the Team! </h4>
                     <h5>Stephen Lyssy - Project Manager, Developer, & Visulizations</h5>
                     <a href= "https://www.linkedin.com/in/stephenlyssy/">Linked In</a>
@@ -165,9 +168,9 @@
                     
 
                 </form>
-                {% if error %}
+                <!-- {% if error %}
                     <p class="error"><strong>Error:</strong> {{ error }}</p>
-                {% endif %}
+                {% endif %} -->
 
 
             </div>
