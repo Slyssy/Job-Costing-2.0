@@ -71,21 +71,53 @@ def index():
         length = len(login_fetch)
         
         login_names_list = []
+        login_names_dict_list = []
         for db_row in login_fetch:
             login_name_dict = {}
-            login_name_dict['log_name'] = db_row[0]
-            login_names_list.append(login_name_dict)
-            
-        print(login_names_list) 
+            db_row = functools.reduce(operator.add,(db_row))
+            # login_name_dict['log_name'] = db_row[0]
+            login_name_dict['log_name'] = db_row
+            login_names_dict_list.append(login_name_dict)
+            login_names_list.append(db_row)
 
-        res = [] 
-        for key, value in ( 
-            itertools.chain.from_iterable( 
-                [itertools.product((k, ), v) for k, v in test_dict.items()])): 
-                    res.append(value) 
+            print(login_names_list) 
+
+        if input_log_in in login_names_list:
+            cur = conn.cursor() 
+            cur.execute('SELECT password FROM users WHERE log_in=%s;', [input_log_in])
+            rows = cur.fetchall()
+            print("this is the rows(fetch)")
+            print(rows)
+            print("----------------------------------")
+            tup=rows[0]
+            print("this is the tup")
+            print(tup)
+            strpass = functools.reduce(operator.add,(tup))
+            print(strpass)
+            hashed_in_pass = sha256_crypt.verify(in_password, strpass)
+            print(hashed_in_pass)
+            if hashed_in_pass:
+                return redirect(url_for('dashboard_data'))
+                print("matched")
+            else:
+                error = 'Invalid p Credentials. Please try again.'
+                print(error)
+                return render_template('logIndex.html', error=error)
+        else:
+            error = 'Invalid login. Please try again.'
+            print(error)
+            return render_template('logIndex.html', error=error)
+            
+       
+
+        # res = [] 
+        # for key, value in ( 
+        #     itertools.chain.from_iterable( 
+        #         [itertools.product((k, ), v) for k, v in test_dict.items()])): 
+        #             res.append(value) 
       
         # printing result  
-        print("The list values of keys are : " + str(res))
+        # print("The list values of keys are : " + str(res))
 
         # cur = conn.cursor()
         # cur.execute('SELECT log_in FROM users;')
