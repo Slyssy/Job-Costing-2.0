@@ -56,31 +56,79 @@ def index():
         return render_template('logIndex.html') 
     error = None
     if request.method == 'POST':
-        log_in = request.form['username']
+        input_log_in = request.form['username']
         in_password = request.form['password']
         print(in_password)
+
+        # grabbing log_in names from db to check against input
         cur = conn.cursor() 
-        # cur.execute('SELECT password FROM users ;')
-        cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
-        rows = cur.fetchall()
-        print("this is the rows(fetch)")
-        print(rows)
-        print("----------------------------------")
-        tup=rows[0]
-        print("this is the tup")
-        print(tup)
-        strpass = functools.reduce(operator.add,(tup))
-        print(strpass)
-        # print(hashed_in_pass)
-        hashed_in_pass = sha256_crypt.verify(in_password, strpass)
-        if hashed_in_pass:
-            return redirect(url_for('dashboard_data'))
-            # print("matched")
+        cur.execute('SELECT log_in FROM users;')
+        login_fetch = cur.fetchall()
+        print("this is the fetch")
+        print(login_fetch)
+        print("----------------------------------") 
+
+        login_names_list = []
+        login_names_dict_list = []
+        for db_row in login_fetch:
+            login_name_dict = {}
+            db_row = functools.reduce(operator.add,(db_row))
+            # login_name_dict['log_name'] = db_row[0]
+            login_name_dict['log_name'] = db_row
+            login_names_dict_list.append(login_name_dict)
+            login_names_list.append(db_row)
+
+            print(login_names_list) 
+
+        if input_log_in in login_names_list:
+            cur = conn.cursor() 
+            cur.execute('SELECT password FROM users WHERE log_in=%s;', [input_log_in])
+            rows = cur.fetchall()
+            print("this is the rows(fetch)")
+            print(rows)
+            print("----------------------------------")
+            tup=rows[0]
+            print("this is the tup")
+            print(tup)
+            strpass = functools.reduce(operator.add,(tup))
+            print(strpass)
+            hashed_in_pass = sha256_crypt.verify(in_password, strpass)
+            print(hashed_in_pass)
+            if hashed_in_pass:
+                return redirect(url_for('dashboard_data'))
+                print("matched")
+            else:
+                error = 'Invalid credentials. Please try again.'
+                print(error)
+                return render_template('logIndex.html', error=error)
         else:
-            error = 'Invalid Credentials. Please try again.'
+            error = 'Invalid credentials. Please try again.'
             print(error)
             return render_template('logIndex.html', error=error)
-    return render_template('logIndex.html')
+
+
+
+        # cur = conn.cursor() 
+        # cur.execute('SELECT password FROM users WHERE log_in=%s;', [log_in])
+        # rows = cur.fetchall()
+        # print("this is the rows(fetch)")
+        # print(rows)
+        # print("----------------------------------")
+        # tup=rows[0]
+        # print("this is the tup")
+        # print(tup)
+        # strpass = functools.reduce(operator.add,(tup))
+        # print(strpass)
+        # print(hashed_in_pass)
+        # hashed_in_pass = sha256_crypt.verify(in_password, strpass)
+        # if hashed_in_pass:
+            return redirect(url_for('dashboard_data'))
+            # print("matched")
+    #     else:
+    #         error = 'Invalid Credentials. Please try again.'
+    #         print(error)
+    #         return render_template('logIndex.html', error=error)
+    # return render_template('logIndex.html')
 
 # def index():
 #     error = None
