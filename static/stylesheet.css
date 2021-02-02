@@ -310,3 +310,8 @@ td a.flag::after {
 .dropdown-wrapper {
   width: 100%;
 }
+
+.error {
+  color: red;
+}
+]
