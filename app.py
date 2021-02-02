@@ -476,8 +476,8 @@ def userdata_html_to_db():
             login = functools.reduce(operator.add,(login))
             print(login)
             if login == log_in: 
-                error = 'Log-in name already taken Please choose another.'
-                flash('Log-in name already taken Please choose another')
+                error = 'Log-in name already taken. Please choose another.'
+                flash('Log-in name already taken. Please choose another')
                 print(error)
                 return render_template('new_user.html', error=error)
             else:
@@ -825,8 +825,21 @@ def user_data_update_db():
     
     if request.method == 'POST':
         drop_name = request.form['employee_name']
-        
         print(drop_name)
+        
+        #grabbing all usernames in db
+        cur = conn.cursor()
+        cur.execute('SELECT log_in FROM users;') 
+        login_names_fetch = cur.fetchall()
+        #list of tuppels
+        print(login_names_fetch)
+
+        login_names_list = []
+        for login in login_names_fetch:
+            login = functools.reduce(operator.add,(login))
+            login_names_list.append(login)
+
+        
         cur = conn.cursor() 
         # cur.execute('SELECT password FROM users ;')
         cur.execute('SELECT * FROM users WHERE name=%s;', [drop_name])
@@ -897,8 +910,15 @@ def user_data_update_db():
 
 
         log_in = request.form['log_in']
-        if log_in != "" :
-            log_in = request.form['log_in']
+        if log_in != "":
+            if log_in in login_names_list:
+                error = 'Log-in name already taken. Please choose another.'
+                flash('Log-in name already taken. Please choose another')
+                print(error)
+                return render_template('updateUser.html', error=error)
+                
+            else:
+                log_in = request.form['log_in']
         else:
             log_in = db_log_in
 
@@ -956,7 +976,8 @@ def user_data_update_db():
             db_write_error = 'Oops - could not write to database!'
             print('---------------------------------------')
             return render_template('error.html', error_type=db_write_error)
-        return redirect(url_for('dashboard_data'))
+        return render_template('updateUser.html')
+        # return redirect(url_for('dashboard_data'))
 
 #THIS ROUTE DOES NOT WORK YET       
 # @app.route('/update_project', methods=['GET', 'POST'])

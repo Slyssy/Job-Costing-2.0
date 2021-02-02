@@ -212,7 +212,9 @@
             </small>
           </div>
         </div>
-
+        {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}</p>
+        {% endif %}
         <div class="form-group row">
           <label class="col-lg-3 col-form-label form-control-label text-muted"
             >Password:</label
