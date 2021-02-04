@@ -22,7 +22,12 @@
       type="text/css"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="stylesheet.css" /> -->
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='stylesheet.css') }}"
+    />
     ​
     <!-- JS and Bootstrap CSS and JS online libraries -->
     <link
@@ -59,8 +64,8 @@
       <br />
 
       <!-- Begin Form -->
-      {% extends "logMessage.html" %} {% block body %}
-      <!-- <h1>Attention</h1> -->
+      <!-- {% extends "logMessage.html" %} {% block body %} -->
+      
       {% if error %}
       <h1>Attention</h1>
       <p class="error"><strong>Error:</strong> {{ error }} {% endif %}</p>
