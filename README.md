@@ -4,6 +4,9 @@
 
 <a href="https://job-costing-2-0.herokuapp.com/">Deployed Link</a>
 
+Demo Username: JanTest
+Demo Password: tutortest 
+
 # Job Costing App 2.0
 
 ## Table of contents:
