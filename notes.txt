@@ -170,3 +170,9 @@ full_values_string += ',' + est_labor_expense
             act_start_date = datetime.datetime.strptime(request.form['act_start_date'], '%m/%d/%Y').date()
         else:
             act_start_date = datetime.datetime.now()
+
+Feb 14:
+    Add questions to new user page for password or username recovery/update.
+    Will need to add columns to new user page to include answers for pass update/recovery.
+    Create a page that will provide the username if someone can't remember it and answered the questions correctly
+    Create a page that will update password if q's are answered correctly. 

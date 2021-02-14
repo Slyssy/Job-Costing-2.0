@@ -1240,7 +1240,7 @@ def password_update_db():
         dropdown_dict = {}
         dropdown_dict['employee_list'] = employee_list
         pprint(dropdown_dict)
-        return render_template('updateUser.html', dropdown_dict=json.dumps(dropdown_dict))
+        return render_template('updatePassword.html', dropdown_dict=json.dumps(dropdown_dict))
 
 
         # return render_template('new_user.html')    
