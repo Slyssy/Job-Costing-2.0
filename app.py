@@ -1214,6 +1214,83 @@ def user_data_update_db():
         # return redirect(url_for('dashboard_data'))
 
 
+@app.route('/update_password', methods=['GET', 'POST'])
+def password_update_db():
+    if request.method == 'GET':
+        print('*****************')
+        print('Getting form...')
+        print('*****************')
+    # Fetch all employee names from database for dropdown menu
+        cur = conn.cursor()
+        cur.execute('SELECT name FROM users ORDER BY name ASC')
+        employee_names_fetch = cur.fetchall()
+        print('------------------------------------------------------------')   
+        print('All employee names fetched from database for dropdown list')   
+        print('------------------------------------------------------------')   
+        print(employee_names_fetch)
+        print('------------------------------------------------------------')   
+        # Convert employee names to a JSON
+        employee_list = []
+        for db_row in employee_names_fetch:
+            employee_dict = {}
+            employee_dict['name'] = db_row[0]
+            employee_list.append(employee_dict)
+
+        # Create a dictionary for employee and convert to a JSON for the dropdown menus
+        dropdown_dict = {}
+        dropdown_dict['employee_list'] = employee_list
+        pprint(dropdown_dict)
+        return render_template('updateUser.html', dropdown_dict=json.dumps(dropdown_dict))
+
+
+        # return render_template('new_user.html')    
+    
+    if request.method == 'POST':
+        drop_name = request.form['employee_name']
+        print(drop_name)
+        
+        #grabbing all usernames in db
+        cur = conn.cursor()
+        cur.execute('SELECT log_in FROM users WHERE name=%s;', [drop_name]) 
+        login_names_fetch = cur.fetchall()
+        #list of tuppels
+        print(login_names_fetch)
+        #no longer a tupple
+        for login in login_names_fetch:
+            login = functools.reduce(operator.add,(login))
+        
+        input_login = request.form['log_in']
+        if input_login != login:
+            error = 'Invalid credentials. Please try again.'
+            print(error)
+            return render_template('updatePassword.html', error=error)
+        else:
+            password = request.form['password']
+            passw = sha256_crypt.hash(password)
+        
+            cur = conn.cursor()
+            print(f"UPDATE users SET password = '{passw}'  WHERE user_id = {db_user_id}")
+        # Adding form input data to PostgreSQL database
+        try:
+            cur.execute(f"UPDATE users SET password = '{passw}'  WHERE user_id = {db_user_id}")
+
+            print('-----------------------------------')
+            print('Data added to database - woohoo!')
+            print('-----------------------------------')
+        except:
+            print('---------------------------------------')
+            db_write_error = 'Oops - could not write to database!'
+            print('---------------------------------------')
+            return render_template('error.html', error_type=db_write_error)
+        return render_template('updateUser.html')
+        # return redirect(url_for('dashboard_data'))
+
+
+        
+
+
+
+
 
 # Close database connection
     if(conn):
