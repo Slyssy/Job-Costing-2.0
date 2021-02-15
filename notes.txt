@@ -176,3 +176,9 @@ Feb 14:
     Will need to add columns to new user page to include answers for pass update/recovery.
     Create a page that will provide the username if someone can't remember it and answered the questions correctly
     Create a page that will update password if q's are answered correctly. 
+
+    -- If username matches in db, then pull the answers for that user from the db
+    next, check the input answer against db answer 
+         - how do I check the answer in the db if I want to allow the user to select their questions
+    if answers match, update password
+    if answers do not match, error that answers do not match

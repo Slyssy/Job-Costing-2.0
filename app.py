@@ -497,7 +497,14 @@ def userdata_html_to_db():
                 full_values_string += ',' + "'" + log_in + "'"
                 password = request.form['password']
                 passw = sha256_crypt.hash(password)
-                full_values_string += ',' + "'" + passw + "'" + ")"
+                # full_values_string += ',' + "'" + passw + "'" + ")"
+                full_values_string += ',' + "'" + passw + "'"
+                answer1 = request.form['answer1']
+                full_values_string += ',' + "'" + answer1 + "'"
+                answer2 = request.form['answer2']
+                full_values_string += ',' + "'" + answer1 + "'"
+                answer3 = request.form['answer1']
+                full_values_string += ',' + "'" + answer3 + "'" + ")"
                 # Print data list for database entry
                 print('-------------------------------------------------------------------')
                 print('Data list prepared for entry to Users table in database')
@@ -507,7 +514,7 @@ def userdata_html_to_db():
         cur = conn.cursor()
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in, password) VALUES ' + full_values_string + ';')
+            cur.execute('INSERT INTO users (name, job_title, pay_rate, email, phone, log_in, password, answer1, answer2, answer3) VALUES ' + full_values_string + ';')
             print('-----------------------------------')
             print('Data added to database - woohoo!')
             print('-----------------------------------')
