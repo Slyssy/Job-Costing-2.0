@@ -499,11 +499,11 @@ def userdata_html_to_db():
                 passw = sha256_crypt.hash(password)
                 # full_values_string += ',' + "'" + passw + "'" + ")"
                 full_values_string += ',' + "'" + passw + "'"
-                answer1 = request.form['answer1']
+                answer1 = request.form['q1_answer']
                 full_values_string += ',' + "'" + answer1 + "'"
-                answer2 = request.form['answer2']
-                full_values_string += ',' + "'" + answer1 + "'"
-                answer3 = request.form['answer1']
+                answer2 = request.form['q2_answer']
+                full_values_string += ',' + "'" + answer2 + "'"
+                answer3 = request.form['q3_answer']
                 full_values_string += ',' + "'" + answer3 + "'" + ")"
                 # Print data list for database entry
                 print('-------------------------------------------------------------------')
