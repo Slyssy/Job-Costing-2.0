@@ -182,3 +182,4 @@ Feb 14:
          - how do I check the answer in the db if I want to allow the user to select their questions
     if answers match, update password
     if answers do not match, error that answers do not match
+    ** make all input and answers from db to be lower case to make sure they match (unless you want to be that specific)

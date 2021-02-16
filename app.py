@@ -1247,7 +1247,7 @@ def password_update_db():
         dropdown_dict = {}
         dropdown_dict['employee_list'] = employee_list
         pprint(dropdown_dict)
-        return render_template('updatePassword.html', dropdown_dict=json.dumps(dropdown_dict))
+        return render_template('updatePassword copy.html', dropdown_dict=json.dumps(dropdown_dict))
 
 
         # return render_template('new_user.html')    
@@ -1272,14 +1272,36 @@ def password_update_db():
             print(error)
             return render_template('updatePassword.html', error=error)
         else:
+            cur = conn.cursor()
+            cur.execute('SELECT answer1, answer2, answer3 FROM users WHERE name=%s;', [input_login]) 
+            answers_fetch = cur.fetchall()
+            print(answers_fetch)
+
+            answer_list = []
+            for answer in answers_fetch:
+                answer = functools.reduce(operator.add,(answer))
+                answer_list.append(answer)
+                print(answer_list)
+
+            #trying to figure out how to let the user choose which questions to answer from drop down, 
+            #then comparing answers from input (based on questions)
+            question_type = request.form['quest_1']
+            print(question_type)
+
+            # if question_type == "q1":
+            #     input1 = requst.form['input1']
+            # elif question_type == "q2"
+            #     input1 = request.form[input1]
+
+
             password = request.form['password']
             passw = sha256_crypt.hash(password)
         
             cur = conn.cursor()
-            print(f"UPDATE users SET password = '{passw}'  WHERE user_id = {db_user_id}")
+            print(f"UPDATE users SET password = '{passw}'  WHERE name = {drop_name}")
         # Adding form input data to PostgreSQL database
         try:
-            cur.execute(f"UPDATE users SET password = '{passw}'  WHERE user_id = {db_user_id}")
+            cur.execute(f"UPDATE users SET password = '{passw}'  WHERE name = {drop_name}")
 
             print('-----------------------------------')
             print('Data added to database - woohoo!')
